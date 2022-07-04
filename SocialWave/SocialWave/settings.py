@@ -43,7 +43,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
 
 # allowed hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -68,8 +68,14 @@ INSTALLED_APPS = [
     # debugger
     'debug_toolbar',
 
+
+    # 'chanells',
+
     # working: 1 - one
     'django.contrib.humanize',
+
+    # for jupyter-notebook
+    'django_extensions',
 
     # registration
     'allauth',
@@ -125,7 +131,7 @@ TEMPLATES = [
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.accounts.auth_backends.AuthenticationBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -201,7 +207,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STAICFILES_DIRS = [
 
-    # os.path.join(BASE_DIR, 'my_site/templates')
+    os.path.join(BASE_DIR, "other_static"),
 
 ]
 
@@ -227,7 +233,49 @@ CRISPY_TEMPLATE_PACK = 'uni-form'
 
 # django-ckeiditor
 CKEDITOR_CONFIGS = {
-    'dafeult': {
+    'default': {
         'width': 'auto',
     },
 }
+
+# django-chanells
+
+"""
+ASGI_APPLICATION = 'gobot_social_network.routing.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+"""
+
+# email
+EMAIL_BACKEND = 'django.core.mail.backends.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = os.getenv("EMAIL_PORT")
+EMAIL_USE_TILS = True
+EMAIL_HOST_TLS = os.getenv("EMAIL_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASSWORD")
+
+# google
+GOOGLE_RECAPTCHA_SECRET_KEY = os.getenv("GOOGLE_RECAPTCHA_SECRET_KEY")
+
+# color of messages
+MESSAGE_TAGS = {
+
+    messages.DEBUG: 'alert-secondary',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-error',
+
+}
+
+# after delete
+
+os.environ["DJANGO+ALLOW_ASYNC_UNSAFE"] = 'true'
+
+
+
+
