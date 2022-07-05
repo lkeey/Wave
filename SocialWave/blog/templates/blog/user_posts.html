@@ -1,0 +1,26 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Post{% endblock %}
+
+{% block content_blog %}
+
+<p class="content">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente, quaerat. Saepe explicabo id rerum aperiam consectetur earum sint expedita iste voluptatum recusandae, et officiis repudiandae odit! Impedit enim consequatur ea?</p>
+<p class="content">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente, quaerat. Saepe explicabo id rerum aperiam consectetur earum sint expedita iste voluptatum recusandae, et officiis repudiandae odit! Impedit enim consequatur ea?</p>
+<p class="content">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente, quaerat. Saepe explicabo id rerum aperiam consectetur earum sint expedita iste voluptatum recusandae, et officiis repudiandae odit! Impedit enim consequatur ea?</p>
+
+{% for post in blog_post_user_list %}
+    <div class="post alert alert-info">
+        <p class="author">{{ post.author }}</p>
+
+        <h3 class="title">{{ post.title }}</h3>
+
+        <p class="content">{{ post.content }}</p><br>
+
+        <p class="date">{{ post.date_created }}</p><br>
+
+        <p class="amount-likes">Likes: {{ post.total_likes }}</p>
+
+    </div>
+{% endfor %}
+
+{% endblock %}
