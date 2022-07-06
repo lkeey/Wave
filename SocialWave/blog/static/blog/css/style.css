@@ -2,6 +2,7 @@ body {
     margin: 0px;
 
     background-image: linear-gradient(60deg, rgb(123, 69, 223) 10%, #7522bd 100%);
+  
 }
 
 .example::-webkit-scrollbar {
@@ -60,20 +61,26 @@ footer ul li:hover, footer ul a:hover{
     width: auto;
     border: 2px solid white;
     border-radius: 100px;
+    text-align: center;
     background-image: linear-gradient(60deg, rgb(237, 42, 224) 10%, #9d3ef0 100%);
 }
 
 .title {
+    text-align: center;
+
     font-size: 30px;
     font-weight: bold;
 }
 
 .content {
+    text-align: start;
+    
     margin-left: 10%;
     margin-right: 10%;
 
     font-size: 20px;
     font-weight: 500;
+    
 }
 
 .date {
@@ -99,5 +106,11 @@ footer ul li:hover, footer ul a:hover{
 
     background: #9d3ef0;  
     background-image: linear-gradient(0deg, rgb(128, 180, 240) 10%, #9d3ef0 100%);
+
+    /* переносит текст, если не вмещается */
+    word-break: break-all;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
 
 }

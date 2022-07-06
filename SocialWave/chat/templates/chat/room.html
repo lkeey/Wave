@@ -1,0 +1,66 @@
+<script   src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+<h1>HI</h1>
+<h1>{{ name }}</h1>
+<h1>{{ room }}</h1>
+<h1>{{ room_details }}</h1>
+
+<div id="display">
+
+</div>
+
+{# печатает все сообщения #}
+<script>
+    $(document).ready(function(){
+    
+    setInterval(function(){
+        $.ajax({
+            type: 'GET',
+            url : "{% url 'getMessages' room=room %}",
+            success: function(response){
+                //console.log(response);
+                $("#display").empty();
+                for (var key in response.messages)
+                {
+                    var temp="<div class='container darker'><b>"+response.messages[key].user+"</b><p>"+response.messages[key].value+"</p><span class='time-left'>"+response.messages[key].date+"</span></div>";
+                    $("#display").append(temp);
+                }
+            },
+            error: function(response){
+                alert('An error occured')
+            }
+        });
+    },1000);
+    })
+    </script>
+
+<form id="post-form">
+    {% csrf_token %}
+    <input type="hidden" name="username" id="username" value="{{name}}">
+    <input type="hidden" name="room_id" id="room_id" value="{{room_details.id}}">
+    <input type="text" name="message" id="message">
+    <input type="submit" value="SEND">
+
+</form>
+
+{# добавляется сообщения из input-а #}
+<script type="text/javascript">
+    $(document).on('submit','#post-form',function(e){
+      e.preventDefault();
+  
+      $.ajax({
+        type:'POST',
+        url:'{% url "send" %}',
+        data:{
+            username:$('#username').val(),
+            room_id:$('#room_id').val(),
+            message:$('#message').val(),
+          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+        },
+        success: function(data){
+           //alert(data)
+        }
+      });
+      document.getElementById('message').value = ''
+    });
+</script>
+

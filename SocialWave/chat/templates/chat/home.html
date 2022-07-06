@@ -1,0 +1,10 @@
+
+
+<form method="POST" id="post-form" action="{% url 'checkview' %}">
+    {% csrf_token %}
+
+    <label>Room Name</label>
+    <input type="text" name="room_name" id="room_name">
+</form>
+
+

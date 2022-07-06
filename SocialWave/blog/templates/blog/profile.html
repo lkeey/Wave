@@ -1,0 +1,31 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content_blog %}
+
+
+{% if blog_post_user_list|length > 0 %}
+    {% for post in blog_post_user_list %}
+        <div class="post alert alert-info">
+            
+            <p class="author">{{ post.author }}</p>
+
+            <h3 class="title">{{ post.title }}</h3>
+
+            <p class="content">{{ post.content|safe }}</p><br>
+
+            <p class="date">{{ post.date_created }}</p><br>
+
+            <p class="amount-likes">Likes: {{ post.total_likes }}</p>
+
+        </div>
+    {% endfor %}
+
+{% else %}
+
+<h3 class="title">You haven't got any post...</h3>
+
+{% endif %}
+
+{% endblock %}

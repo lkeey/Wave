@@ -4,16 +4,16 @@
         <ul>
             <div class="row justify-content-around">
                 <div class="container col text-center">
-                    <a href=""><li><i class="fas fa-home"></i> Main</li></a>
+                    <a href="{% url 'posts_feed' %}"><li><i class="fa-solid fa-cloud-showers-water"></i> Ocean</li></a>
                 </div>
                 <div class="container col text-center">
                     <a href=""><li><i class="fa-solid fa-address-card"></i> Contacts</li></a>
                 </div>
                 <div class="container col text-center">
-                    <a href=""><li><i class="fa-solid fa-box-archive"></i> Catalog</li></a>
+                    <a href="{% url 'home' %}"><li><i class="fa-solid fa-box-archive"></i> Chat</li></a>
                 </div>
                 <div class="container col text-center">
-                    <a href=""><li><i class="fa-solid fa-scroll"></i> About</li></a>
+                    <a href="{% url 'user_posts_list' username=user %}"><li><i class="fa-solid fa-house-flood-water"></i></i> Profile</li></a>
                 </div>
             </div>
         </ul>
