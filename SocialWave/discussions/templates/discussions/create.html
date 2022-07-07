@@ -1,0 +1,28 @@
+{% extends 'blog/base.html' %}
+
+{% load crispy_forms_tags %}
+
+
+{% block title %}Creating Post{% endblock %}
+
+{% block content_blog %}
+<div class="post alert alert-info text-center">
+
+    <h2 class="title">What do you want to discuss?</h2><br>
+
+    <form action="" method="POST">
+
+        {% csrf_token %}
+
+        <div>
+            {{formset.media}}
+
+            {{formset|crispy}}
+        </div>
+
+        <br><input type="submit" value="SAVE" class="btn btn_save">
+        
+    </form>
+
+</div>
+{% endblock %}

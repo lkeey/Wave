@@ -49,6 +49,7 @@ class Post(models.Model):
         User,
         related_name='postcomment',
         blank=True,
+        default=0,
     )
 
     # для ответов на комменты
@@ -57,6 +58,7 @@ class Post(models.Model):
         null=True,
         related_name='reply_ok',
         on_delete=models.CASCADE,
+        default=None
     )
 
     # подсчитывает все лайки на посте

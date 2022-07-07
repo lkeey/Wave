@@ -3,6 +3,9 @@ from django.views.generic import ListView
 from django.shortcuts import render, get_object_or_404
 
 from blog.models import Post
+
+from discussions.models import Discussion
+
 from django.contrib.auth.models import User
 # Create your views here.
 
@@ -48,7 +51,7 @@ class UserPostListView(ListView):
 # все посты
 def feed(request):
     data = {
-        "all_posts": Post.objects.order_by('-date_created'),
+        "all_posts": Discussion.objects.order_by('-date_created'),
     }
 
     return render(request, 'blog/posts_feed.html', data)

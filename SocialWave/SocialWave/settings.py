@@ -53,9 +53,13 @@ INSTALLED_APPS = [
     # my apps
     'blog.apps.BlogConfig',
     'chat',
+    'discussions',
 
     # packages install
     'crispy_forms',
+    'crispy_forms_materialize',
+    
+
     'ckeditor',
 
     'django.contrib.admin',
@@ -202,7 +206,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
@@ -227,10 +231,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# awesome forms
-# bootstrap4 may be
-CRISPY_TEMPLATE_PACK = 'uni-form'
 
 # django-ckeiditor
 CKEDITOR_CONFIGS = {
@@ -274,9 +274,14 @@ MESSAGE_TAGS = {
 }
 
 # after delete
-
 os.environ["DJANGO+ALLOW_ASYNC_UNSAFE"] = 'true'
 
+# awesome forms
+# bootstrap4 may be
+CRISPY_ALLOWED_TEMPLATE_PACKS = ('bootstrap', 'uni_form', 'bootstrap3', 'bootstrap4', 'semantic-ui')
 
+CRISPY_TEMPLATE_PACK = 'uni_form'
+
+# CRISPY_TEMPLATE_PACK = 'materialize_css_forms'
 
 
