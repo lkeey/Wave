@@ -1,2 +1,16 @@
-<a href="{% url 'room' room=room name=user %}">Click here</a>
-awd
+{% extends "blog/base.html" %}
+
+{% load static %}
+
+{% block title %}Contacts{% endblock %}
+
+{% block content_blog %}
+
+<div>
+
+    <a href="{% url 'room' room=room name=user %}" class="contact">{{ room }}</a>
+
+</div>
+
+
+{% endblock %}

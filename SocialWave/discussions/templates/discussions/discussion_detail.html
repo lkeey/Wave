@@ -1,14 +1,21 @@
-<h3>ID{{ discussion_detail }}</h3>
+{% extends "blog/base.html" %}
+
+{% block title %}Own Post{% endblock %}
+
+{% block content_blog %}
+
 <div class="post alert alert-info">
             
     <p class="author">{{ discussion_detail.author }}</p>
 
     <h3 class="title">{{ discussion_detail.title }}</h3>
 
-    <p class="content">{{ discussion_detail.content }}</p><br>
+    <p class="content">{{ discussion_detail.content|safe }}</p><br>
 
-    <p class="date">{{ discussion_detail.date }}</p><br>
+    <p class="date">{{ discussion_detail.date_created }}</p><br>
 
-    <p class="amount-likes">Likes: {{ discussion_detail.amount-likes }}</p>
+    <p class="amount-likes">Likes: {{ discussion_detail.total_likes }}</p>
 
 </div>
+
+{% endblock %}

@@ -5,6 +5,8 @@
 
 {% block title %}Creating Post{% endblock %}
 
+{% load static %}
+
 {% block content_blog %}
 <div class="post alert alert-info text-center">
 
@@ -20,7 +22,7 @@
             {{formset|crispy}}
         </div>
 
-        <br><input type="submit" value="SAVE" class="btn btn_save">
+        <br><input type="submit" value="SAVE" class="btn btn-save">
         
     </form>
 

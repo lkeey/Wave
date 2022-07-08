@@ -4,6 +4,15 @@
 
 {% block content_blog %}
 
+<div class="avatar">
+
+    {# добавить условие, если есть ава, иначе фото без авы #}
+
+    <img src="#" alt="None" class="img-user">
+
+    <h3 class="name-user">{{ user }}</h3>
+</div>
+
 
 {% if blog_post_user_list|length > 0 %}
     {% for post in blog_post_user_list %}
