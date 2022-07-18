@@ -20,15 +20,19 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 
+# добавить классы для отпрвителя сообщения,
+# красивый вывод даты
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    path('posts/', include('blog.urls')),
-        
     path('chat/', include('chat.urls')),
 
-    path('discussions/', include('discussions.urls')),
+    path('', include('discussions.urls')),
+        
+    
+
+ 
     # path('__debug__/', include('debug_toolbar.urls')),
     
     # https://www.youtube.com/watch?v=d1w1qL4aatY&list=PLuZJ9n46uMzXVj9JEjULImuBKRVKKS9To&index=11
