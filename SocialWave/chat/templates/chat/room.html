@@ -29,16 +29,18 @@
                     $("#display").empty();
                     for (var key in response.messages)
                     {     
-                        if (response.messages[key].user == {name}){
+                        if (response.messages[key].user == $('#username').val()){
                           var class_name = 'own_message';
+                          //alert("MY")
                           
                         } else {
-                            var class_name = 'other_message';         
+                            var class_name = 'other_message';  
+                            //alert("NOT MY")       
                         };
                                 
                         //alert(class_name)
 
-                        var temp=`<div class='container darker ${class_name}'><b>`+
+                        var temp=`<div class='container message ${class_name}'><b>`+
                             response.messages[key].user+"</b><p>"+
                             response.messages[key].value+
                             "</p><span class='time-left'>"+
@@ -73,8 +75,9 @@
     <script type="text/javascript">
         $(document).on('submit','#post-form',function(e){
         e.preventDefault();
-    
+        
         $.ajax({
+            
             type:'POST',
             url:'{% url "send" %}',
             data:{
@@ -84,7 +87,7 @@
             csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
             },
             success: function(data){
-            alert(data)
+            //alert(data)
             }
         });
         document.getElementById('message').value = ''

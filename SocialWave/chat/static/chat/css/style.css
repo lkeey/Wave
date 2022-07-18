@@ -49,6 +49,10 @@
 input {
     list-style: none;
 }
+.own_message {
+    border-radius: 20px;
+    background-image: linear-gradient(60deg, rgb(123, 69, 223) 10%, #7522bd 100%);
+}
 
 .other_message {
     background-color: red;

@@ -51,9 +51,9 @@ ALLOWED_HOSTS = ['*']
 # all apps
 INSTALLED_APPS = [
     # my apps
-    'blog.apps.BlogConfig',
-    'chat',
+    # 'blog.apps.BlogConfig',   
     'discussions',
+    'chat',
 
     # packages install
     'crispy_forms',

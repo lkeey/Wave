@@ -48,6 +48,7 @@ def checkview(request):
     return render(request, 'chat/loading.html', data)
 
 def send(request):
+    
     message = request.POST['message']
     username = request.POST['username']
     room_id = request.POST['room_id']

@@ -15,7 +15,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path, re_path
-from discussions.views import DiscussionDetailtView, UserDiscussionListView
+from discussions.views import (DiscussionDetailtView, UserDiscussionListView,
+                                UserPostListView)
 from . import views
 
 urlpatterns = [
@@ -25,5 +26,11 @@ urlpatterns = [
     path('create', views.discussion_create, name='create_post'),   
     
     path('<int:pk>/detail', DiscussionDetailtView.as_view(), name='discussions_detail'),   
+
+    # все посты
+    path('', views.feed, name='posts_feed'),
+
+    # profile
+    path('<str:username>', UserPostListView.as_view(), name='user_posts_list'),   
 ]
 
