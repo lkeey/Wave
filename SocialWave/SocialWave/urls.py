@@ -30,9 +30,7 @@ urlpatterns = [
 
     path('', include('discussions.urls')),
         
-    
 
- 
     # path('__debug__/', include('debug_toolbar.urls')),
     
     # https://www.youtube.com/watch?v=d1w1qL4aatY&list=PLuZJ9n46uMzXVj9JEjULImuBKRVKKS9To&index=11
@@ -48,11 +46,11 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(
-        settings.MEDIA_URL, 
-        document_root=settings.MEDIA_ROOT,
-        )
+# if settings.DEBUG:
+urlpatterns += static(
+    settings.MEDIA_URL, 
+    document_root=settings.MEDIA_ROOT,
+    )
 
 if settings.DEBUG:
     import debug_toolbar

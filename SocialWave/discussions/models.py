@@ -11,10 +11,16 @@ from ckeditor.fields import RichTextField
 
 from pytils.translit import slugify
 
+from datetime import datetime
+
+from django.contrib.auth import get_user_model
+
 # django.template.defaultfilters import slugify
 # from django.utils.text import slugify
 
-class Discussion(models.Model) :
+User = get_user_model()
+
+class Discussion(models.Model):
 
     class Meta:
         verbose_name = 'Discussion'
@@ -30,7 +36,7 @@ class Discussion(models.Model) :
                     help_text="No more 5000 symbols",
             )
 
-    date_created = models.DateTimeField(default=timezone.now)
+    date_created = models.DateTimeField(default=datetime.now)
     
     date_updated = models.DateTimeField(auto_now=True)
 
@@ -77,3 +83,17 @@ class Discussion(models.Model) :
 
     def __str__(self):
         return self.title
+
+
+
+class Profile(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    id_user = models.IntegerField()
+    bio = models.TextField(blank=True)
+    profile_img = models.ImageField(upload_to='profile_images', default='blank-profile-img.png')
+    location = models.CharField(max_length=100, blank=True)
+
+    def __str__(self):
+        return self.user.username
+
+

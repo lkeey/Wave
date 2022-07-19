@@ -1,5 +1,5 @@
 from django.contrib import admin
-from discussions.models import Discussion
+from .models import Discussion, Profile
 
 # Register your models here.
 @admin.register(Discussion)
@@ -10,3 +10,9 @@ class PageAdmin(admin.ModelAdmin):
     prepopulated_fields = {
         "slug": ('title',),
     }
+    
+# admin.site.register(Discussion)
+
+admin.site.register(Profile)
+
+

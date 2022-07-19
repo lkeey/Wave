@@ -1,12 +1,14 @@
+from pickletools import read_uint1
+
 from django.http.response import HttpResponseRedirect
+
 from django.urls.base import reverse_lazy
 
 from django.views.generic import ListView, CreateView, DetailView, ListView
 
 from django.shortcuts import render, get_object_or_404, redirect
 
-
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, auth
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 # https://docs.djangoproject.com/en/4.0/ref/contrib/
@@ -15,7 +17,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
 from django.views.generic.dates import timezone_today
-from discussions.models import Discussion
+from .models import Discussion, Profile
 
 from . forms import DiscussionCreateForm
 
@@ -53,7 +55,7 @@ class DiscussionDetailtView(DetailView):
     # def get_pk(self):
 
 
-@login_required
+@login_required(login_url='sign_in')
 def discussion_create(request):
     print("USER", request.user)
 
@@ -122,4 +124,116 @@ def feed(request):
 
     return render(request, 'discussions/posts_feed.html', data)
 
+# registration
+def sign_up(request):
+    
+    if request.method == 'POST':
+        
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        password2 = request.POST['password2']
 
+        if password == password2:
+
+            if User.objects.filter(email=email).exists():
+                messages.info(request, "EMAIL WAS TAKEN")
+                return redirect('sign_up')
+
+            elif User.objects.filter(username=username).exists():
+                messages.info(request, "USERANAME WAS TAKEN")
+
+            else:
+                # create User
+                user = User.objects.create_user(
+                    username=username,
+                    email=email,
+                    password=password
+                )
+
+                user.save()
+
+                # redirect to settings
+                user_login = auth.authenticate(username=username, password=password)
+
+                auth.login(request, user_login)
+
+                # Create User's profile
+                user_model = User.objects.get(username=username)
+                new_profile = Profile.objects.create(
+                    user=user_model, 
+                    id_user=user_model.id                            
+                )
+
+                new_profile.save()
+                return redirect('settings')
+
+
+        else:
+            messages.info(request, 'PASSWORD IS NOT MATCHING')
+            return redirect('sign_up')
+
+    return render(request, 'discussions/sign_up.html')
+
+# logging
+def sign_in(request):
+
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = auth.authenticate(username=username, password=password)
+
+        if user is not None:
+            auth.login(request, user)
+
+            return redirect('posts_feed')
+
+        else:
+            messages.info(request, 'DATA IS INVALID')
+
+    return render(request, "discussions/sign_in.html")
+
+
+# logging out
+@login_required(login_url='sign_in')
+def log_out(request):
+    auth.logout(request)
+
+    return redirect('sign_in')
+
+# user's seettings
+def settings(request):
+
+    user_profile = Profile.objects.get(user=request.user)
+
+    if request.method == "POST":
+
+        if request.FILES.get('image') == None:
+            image = user_profile.profile_img
+            # bio = request.POST['bio']
+            # location = request.POST['location']
+
+            # user_profile.profile_img = image
+            # user_profile.bio = bio
+            # user_profile.location = location
+            # user_profile.save()
+
+        if request.FILES.get('image') != None:
+            image = request.FILES.get('image')
+
+        bio = request.POST['bio']
+        location = request.POST['location']
+
+        user_profile.profile_img = image
+        user_profile.bio = bio
+        user_profile.location = location
+        user_profile.save()
+
+        return redirect('settings')
+
+    data = {
+        'user_profile': user_profile
+    }
+
+    return render(request, 'discussions/settings.html', data)

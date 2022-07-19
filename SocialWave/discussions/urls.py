@@ -25,6 +25,14 @@ urlpatterns = [
     
     path('create', views.discussion_create, name='create_post'),   
     
+    path('sign_up', views.sign_up, name='sign_up'),
+
+    path('sign_in', views.sign_in, name='sign_in'),
+
+    path('log_out', views.log_out, name='log_out'),
+
+    path('settings', views.settings, name='settings'),
+    
     path('<int:pk>/detail', DiscussionDetailtView.as_view(), name='discussions_detail'),   
 
     # все посты
