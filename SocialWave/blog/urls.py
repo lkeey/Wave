@@ -40,7 +40,6 @@ urlpatterns = [
     path('', views.feed, name='posts_feed'),
 
     # profile
-
     # заменить класс на функцию
     path('<str:username>', UserPostListView.as_view(), name='user_posts_list'),   
 ]
