@@ -1,0 +1,33 @@
+{% extends 'discussions/base.html' %}
+
+{% load crispy_forms_tags %}
+
+
+{% block title %}Creating Post{% endblock %}
+
+{% load static %}
+
+{% block content_blog %}
+<div class="post alert alert-info text-center">
+
+    <h2 class="title">What do you want to discuss?</h2><br>
+
+    <form action="{% url 'create_post' %}" method="POST" class="dropzone" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <div>
+            {{formset.media}}
+
+            {{formset|crispy}}
+        </div>
+
+        <input type="file" name="image_upload">
+
+        <br><input type="submit" value="SAVE" class="btn btn-save"><br>
+        
+    </form>
+
+
+</div>
+{% endblock %}

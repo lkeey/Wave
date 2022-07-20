@@ -1,0 +1,35 @@
+{% extends "discussions/base.html" %}
+
+{% block title %}Posts{% endblock %}
+
+{% block content_blog %}
+
+{% if all_posts|length > 0 %}
+
+    {% for post in all_posts %}
+        <div class="post alert alert-info">
+            
+            <p class="author">{{ post.author }}</p>
+
+            <h3 class="title">{{ post.title }}</h3>
+
+            <a href="media/{{ post.image }}">
+                <img src="media/{{ post.image }}" alt="None">
+            </a>
+        
+            <p class="content">{{ post.content|safe }}</p><br>
+
+            <p class="date">{{ post.date_created }}</p><br>
+
+            <p class="amount-likes">Likes: {{ post.amount_of_likes }}</p>
+
+        </div>
+    {% endfor %}
+
+{% else %}
+
+    <h3 class="title">We haven't got any post...</h3>
+    
+{% endif %}
+
+{% endblock %}

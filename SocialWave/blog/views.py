@@ -17,17 +17,17 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
 from django.views.generic.dates import timezone_today
-from .models import Discussion, Profile
+from .models import Post, Profile
 
-from . forms import DiscussionCreateForm
+from .forms import PostCreateForm
 
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
-class UserDiscussionListView(ListView) :
+class UserPostsListView(ListView):
     # Модель пост в models.py
-    model = Discussion
+    model = Post
 
     # Имя шаблона html
     template_name = 'discussions/user_discussions.html'
@@ -38,7 +38,7 @@ class UserDiscussionListView(ListView) :
             username = self.kwargs.get('username')
             )
 
-        queryset = Discussion.objects.filter(author=user)
+        queryset = Post.objects.filter(author=user)
 
         context = super().get_context_data(**kwargs)
 
@@ -46,8 +46,8 @@ class UserDiscussionListView(ListView) :
         
         return context
 
-class DiscussionDetailtView(DetailView):
-    model = Discussion
+class PostDetailtView(DetailView):
+    model = Post
 
     template_name = 'discussions/discussion_detail.html'
     context_object_name = 'discussion_detail'
@@ -65,27 +65,31 @@ def discussion_create(request):
 
         # Создадим форму для редактирования
 
-        form = DiscussionCreateForm(request.POST, request.FILES)
-        print(form) 
+        form = PostCreateForm(request.POST, request.FILES)
+        print("FORM",form) 
         # данные пост для заполнения формы
 
         if form.is_valid():
             new_disccusion = form.save(commit=False)
+
             new_disccusion.author = request.user
+
+            new_disccusion.image = request.FILES.get("image_upload")
+
             new_disccusion.save()
 
             return redirect(new_disccusion.get_absolute_url())
 
-    else:
-        # если get-запрос, то вернуть пустую форму
-        formset = DiscussionCreateForm()
+    
+    # если get-запрос, то вернуть пустую форму
+    formset = PostCreateForm()
 
     return render(request, 'discussions/create.html', {'formset': formset})
 
 # for profile
 class UserPostListView(ListView):
     # model in models.py
-    model = Discussion
+    model = Post
 
     # name of template
     template_name = 'discussions/profile.html'
@@ -108,7 +112,7 @@ class UserPostListView(ListView):
             username=self.kwargs.get('username')
         )
 
-        queryset = Discussion.objects.filter(author=user).order_by('-date_created')
+        queryset = Post.objects.filter(author=user).order_by('-date_created')
         
         # context = super().get_context_data(**kwargs)['blog_post_user_list'] = queryset
         context = {
@@ -119,7 +123,7 @@ class UserPostListView(ListView):
 # все посты
 def feed(request):
     data = {
-        "all_posts": Discussion.objects.order_by('-date_created'),
+        "all_posts": Post.objects.order_by('-date_created'),
     }
 
     return render(request, 'discussions/posts_feed.html', data)

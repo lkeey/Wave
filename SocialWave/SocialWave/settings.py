@@ -52,7 +52,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     # my apps
     # 'blog.apps.BlogConfig',   
-    'discussions',
+    'blog',
     'chat',
 
     # packages install

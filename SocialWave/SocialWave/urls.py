@@ -28,7 +28,7 @@ urlpatterns = [
     
     path('chat/', include('chat.urls')),
 
-    path('', include('discussions.urls')),
+    path('', include('blog.urls')),
         
 
     # path('__debug__/', include('debug_toolbar.urls')),

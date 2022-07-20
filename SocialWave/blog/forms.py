@@ -1,9 +1,9 @@
 from dataclasses import fields
-from . models import Discussion
+from . models import Post
 from django.forms import ModelForm
 
-class DiscussionCreateForm(ModelForm):
+class PostCreateForm(ModelForm):
 
     class Meta:
-        model = Discussion
+        model = Post
         fields = ('title', 'content')

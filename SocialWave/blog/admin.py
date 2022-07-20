@@ -1,10 +1,10 @@
 from django.contrib import admin
-from .models import Discussion, Profile
+from .models import Post, Profile
 
 # Register your models here.
-@admin.register(Discussion)
+@admin.register(Post)
 class PageAdmin(admin.ModelAdmin):
-    list_display = ['title', 'author', 'date_created', 'date_updated']
+    list_display = ['title', 'date_created', 'date_updated', 'amount_of_likes']
     
     # автозаполнение
     prepopulated_fields = {
