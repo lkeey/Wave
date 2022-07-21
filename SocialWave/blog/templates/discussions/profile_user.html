@@ -1,0 +1,44 @@
+{% extends "discussions/base.html" %}
+
+{% block title %}Profile {{ user_profile.user.username }}{% endblock %}
+
+{% block content_blog %}
+
+
+
+<div class="avatar">
+    <a href="{{ user_profile.profile_img.url }}">
+        <img src="{{ user_profile.profile_img.url }}" alt="None" class="img-user">
+    </a>
+
+    <h3 class="name-user">{{ user_profile.user.username }}</h3>
+
+    <h2 class="name-user">{{ user_profile.bio }}</h2>
+
+</div>
+
+
+{% if user_posts_length  > 0 %}
+    {% for post in user_posts %}
+        <div class="post alert alert-info">
+            
+            <p class="author">{{ post.author }}</p>
+
+            <h3 class="title">{{ post.title }}</h3>
+
+            <p class="content">{{ post.content|safe }}</p><br>
+
+            <p class="date">{{ post.date_created }}</p><br>
+
+            <p class="amount-likes">Likes: {{ post.total_likes }}</p>
+
+        </div>
+    {% endfor %}
+
+{% else %}
+
+<h3 class="title">You haven't got any post...</h3>
+
+{% endif %}
+
+{% endblock %}

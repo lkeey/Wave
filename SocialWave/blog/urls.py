@@ -36,6 +36,10 @@ urlpatterns = [
     
     path('<int:pk>/detail', PostDetailtView.as_view(), name='discussions_detail'),   
 
+    path('like_post', views.like_post, name='like_post'),
+
+    path('profile/<str:user_name>', views.profile_user, name='profile_user'),
+
     # все посты
     path('', views.feed, name='posts_feed'),
 

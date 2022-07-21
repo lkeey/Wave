@@ -17,7 +17,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
 from django.views.generic.dates import timezone_today
-from .models import Post, Profile
+from .models import Post, Profile, LikePost
 
 from .forms import PostCreateForm
 
@@ -241,3 +241,59 @@ def settings(request):
     }
 
     return render(request, 'discussions/settings.html', data)
+
+@login_required(login_url='sign_in') 
+def like_post(request):
+    username = request.user.username
+    post_id = request.GET.get('post_id')
+
+    post = Post.objects.get(id=post_id)
+
+    like_filter = LikePost.objects.filter(
+        post_id=post_id,
+        username=username
+    ).first()
+
+    if like_filter == None:
+        new_like = LikePost.objects.create(
+            post_id=post_id,
+            username=username
+        )
+
+        new_like.save()
+
+        post.amount_of_likes += 1
+        post.save()
+
+        return redirect('posts_feed')
+
+    else:
+        like_filter.delete()
+        post.amount_of_likes -= 1
+        post.save()
+        return redirect('posts_feed')
+
+
+def profile_user(request, user_name):
+
+    # user_object = User.objects.get(username=pk)
+
+    user = get_object_or_404(
+            User, 
+            username=user_name
+        )
+
+    user_profile = Profile.objects.get(user=user)
+
+    user_posts = Post.objects.filter(author=user).order_by('-date_created')
+
+    user_posts_length = len(user_posts)
+
+    context = {
+        'user_object': user,
+        'user_profile': user_profile,
+        'user_posts': user_posts,
+        'user_posts_length': user_posts_length,
+    }
+
+    return render(request, 'discussions/profile_user.html', context)
