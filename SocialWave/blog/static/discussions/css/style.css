@@ -128,11 +128,97 @@ footer ul li:hover, footer ul a:hover{
 
 }
 
-.img-user {
-  border-radius: 100%;
-  width: 20vw;
-  height: 20vh;
+/* PROFILE */
+
+.avatar {
+  margin: 0 1%;
 }
+
+.container{
+  overflow:hidden;
+}
+.box{
+  white-space: nowrap;
+}
+
+.img-profile {
+  margin-right: 4%;
+}
+
+.box div{
+  /* width:90px; */
+  display:inline-block;
+  /* border:1px solid black */
+}
+
+.information {
+  display: inline;
+}
+
+.img-user {
+  /* display: inline; */
+  border-radius: 50%;
+  width: 30vh; 
+  height: 30vh;
+  background-size: auto 300px;
+}
+
+.name-user {
+  font-weight: 700;
+  font-size: 40px;
+}
+
+.bio {
+  font-size: 25px;
+  font-weight: 500;
+}
+
+/* Dropown */
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  border-radius: 20px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropbtn {
+  background-color: #28c6e9;
+  border-radius: 15px;
+  color: white;
+  padding: 16px;
+  border: none;
+  font-size: 16px;
+  cursor: context-menu;
+}
+
+.fa-ban {
+  color: red;
+}
+
+.fa-trash-can {
+  color: red
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1; border-radius: 30px;}
+.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropbtn {background-color: #6f238f;}
 
 /* tabs */
 

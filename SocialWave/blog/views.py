@@ -112,11 +112,14 @@ class UserPostListView(ListView):
             username=self.kwargs.get('username')
         )
 
+        user_profile = Profile.objects.get(user=user)
+
         queryset = Post.objects.filter(author=user).order_by('-date_created')
         
         # context = super().get_context_data(**kwargs)['blog_post_user_list'] = queryset
         context = {
             'blog_post_user_list': queryset,
+            'user_profile': user_profile,
         }
         return context
 
