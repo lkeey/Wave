@@ -86,6 +86,17 @@ User = get_user_model()
 #     def __str__(self):
 #         return self.title
 
+class Profile(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    id_user = models.IntegerField()
+    bio = models.TextField(blank=True)
+    profile_img = models.ImageField(upload_to='profile_images', default='blank-profile-img.png')
+    location = models.CharField(max_length=100, blank=True)
+
+    def __str__(self):
+        return self.user.username
+
+
 class Post(models.Model):
 
     class Meta:
@@ -95,6 +106,11 @@ class Post(models.Model):
     author = models.ForeignKey(User,
                 on_delete=models.CASCADE,
                 )
+
+    profile_user = models.ForeignKey(Profile,
+                on_delete=models.CASCADE,
+    )
+
     title = models.CharField(max_length=200,
         help_text='No more 200 symbols',
         db_index=True,
@@ -121,17 +137,6 @@ class Post(models.Model):
     def get_absolute_url(self):
         print("PK", self.pk)
         return reverse('discussions_detail', kwargs={"pk": self.pk})
-
-class Profile(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    id_user = models.IntegerField()
-    bio = models.TextField(blank=True)
-    profile_img = models.ImageField(upload_to='profile_images', default='blank-profile-img.png')
-    location = models.CharField(max_length=100, blank=True)
-
-    def __str__(self):
-        return self.user.username
-
 
 class LikePost(models.Model):
     post_id = models.CharField(max_length=500)

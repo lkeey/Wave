@@ -1,3 +1,4 @@
+from operator import length_hint
 from pickletools import read_uint1
 
 from django.http.response import HttpResponseRedirect
@@ -70,9 +71,13 @@ def discussion_create(request):
         # данные пост для заполнения формы
 
         if form.is_valid():
+            user_profile = Profile.objects.get(user=request.user)
+
             new_disccusion = form.save(commit=False)
 
             new_disccusion.author = request.user
+
+            new_disccusion.profile_user = user_profile
 
             new_disccusion.image = request.FILES.get("image_upload")
 
@@ -125,6 +130,7 @@ class UserPostListView(ListView):
 
 # все посты
 def feed(request):
+    
     data = {
         "all_posts": Post.objects.order_by('-date_created'),
     }
@@ -143,42 +149,49 @@ def sign_up(request):
 
         if password == password2:
 
-            if User.objects.filter(email=email).exists():
-                messages.info(request, "EMAIL WAS TAKEN")
-                return redirect('sign_up')
+            if len(username) >= 3 and len(password) >= 8:
 
-            elif User.objects.filter(username=username).exists():
-                messages.info(request, "USERANAME WAS TAKEN")
 
+                if User.objects.filter(email=email).exists():
+                    messages.info(request, "EMAIL WAS TAKEN")
+                    return redirect('sign_up')
+
+                elif User.objects.filter(username=username).exists():
+                    messages.info(request, "USERANAME WAS TAKEN")
+
+                else:
+                    # create User
+                    user = User.objects.create_user(
+                        username=username,
+                        email=email,
+                        password=password
+                    )
+
+                    user.save()
+
+                    # redirect to settings
+                    user_login = auth.authenticate(username=username, password=password)
+
+                    auth.login(request, user_login)
+
+                    # Create User's profile
+                    user_model = User.objects.get(username=username)
+                    new_profile = Profile.objects.create(
+                        user=user_model, 
+                        id_user=user_model.id                            
+                    )
+
+                    new_profile.save()
+                    return redirect('settings')
+                    
             else:
-                # create User
-                user = User.objects.create_user(
-                    username=username,
-                    email=email,
-                    password=password
-                )
-
-                user.save()
-
-                # redirect to settings
-                user_login = auth.authenticate(username=username, password=password)
-
-                auth.login(request, user_login)
-
-                # Create User's profile
-                user_model = User.objects.get(username=username)
-                new_profile = Profile.objects.create(
-                    user=user_model, 
-                    id_user=user_model.id                            
-                )
-
-                new_profile.save()
-                return redirect('settings')
+                messages.info(request, 'The USERNAME must be more than 2 characters and the PASSWORD more than 7')
 
 
         else:
             messages.info(request, 'PASSWORD IS NOT MATCHING')
             return redirect('sign_up')
+
 
     return render(request, 'discussions/sign_up.html')
 
@@ -198,6 +211,8 @@ def sign_in(request):
 
         else:
             messages.info(request, 'DATA IS INVALID')
+
+        
 
     return render(request, "discussions/sign_in.html")
 

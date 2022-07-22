@@ -8,22 +8,28 @@
 
     {% for post in all_posts %}
         <div class="post alert alert-info">
-            
-            <a href="{% url 'profile_user' user_name=post.author.username %}">
-                <p class="author">{{ post.author }}</p>
-            </a>
-
+            <div class="box">
+                <div class="">
+                    <a href="{% url 'profile_user' user_name=post.author.username %}">
+                        <img src="{{ post.profile_user.profile_img.url }}" alt="None" class="img-posts-feed">
+                    </a>
+                </div>
+                <div class="">
+                    <a href="{% url 'profile_user' user_name=post.author.username %}">
+                        <p class="author">{{ post.author }}</p>
+                    </a>
+                </div>
+            </div>
             <h3 class="title">{{ post.title }}</h3>
 
-            <a href="media/{{ post.image }}">
-                <img src="media/{{ post.image }}" alt="None">
+            <a href="{{ post.image.url }}">
+                <img src="{{ post.image.url }}" alt="None" class="post-image">
             </a>
         
-            <p class="content">{{ post.content|safe }}</p><br>
+            <div class="content">@{{ post.author }}: {{ post.content|safe }}</div><br>
 
             <p class="date">{{ post.date_created }}</p><br>
 
-            <p class="amount-likes">Likes: {{ post.amount_of_likes }}</p>
 
             <div class="py-3 px-4 space-y-3"> 
                                

@@ -67,10 +67,8 @@ footer ul li:hover, footer ul a:hover{
 }
 
 .author {
-    margin-left: 5%;
-    margin-right: 70%;
+    padding: 5px 5vw;
     font-size: 15px;
-    padding: 5px;
     width: auto;
     border: 2px solid white;
     border-radius: 100px;
@@ -92,8 +90,12 @@ footer ul li:hover, footer ul a:hover{
     margin-right: 10%;
 
     font-size: 20px;
-    font-weight: 500;
+    font-weight: 500;   
     
+}
+
+p {
+  display: inline;
 }
 
 .date {
@@ -128,10 +130,20 @@ footer ul li:hover, footer ul a:hover{
 
 }
 
+.post-image {
+  margin: 1vw 0;
+
+  margin-left: 20%;
+  margin-right: 20%;
+
+  border-radius: 15px;
+  width: 100vh; 
+}
+
 /* PROFILE */
 
 .avatar {
-  margin: 0 1%;
+  margin: 0 4%;
 }
 
 .container{
@@ -160,6 +172,13 @@ footer ul li:hover, footer ul a:hover{
   border-radius: 50%;
   width: 30vh; 
   height: 30vh;
+  background-size: auto 300px;
+}
+
+.img-posts-feed {
+  border-radius: 50%;
+  width: 10vh; 
+  height: 10vh;
   background-size: auto 300px;
 }
 
@@ -208,17 +227,19 @@ footer ul li:hover, footer ul a:hover{
   cursor: context-menu;
 }
 
-.fa-ban {
+.dropbtn-profile {
+  background-image: linear-gradient(60deg, rgb(212, 49, 196) 10%, #7522bd 100%);
+}
+
+.danger-icon {
   color: red;
 }
 
-.fa-trash-can {
-  color: red
-}
 
 .dropdown-content a:hover {background-color: #f1f1f1; border-radius: 30px;}
 .dropdown:hover .dropdown-content {display: block;}
 .dropdown:hover .dropbtn {background-color: #6f238f;}
+.dropdown-profile:hover .dropbtn-profile {background-image: linear-gradient(60deg, rgb(162, 16, 148) 10%, #53108d 100%);}
 
 /* tabs */
 
