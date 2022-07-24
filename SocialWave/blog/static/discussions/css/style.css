@@ -5,6 +5,10 @@ body {
  
 }
 
+a {
+  text-decoration: none;
+}
+
 .example::-webkit-scrollbar {
     display: none;
   }
@@ -137,7 +141,9 @@ p {
   margin-right: 20%;
 
   border-radius: 15px;
-  width: 100vh; 
+
+  width: 55vw; 
+  height: 100vh;
 }
 
 /* PROFILE */
@@ -190,6 +196,27 @@ p {
 .bio {
   font-size: 25px;
   font-weight: 500;
+}
+
+.profile-btn {
+  border-radius: 15px;
+
+  color: black;
+  font-size: 20px;
+  font-weight: 300;
+
+  margin-top: 3vh;
+  padding: 1vw 5vw;
+
+}
+
+.send-message{
+  margin-right: 1vw;
+  background-image: linear-gradient(45deg, rgb(36, 51, 215) 10%, #2250d7 100%);
+}
+
+.add-friends {
+  background-image: linear-gradient(45deg, rgb(36, 108, 215) 10%, #22d7b0 100%);
 }
 
 /* Dropown */
@@ -337,3 +364,61 @@ p {
       transform: scale(0.6);
     }
   }
+
+  /* Comment Form */
+
+.input-comment {
+  border-radius: 30px;
+
+  display: inline;
+  
+  margin-bottom: 1vw;
+
+}
+
+.btn-send {
+  text-align: center;
+
+  display: inline;
+
+  border-radius: 50px;
+  background-image: linear-gradient(60deg, rgb(61, 120, 202) 10%, #16d054 100%);
+
+  font-size: 20px;
+  font-weight: 500;
+
+  margin-bottom: 3vw;
+
+}
+
+/* Comments */
+
+.comment_by_user {
+  border-radius: 15px;
+
+  background-image: linear-gradient(60deg, rgb(153, 157, 163) 10%, #e4efe8 100%);
+
+  margin-bottom: 1vw;
+}
+
+.img-profile-comm {
+  border-radius: 50%;
+  width: 5vh; 
+  height: 5vh;
+  /* background-size: auto ; */
+
+  margin: 10px 10px;
+
+}
+
+.comm-user {
+  font-weight: bold;
+}
+
+.comm-date {
+  font-weight: 100;
+
+  font-size: 15px;
+
+  margin: 0 1vw 0 60vw;
+}

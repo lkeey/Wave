@@ -15,8 +15,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path, re_path
-from .views import (PostDetailtView, UserPostsListView,
-                                UserPostListView)
+from .views import (PostDetailtView, 
+                    UserPostListView)
 
 from . import views
 
@@ -39,6 +39,8 @@ urlpatterns = [
     path('like_post', views.like_post, name='like_post'),
 
     path('profile/<str:user_name>', views.profile_user, name='profile_user'),
+
+    # path('comment/<post_id>', views.add_comment, name='add_comment'),
 
     # все посты
     path('', views.feed, name='posts_feed'),

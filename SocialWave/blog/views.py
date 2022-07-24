@@ -3,9 +3,12 @@ from pickletools import read_uint1
 
 from django.http.response import HttpResponseRedirect
 
+from django.core.exceptions import ObjectDoesNotExist
+
 from django.urls.base import reverse_lazy
 
-from django.views.generic import ListView, CreateView, DetailView, ListView
+from django.views.generic import ListView, CreateView, DetailView, View
+from django.views.generic.edit import FormMixin
 
 from django.shortcuts import render, get_object_or_404, redirect
 
@@ -18,42 +21,82 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
 from django.views.generic.dates import timezone_today
-from .models import Post, Profile, LikePost
+from .models import Post, Profile, LikePost, Comment
 
-from .forms import PostCreateForm
+from .forms import PostCreateForm, CommentForm
 
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
-class UserPostsListView(ListView):
-    # Модель пост в models.py
-    model = Post
+# class UserPostsListView(ListView):
+#     # Модель пост в models.py
+#     model = Post
 
-    # Имя шаблона html
-    template_name = 'discussions/user_discussions.html'
+#     # Имя шаблона html
+#     template_name = 'discussions/user_discussions.html'
 
-    def get_context_data(self, **kwargs):
+#     def get_context_data(self, **kwargs):
 
-        user = get_object_or_404(User,
-            username = self.kwargs.get('username')
-            )
+#         user = get_object_or_404(User,
+#             username = self.kwargs.get('username')
+#             )
 
-        queryset = Post.objects.filter(author=user)
+#         queryset = Post.objects.filter(author=user)
 
-        context = super().get_context_data(**kwargs)
+#         context = super().get_context_data(**kwargs)
 
-        context['discussions post_user_list'] = queryset.order_by('-date_created')
+#         context['discussions post_user_list'] = queryset.order_by('-date_created')
         
-        return context
+#         return context
 
-class PostDetailtView(DetailView):
+class PostDetailtView(FormMixin, DetailView):
     model = Post
 
     template_name = 'discussions/discussion_detail.html'
     context_object_name = 'discussion_detail'
 
+    form_class = CommentForm
+
     # def get_pk(self):
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('discussions_detail', kwargs={"pk":self.get_object().id})
+    
+   
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+
+        if form.is_valid():
+            return self.form_valid(form, request)
+
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form, request):
+        user_profile = Profile.objects.get(user=request.user)
+
+        self.object = form.save(commit=False)
+        self.object.post = self.get_object()
+        self.object.author = self.request.user
+        self.object.profile_user = user_profile
+        self.object.save()
+
+        return super().form_valid(form)
+
+    # def get_context_data(self, **kwargs):
+
+    #     user = get_object_or_404(User,
+    #         username = self.kwargs.get('username')
+    #         )
+
+    #     user_profile = Profile.objects.get(user=user)
+
+    #     context = super().get_context_data(**kwargs)
+
+    #     context['user_profile'] = user_profile
+        
+    #     return context
 
 
 @login_required(login_url='sign_in')
@@ -133,6 +176,7 @@ def feed(request):
     
     data = {
         "all_posts": Post.objects.order_by('-date_created'),
+        "form": CommentForm
     }
 
     return render(request, 'discussions/posts_feed.html', data)
@@ -315,3 +359,55 @@ def profile_user(request, user_name):
     }
 
     return render(request, 'discussions/profile_user.html', context)
+
+
+# @login_required
+# def add_comment(request, post_id):
+#     if request.method == "POST":
+
+#         form = CommentForm(request.POST)
+#         post = get_object_or_404(Post, id=post_id)
+    
+#         if form.is_valid():
+#             comment = Comment()
+#             comment.path = []
+#             comment.post_id = post
+#             comment.author_id = auth.get_user(request)
+#             comment.content = form.cleaned_data['comment_area']
+#             comment.save()
+    
+#             # Django не позволяет увидеть ID комментария по мы не сохраним его, 
+#             # хотя PostgreSQL имеет такие средства в своём арсенале, но пока не будем
+#             # работать с сырыми SQL запросами, поэтому сформируем path после первого сохранения
+#             # и пересохраним комментарий 
+#             try:
+#                 comment.path.extend(Comment.objects.get(id=form.cleaned_data['parent_comment']).path)
+#                 comment.path.append(comment.id)
+            
+#             except ObjectDoesNotExist:
+#                 comment.path.append(comment.id)
+    
+#             comment.save()
+    
+#         return redirect(post.get_absolute_url())
+
+# class EArticleView(View):
+#     template_name = 'knowledge/article.html'
+#     comment_form = CommentForm
+
+#     def get(self, request,  *args, **kwargs):
+#         post = get_object_or_404(Post, id=self.kwargs['post_id'])
+#         context = {}
+#         context.update(csrf(request))
+#         user = auth.get_user(request)
+#         context['post'] = post
+#         # Помещаем в контекст все комментарии, которые относятся к статье
+#         # попутно сортируя их по пути, ID автоинкрементируемые, поэтому
+#         # проблем с иерархией комментариев не должно возникать
+#         context['comments'] = post.comment_set.all().order_by('path')
+#         context['next'] = post.get_absolute_url()
+#         # Будем добавлять форму только в том случае, если пользователь авторизован
+#         if user.is_authenticated:
+#             context['form'] = self.comment_form
+
+#         return render(request, template_name=self.template_name, context=context)

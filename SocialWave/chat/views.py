@@ -4,6 +4,9 @@ from chat.models import Room, Message
 from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
 
+from django.views.generic import View
+
+
 # Create your views here.
 
 def home(request):
@@ -68,3 +71,10 @@ def getMessages(request, room):
     messages = Message.objects.filter(room=room_details.id)
 
     return JsonResponse({"messages":list(messages.values())})
+
+
+class DialogsView(View):
+    def get(self, request):
+        chats = Room.objects.filter(members__in=[request.user.id])
+        return render(request, 'chat/home.html', {'user_profile': request.user, 'chats': chats})
+

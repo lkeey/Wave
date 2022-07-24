@@ -17,6 +17,7 @@ from django.contrib.auth import get_user_model
 
 import uuid
 
+from django.contrib.postgres.fields import ArrayField
 # django.template.defaultfilters import slugify
 # from django.utils.text import slugify
 
@@ -114,7 +115,7 @@ class Post(models.Model):
     title = models.CharField(max_length=200,
         help_text='No more 200 symbols',
         db_index=True,
-        )
+    )
 
     image = models.ImageField(upload_to='post_images')
 
@@ -144,3 +145,33 @@ class LikePost(models.Model):
 
     def __str__(self):
         return self.username
+
+class Comment(models.Model):
+    class Meta:
+        db_table = "comments"
+ 
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_name='comments_post'
+    )
+
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+
+    )
+
+    profile_user = models.ForeignKey(Profile,
+                on_delete=models.CASCADE,
+    )
+
+    content = models.TextField('')
+
+    create_date = models.DateTimeField(auto_now=True)
+ 
+    def __str__(self):
+        return self.content[0:200]
+ 

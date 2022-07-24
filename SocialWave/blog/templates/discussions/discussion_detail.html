@@ -57,6 +57,48 @@
             </a>
         </div>
     </div>
+
+    {% for comm in discussion_detail.comments_post.all %}
+
+        <div class="comment_by_user box">
+
+            <div class="">
+                <a href="{% url 'profile_user' user_name=discussion_detail.author.username %}">
+                    <img src="{{ discussion_detail.profile_user.profile_img.url }}" alt="None" class="img-profile-comm">
+                </a>
+            </div>
+
+            <div>
+                <a href="{% url 'profile_user' user_name=discussion_detail.author.username %}">
+                    <h4 class="comm-user">{{ comm.author }}</h4>
+                </a>
+
+                <p class="comm-text">{{ comm }}</p><br>
+
+                <p class="comm-date">{{ comm.create_date }}</p>
+            </div> 
+
+        </div>
+        
+    {% endfor %}
+
+    <div class="box text-center">
+        <form action="" method="POST" enctype="multipart/form-data">
+
+            {% csrf_token %}
+    
+            <div class="col-10 ">
+
+                {{ form }}
+
+            </div>
+
+            <div class="">
+                <input type="submit" value="SEND" class="btn btn-send"><br>
+            </div>
+        </form>
+    </div>  
+
 </div>
 
 {% endblock %}
