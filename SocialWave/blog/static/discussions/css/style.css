@@ -422,3 +422,26 @@ p {
 
   margin: 0 1vw 0 60vw;
 }
+
+/* ICONS COMM AND LIKES */
+
+.data-likes {
+  border-radius: 50px;
+
+  width: 15vw;
+
+  margin-right: 1vw;
+  
+  background-image: linear-gradient(60deg, rgb(123, 69, 223) 10%, #7522bd 100%);
+
+}
+
+.data-comm {
+  border-radius: 50px;
+
+  width: 15vw;
+  
+  background-image: linear-gradient(60deg, rgb(217, 213, 223) 10%, #39383a 100%);
+
+}
+

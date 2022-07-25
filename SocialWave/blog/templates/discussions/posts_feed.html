@@ -5,18 +5,32 @@
 {% block content_blog %}
 
 <script>
-    function show_comments_form(parent_comment_id){
-        
-        if (parent_comment_id == 'write_comment')
-        {
-            $("#id_parent_comment").val('')
-        }
-        else
-        {
-            $("#id_parent_comment").val(parent_comment_id);
-        }
-        $("#comment_form").insertAfter("#" + parent_comment_id);
+    
+    function to_bookmarks()
+    {
+        var current = $(this);
+        var type = current.data('type');
+        var pk = current.data('id');
+        var action = current.data('action');
+     
+        $.ajax({
+            url : type + "/" + pk + "/" + action + "/",
+            type : 'POST',
+            data : { 'obj' : pk },
+     
+            success : function (json) {
+                current.find("[data-count='" + action + "']").text(json.count);
+            }
+        });
+     
+        return false;
     }
+     
+    // Подключение обработчика
+    $(function() {
+        $('[data-action="bookmark"]').click(to_bookmarks);
+    });
+    
 </script>
 
 {% if all_posts|length > 0 %}
@@ -49,11 +63,11 @@
             <p class="date">{{ post.date_created }}</p><br>
 
 
-            <div class="py-3 px-4 space-y-3"> 
+            <div class="py-3 px-4 space-y-3 box"> 
                                
-                <div class="flex space-x-4 lg:font-bold">
-                    <a href="/like_post?post_id={{post.id}}" class="flex items-center space-x-2">
-                        <div class="p-2 rounded-full text-black">
+                <div class="flex space-x-4 lg:font-bold data-likes text-center">
+                    <a href="/like_post?post_id={{post.id}}" class="flex items-center space-x-2 ">
+                        <div class="p-2 rounded-full text-black " >
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="25" height="25" class="">
                                 <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
                             </svg>
@@ -66,6 +80,29 @@
                             {% endif %}
                         </div>  
                     </a>
+                </div>
+
+                <div class="data-comm text-center">
+
+                    <a href="{% url 'discussions_detail' pk=post.pk %}">
+                        <div class="p-2 rounded-full text-black " >
+                            <i class="fa-solid fa-comment-dots comment-icon"></i>
+                            {% if post.amount_of_comments == 0 %}
+                            <p>No Comments</p>
+                            {% elif post.amount_of_comments == 1 %}
+                            <p>Commented by {{post.amount_of_comments}} person</p>
+                            {% else %}
+                            <p>Commented by {{post.amount_of_comments}} people</p>
+                            {% endif %}
+                        </div>  
+                    </a>
+
+                </div>
+
+                <div data-id="{{ post.id }}" data-type="post" data-action="bookmark" title="Избранное">
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span data-count="bookmark">Count: {{ post.get_bookmark_count }}</span>
+                    <input type="submit">
                 </div>
 
             </div>
@@ -86,6 +123,8 @@
                     </div>
                 </form>
             </div>  
+
+            
 
             <!--
             {% for comment in comments %}

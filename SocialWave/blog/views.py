@@ -7,7 +7,10 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from django.urls.base import reverse_lazy
 
-from django.views.generic import ListView, CreateView, DetailView, View
+from django.views.generic import (
+    ListView, CreateView, 
+    DetailView, View,
+)
 from django.views.generic.edit import FormMixin
 
 from django.shortcuts import render, get_object_or_404, redirect
@@ -18,6 +21,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # https://docs.djangoproject.com/en/4.0/ref/contrib/
 # messages/
 
+from django.http import HttpResponse
+
 from django.contrib import messages
 
 from django.views.generic.dates import timezone_today
@@ -26,6 +31,8 @@ from .models import Post, Profile, LikePost, Comment
 from .forms import PostCreateForm, CommentForm
 
 from django.contrib.auth.decorators import login_required
+
+import json
 
 # Create your views here.
 
@@ -75,11 +82,16 @@ class PostDetailtView(FormMixin, DetailView):
 
     def form_valid(self, form, request):
         user_profile = Profile.objects.get(user=request.user)
+        post = self.get_object()
 
         self.object = form.save(commit=False)
-        self.object.post = self.get_object()
+        self.object.post = post
         self.object.author = self.request.user
         self.object.profile_user = user_profile
+
+        post.amount_of_comments += 1
+        post.save()
+
         self.object.save()
 
         return super().form_valid(form)
@@ -411,3 +423,27 @@ def profile_user(request, user_name):
 #             context['form'] = self.comment_form
 
 #         return render(request, template_name=self.template_name, context=context)
+
+class BookmarkView(View):
+    # в данную переменную будет устанавливаться модель закладок, которую необходимо обработать
+    model = None
+ 
+    def post(self, request, pk):
+        print(f"DATA: {self}")
+        user = auth.get_user(request)
+        # пытаемся получить закладку из таблицы, или создать новую
+        bookmark, created = self.model.objects.get_or_create(user=user, obj_id=pk)
+        # если не была создана новая закладка, 
+        # то считаем, что запрос был на удаление закладки
+        if not created:
+            bookmark.delete()
+ 
+        return HttpResponse(
+            json.dumps({
+                "result": created,
+                "count": self.model.objects.filter(obj_id=pk).count()
+            }),
+            content_type="application/json"
+        )
+    
+

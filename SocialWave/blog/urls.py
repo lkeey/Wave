@@ -15,13 +15,23 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path, re_path
-from .views import (PostDetailtView, 
-                    UserPostListView)
+from .views import (
+    PostDetailtView, 
+    UserPostListView,
+)    
+
+from django.contrib.auth.decorators import login_required
+
+from .models import (
+    BookmarkPost,
+    BookmarkComment
+)
 
 from . import views
 
-urlpatterns = [
 
+
+urlpatterns = [
     # path('<str:username>/', UserPostsListView.as_view(), name='user_discussions_list'),   
     
     path('create', views.discussion_create, name='create_post'),   
@@ -48,5 +58,22 @@ urlpatterns = [
     # profile
     # заменить класс на функцию
     path('<str:username>', UserPostListView.as_view(), name='user_posts_list'),   
+
+    # path(r'^post/(?P<pk>\d+)/bookmark/$',
+    #     login_required(views.BookmarkView.as_view(model=BookmarkPost)),
+    #     name='post_bookmark'),
+    
+    path('post/<int:pk>/bookmark/',
+        login_required(views.BookmarkView.as_view(model=BookmarkPost)),
+        name='post_bookmark'),
+    
+    # path(r'api/^comment/(?P<pk>\d+)/bookmark/$',
+    #     login_required(views.BookmarkView.as_view(model=BookmarkComment)),
+    #     name='comment_bookmark'),
+    
+    path('comment/<int:pk>/bookmark/',
+        login_required(views.BookmarkView.as_view(model=BookmarkComment)),
+        name='comment_bookmark'),
+    
 ]
 

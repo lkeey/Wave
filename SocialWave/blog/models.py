@@ -130,6 +130,8 @@ class Post(models.Model):
 
     amount_of_likes = models.IntegerField(default=0)
 
+    amount_of_comments = models.IntegerField(default=0)
+
     slug = models.SlugField(max_length=50) # unique=True
 
     def __str__(self):
@@ -138,6 +140,9 @@ class Post(models.Model):
     def get_absolute_url(self):
         print("PK", self.pk)
         return reverse('discussions_detail', kwargs={"pk": self.pk})
+
+    def get_bookmark_count(self):
+        return self.bookmarkpost_set.all().count()
 
 class LikePost(models.Model):
     post_id = models.CharField(max_length=500)
@@ -175,3 +180,38 @@ class Comment(models.Model):
     def __str__(self):
         return self.content[0:200]
  
+
+# BOOKMARKS
+
+class BookmarkBase(models.Model):
+    class Meta:
+        abstract = True
+ 
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+ 
+    def __str__(self):
+        return self.user.username
+
+
+class BookmarkPost(BookmarkBase):
+    class Meta:
+        db_table = "bookmark_post"
+ 
+    obj = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+    )
+ 
+    
+
+class BookmarkComment(BookmarkBase):
+    class Meta:
+        db_table = "bookmark_comment"
+ 
+    obj = models.ForeignKey(
+        Comment,
+        on_delete=models.CASCADE,
+    )
