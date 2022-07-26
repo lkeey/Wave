@@ -26,7 +26,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 
 from django.views.generic.dates import timezone_today
-from .models import Post, Profile, LikePost, Comment
+from .models import Post, Profile, Comment
 
 from .forms import PostCreateForm, CommentForm
 
@@ -316,36 +316,36 @@ def settings(request):
 
     return render(request, 'discussions/settings.html', data)
 
-@login_required(login_url='sign_in') 
-def like_post(request):
-    username = request.user.username
-    post_id = request.GET.get('post_id')
+# @login_required(login_url='sign_in') 
+# def like_post(request):
+#     username = request.user.username
+#     post_id = request.GET.get('post_id')
 
-    post = Post.objects.get(id=post_id)
+#     post = Post.objects.get(id=post_id)
 
-    like_filter = LikePost.objects.filter(
-        post_id=post_id,
-        username=username
-    ).first()
+#     like_filter = LikePost.objects.filter(
+#         post_id=post_id,
+#         username=username
+#     ).first()
 
-    if like_filter == None:
-        new_like = LikePost.objects.create(
-            post_id=post_id,
-            username=username
-        )
+#     if like_filter == None:
+#         new_like = LikePost.objects.create(
+#             post_id=post_id,
+#             username=username
+#         )
 
-        new_like.save()
+#         new_like.save()
 
-        post.amount_of_likes += 1
-        post.save()
+#         post.amount_of_likes += 1
+#         post.save()
 
-        return redirect('posts_feed')
+#         return redirect('posts_feed')
 
-    else:
-        like_filter.delete()
-        post.amount_of_likes -= 1
-        post.save()
-        return redirect('posts_feed')
+#     else:
+#         like_filter.delete()
+#         post.amount_of_likes -= 1
+#         post.save()
+#         return redirect('posts_feed')
 
 
 def profile_user(request, user_name):
@@ -429,7 +429,7 @@ class BookmarkView(View):
     model = None
  
     def post(self, request, pk):
-        print(f"DATA: {self}")
+        print(f"DATA-FAVOURITE: {self}")
         user = auth.get_user(request)
         # пытаемся получить закладку из таблицы, или создать новую
         bookmark, created = self.model.objects.get_or_create(user=user, obj_id=pk)
@@ -446,4 +446,38 @@ class BookmarkView(View):
             content_type="application/json"
         )
     
+class LikekView(View):
+    # в данную переменную будет устанавливаться модель закладок, которую необходимо обработать
+    model = None
+ 
+    def post(self, request, pk):
+        print(f"DATA-LIKE: {pk}")
+        user = auth.get_user(request)
 
+        like, created = self.model.objects.get_or_create(user=user, obj_id=pk)
+
+        if self.model == 'PostLike':
+            obj = Post.objects.get(id=pk)
+
+        else:
+            obj = Comment.objects.get(id=pk)
+
+
+        if not created:
+            like.delete()
+
+            obj.amount_of_likes -= 1
+            obj.save()
+
+        else:
+
+            obj.amount_of_likes += 1
+            obj.save()
+
+        return HttpResponse(
+            json.dumps({
+                "result": created,
+                "count": self.model.objects.filter(obj_id=pk).count()
+            }),
+            content_type="application/json"
+        )

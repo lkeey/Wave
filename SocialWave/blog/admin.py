@@ -1,9 +1,10 @@
 from django.contrib import admin
 from .models import (
     Post, Profile, 
-    LikePost, Comment,
+    PostLike, Comment,
     BookmarkPost,
-    BookmarkComment
+    BookmarkComment,
+    CommentLike,
 )
 
 # Register your models here.
@@ -19,9 +20,13 @@ class PageAdmin(admin.ModelAdmin):
 # admin.site.register(Discussion)
 
 admin.site.register(Profile)
-admin.site.register(LikePost)
+
 admin.site.register(Comment)
+
 admin.site.register(BookmarkPost)
+admin.site.register(PostLike)
+
+admin.site.register(CommentLike)
 admin.site.register(BookmarkComment)
 
 

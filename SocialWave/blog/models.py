@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from tkinter import CASCADE
 from django.db import models
 
 from django.contrib.auth.models import User
@@ -18,6 +19,10 @@ from django.contrib.auth import get_user_model
 import uuid
 
 from django.contrib.postgres.fields import ArrayField
+
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericRelation
 # django.template.defaultfilters import slugify
 # from django.utils.text import slugify
 
@@ -144,12 +149,6 @@ class Post(models.Model):
     def get_bookmark_count(self):
         return self.bookmarkpost_set.all().count()
 
-class LikePost(models.Model):
-    post_id = models.CharField(max_length=500)
-    username = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.username
 
 class Comment(models.Model):
     class Meta:
@@ -168,6 +167,8 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
 
     )
+
+    amount_of_likes = models.IntegerField(default=0)
 
     profile_user = models.ForeignKey(Profile,
                 on_delete=models.CASCADE,
@@ -210,6 +211,45 @@ class BookmarkPost(BookmarkBase):
 class BookmarkComment(BookmarkBase):
     class Meta:
         db_table = "bookmark_comment"
+ 
+    obj = models.ForeignKey(
+        Comment,
+        on_delete=models.CASCADE,
+    )
+
+# class LikePost(models.Model):
+    # post_id = models.CharField(max_length=500)
+    # username = models.CharField(max_length=100)
+
+    # def __str__(self):
+    #     return self.username
+ 
+# LIKES
+
+class LikesBase(models.Model):
+    class Meta:
+        abstract = True
+ 
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+ 
+    def __str__(self):
+        return self.user.username
+
+class PostLike(LikesBase):
+    class Meta:
+        db_table = "like_post"
+
+    obj = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+    )
+ 
+class CommentLike(LikesBase):
+    class Meta:
+        db_table = "like_comment"
  
     obj = models.ForeignKey(
         Comment,

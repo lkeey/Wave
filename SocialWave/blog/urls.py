@@ -18,13 +18,17 @@ from django.urls import path, re_path
 from .views import (
     PostDetailtView, 
     UserPostListView,
+    LikekView,
+    BookmarkView,
 )    
 
 from django.contrib.auth.decorators import login_required
 
 from .models import (
     BookmarkPost,
-    BookmarkComment
+    BookmarkComment,
+    PostLike,
+    CommentLike
 )
 
 from . import views
@@ -46,7 +50,11 @@ urlpatterns = [
     
     path('<int:pk>/detail', PostDetailtView.as_view(), name='discussions_detail'),   
 
-    path('like_post', views.like_post, name='like_post'),
+    # path('like_post', views.like_post, name='like'),
+
+    path('post/<int:pk>/like/', LikekView.as_view(model=PostLike), name='like_post'),
+    
+    path('comment/<int:pk>/like/', LikekView.as_view(model=CommentLike), name='like_comm'),
 
     path('profile/<str:user_name>', views.profile_user, name='profile_user'),
 
@@ -64,7 +72,7 @@ urlpatterns = [
     #     name='post_bookmark'),
     
     path('post/<int:pk>/bookmark/',
-        login_required(views.BookmarkView.as_view(model=BookmarkPost)),
+        login_required(BookmarkView.as_view(model=BookmarkPost)),
         name='post_bookmark'),
     
     # path(r'api/^comment/(?P<pk>\d+)/bookmark/$',
@@ -72,7 +80,7 @@ urlpatterns = [
     #     name='comment_bookmark'),
     
     path('comment/<int:pk>/bookmark/',
-        login_required(views.BookmarkView.as_view(model=BookmarkComment)),
+        login_required(BookmarkView.as_view(model=BookmarkComment)),
         name='comment_bookmark'),
     
 ]
