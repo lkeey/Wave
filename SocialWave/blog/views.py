@@ -87,7 +87,6 @@ class PostDetailtView(FormMixin, DetailView):
         self.object = form.save(commit=False)
         self.object.post = post
         self.object.author = self.request.user
-        self.object.profile_user = user_profile
 
         post.amount_of_comments += 1
         post.save()
@@ -126,13 +125,10 @@ def discussion_create(request):
         # данные пост для заполнения формы
 
         if form.is_valid():
-            user_profile = Profile.objects.get(user=request.user)
 
             new_disccusion = form.save(commit=False)
 
             new_disccusion.author = request.user
-
-            new_disccusion.profile_user = user_profile
 
             new_disccusion.image = request.FILES.get("image_upload")
 
@@ -450,29 +446,25 @@ class LikekView(View):
     # в данную переменную будет устанавливаться модель закладок, которую необходимо обработать
     model = None
  
-    def post(self, request, pk):
+    def post(self, request, pk, id=0):
         print(f"DATA-LIKE: {pk}")
         user = auth.get_user(request)
 
         like, created = self.model.objects.get_or_create(user=user, obj_id=pk)
 
-        if self.model == 'PostLike':
-            obj = Post.objects.get(id=pk)
-
-        else:
-            obj = Comment.objects.get(id=pk)
+        print("MODEL-CLASS IS", like.obj)
 
 
         if not created:
             like.delete()
 
-            obj.amount_of_likes -= 1
-            obj.save()
+            like.obj.amount_of_likes -= 1
+            like.obj.save()
 
         else:
 
-            obj.amount_of_likes += 1
-            obj.save()
+            like.obj.amount_of_likes += 1
+            like.obj.save()
 
         return HttpResponse(
             json.dumps({

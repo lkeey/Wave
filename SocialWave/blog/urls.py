@@ -51,8 +51,12 @@ urlpatterns = [
     path('<int:pk>/detail', PostDetailtView.as_view(), name='discussions_detail'),   
 
     # path('like_post', views.like_post, name='like'),
-
+        # like in feed and own-profile
     path('post/<int:pk>/like/', LikekView.as_view(model=PostLike), name='like_post'),
+        # like in detail
+    path('<int:id>/post/<int:pk>/like/', LikekView.as_view(model=PostLike), name='like_post'),
+        # in users profile
+    path('profile/post/<int:pk>/like/', LikekView.as_view(model=PostLike), name='like_post'),
     
     path('comment/<int:pk>/like/', LikekView.as_view(model=CommentLike), name='like_comm'),
 
