@@ -292,6 +292,7 @@ p {
 
     padding-bottom: 10px;
 
+    z-index: 100;
   }
   .tabs {
     display: flex;
@@ -401,18 +402,27 @@ p {
   margin-bottom: 1vw;
 }
 
+.comm-text {
+  font-weight: 500;
+  font-size: 17px;
+
+  margin: 0 0 1vw 2vw;
+}
+
 .img-profile-comm {
   border-radius: 50%;
   width: 5vh; 
   height: 5vh;
   /* background-size: auto ; */
 
-  margin: 10px 10px;
-
+  /* margin: 10px 10px; */
+  margin: 1vw 1vw 3vw 1vw;
 }
 
 .comm-user {
+  margin-bottom: 1vw;
   font-weight: bold;
+
 }
 
 .comm-date {
@@ -420,7 +430,17 @@ p {
 
   font-size: 15px;
 
-  margin: 0 1vw 0 60vw;
+  margin: 3vw 1vw 1vw 1vw;
+}
+
+.comm-like {
+  border-radius: 50px;
+
+  width: 5vw;
+
+  margin-left: 60vw;
+
+  background-image: linear-gradient(60deg, rgb(238, 237, 240) 10%, #22bd8c 100%);
 }
 
 /* ICONS COMM AND LIKES */
@@ -445,3 +465,47 @@ p {
 
 }
 
+.data-save {
+  border-radius: 50px;
+
+  margin-left: 50vw;
+
+  width: 7vw;
+  
+  background-image: linear-gradient(60deg, rgb(11, 198, 235) 10%, #eef60a 100%);
+
+} 
+
+.data-save a { 
+  color: #ffffff;
+}
+
+/* PROFILE BLOCKS*/
+
+.menu-overlay{
+	position: fixed;
+	top: 30vw;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: rgba(0,0,0,0);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.menu-overlay.active{
+	background-color: rgba(0,0,0,.7);
+}
+
+.menu{
+	list-style: none;
+	width: 100%;
+	text-align: center;
+	transition: all .5s;
+	transform: scale(0);
+}
+
+.menu-overlay.active .menu{
+	transform: scale(1);	
+}

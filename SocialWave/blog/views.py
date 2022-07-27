@@ -424,7 +424,7 @@ class BookmarkView(View):
     # в данную переменную будет устанавливаться модель закладок, которую необходимо обработать
     model = None
  
-    def post(self, request, pk):
+    def post(self, request, pk, id=0):
         print(f"DATA-FAVOURITE: {self}")
         user = auth.get_user(request)
         # пытаемся получить закладку из таблицы, или создать новую

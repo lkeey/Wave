@@ -57,8 +57,11 @@ urlpatterns = [
     path('<int:id>/post/<int:pk>/like/', LikekView.as_view(model=PostLike), name='like_post'),
         # in users profile
     path('profile/post/<int:pk>/like/', LikekView.as_view(model=PostLike), name='like_post'),
-    
+       
+        # like comm in feed and own-profile
     path('comment/<int:pk>/like/', LikekView.as_view(model=CommentLike), name='like_comm'),
+        # like comm in detail
+    path('<int:id>/comment/<int:pk>/like/', LikekView.as_view(model=CommentLike), name='like_comm'),
 
     path('profile/<str:user_name>', views.profile_user, name='profile_user'),
 
@@ -68,21 +71,23 @@ urlpatterns = [
     path('', views.feed, name='posts_feed'),
 
     # profile
-    # заменить класс на функцию
     path('<str:username>', UserPostListView.as_view(), name='user_posts_list'),   
-
-    # path(r'^post/(?P<pk>\d+)/bookmark/$',
-    #     login_required(views.BookmarkView.as_view(model=BookmarkPost)),
-    #     name='post_bookmark'),
-    
+  
+    # to favourite in feed and profile
     path('post/<int:pk>/bookmark/',
         login_required(BookmarkView.as_view(model=BookmarkPost)),
         name='post_bookmark'),
     
-    # path(r'api/^comment/(?P<pk>\d+)/bookmark/$',
-    #     login_required(views.BookmarkView.as_view(model=BookmarkComment)),
-    #     name='comment_bookmark'),
-    
+    # to favourite in detail-post
+    path('<int:id>/post/<int:pk>/bookmark/',
+        login_required(BookmarkView.as_view(model=BookmarkPost)),
+        name='post_bookmark'),
+
+    # to favourite in user-profile
+    path('profile/post/<int:pk>/bookmark/',
+        login_required(BookmarkView.as_view(model=BookmarkPost)),
+        name='post_bookmark'),
+
     path('comment/<int:pk>/bookmark/',
         login_required(BookmarkView.as_view(model=BookmarkComment)),
         name='comment_bookmark'),

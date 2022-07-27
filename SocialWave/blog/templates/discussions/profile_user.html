@@ -191,7 +191,13 @@
                     </a>
 
                 </div>
-
+                <div data-id="{{ post.id }}" data-type="post" data-action="bookmark" title="Favourite" class="data-save text-center">
+                    <a href="">
+                        <span class="glyphicon glyphicon-star"><i class="fa-solid fa-bookmark"></i> </span>
+                        <span data-count="bookmark">{{ post.get_bookmark_count }}</span>
+                    </a>
+                    
+                </div>
             </div>
             
         </div>
