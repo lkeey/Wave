@@ -26,7 +26,11 @@ from django.http import HttpResponse
 from django.contrib import messages
 
 from django.views.generic.dates import timezone_today
-from .models import Post, Profile, Comment
+from .models import (
+    Post, Profile, 
+    PostLike, CommentLike,
+    BookmarkComment, BookmarkPost,
+)
 
 from .forms import PostCreateForm, CommentForm
 
@@ -170,11 +174,26 @@ class UserPostListView(ListView):
 
         user_profile = Profile.objects.get(user=user)
 
-        queryset = Post.objects.filter(author=user).order_by('-date_created')
+        queryset_posts = Post.objects.filter(author=user).order_by('-date_created')
         
+        query_posts_likes = PostLike.objects.filter(user=user).order_by('-obj')
+
+        query_comm_likes = CommentLike.objects.filter(user=user).order_by('-obj')
+
+        query_posts_favourite = BookmarkPost.objects.filter(user=user).order_by('-obj')
+
+        query_comm_favourite = BookmarkComment.objects.filter(user=user).order_by('-obj')
+
         # context = super().get_context_data(**kwargs)['blog_post_user_list'] = queryset
         context = {
-            'blog_post_user_list': queryset,
+            'blog_post_user_list': queryset_posts,
+
+            'like_post_user_list': query_posts_likes,
+            'like_comm_user_list': query_comm_likes,
+
+            'favourite_post_user_list': query_posts_favourite,
+            'favourite_comm_user_list': query_comm_favourite,
+
             'user_profile': user_profile,
         }
         return context
