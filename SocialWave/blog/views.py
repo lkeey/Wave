@@ -18,7 +18,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User, auth
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-# https://docs.djangoproject.com/en/4.0/ref/contrib/
+# https://docs.djandefgoproject.com/en/4.0/ref/contrib/
 # messages/
 
 from django.http import HttpResponse
@@ -197,6 +197,33 @@ class UserPostListView(ListView):
             'user_profile': user_profile,
         }
         return context
+
+    def post(self, request, **kwargs):
+
+        user_profile = Profile.objects.get(user=request.user)
+
+        if request.FILES.get('image') == None:
+            image = user_profile.profile_img
+            # bio = request.POST['bio']
+            # location = request.POST['location']
+
+            # user_profile.profile_img = image
+            # user_profile.bio = bio
+            # user_profile.location = location
+            # user_profile.save()
+
+        if request.FILES.get('image') != None:
+            image = request.FILES.get('image')
+
+        bio = request.POST['bio']
+        location = request.POST['location']
+
+        user_profile.profile_img = image
+        user_profile.bio = bio
+        user_profile.location = location
+        user_profile.save()
+
+        return redirect('user_posts_list', username=request.user)
 
 # все посты
 def feed(request):

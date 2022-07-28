@@ -334,7 +334,7 @@
         <a href="javascript:PopUpShow3rd()">Favourites</a>
     
     </div>
-    <br>
+    
     <div class="b-popup" id="popup3">
 
         <div class="close-btn text-center">
@@ -439,7 +439,73 @@
         
         {% endif %}
         </div>
-</div>
+
+        
+    </div>
+    <div class="b-container settings"> 
+
+        <a href="javascript:PopUpShow4th()">Settings</a>
+    
+    </div>
+    
+    <div class="b-popup" id="popup4">
+
+        <div class="close-btn text-center">
+            <a href="javascript:PopUpHide()"><i class="fa-solid fa-xmark"></i> Close</a>
+        </div>
+
+        <div class="b-popup-content">
+            <div class="container m-auto"> 
+
+                <!-- <ul class="mt-5 -mr-3 flex-nowrap lg:overflow-hidden overflow-x-scroll uk-tab">
+                    <li class="uk-active"><a href="#">General</a></li>
+                    <li><a href="#">Profile</a></li>
+                    <li><a href="#">Privacy</a></li>
+                    <li><a href="#">Notification</a></li>
+                    <li><a href="#">Social links</a></li>
+                    <li><a href="#">Billing</a></li>
+                    <li><a href="#">Security</a></li>
+                </ul> -->
+                <br>
+                <div class="grid lg:grid-cols-3 mt-12 gap-8 ">
+        
+                    <div class="rounded-md lg:shadow-lg shadow col-span-2">
+                        
+                    <form action="" method="POST" class="data-settings" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
+
+                            <div class="col-span-2">
+                                <label for=""> Profile Image</label>
+                                <img width="100" height="100" src="{{user_profile.profile_img.url}}" />
+                                <input type="file" name="image" value="" class="shadow-none input-save">
+                            </div>
+                            
+                            <div class="col-span-2">
+                                <label for="about">Bio</label>  
+                                <textarea id="about" placeholder="Write a little about yourself..." name="bio" rows="3"  class="shadow-none settings-field">{{user_profile.bio}}</textarea>
+                            </div> 
+                            
+                            <div class="col-span-2">
+                                <label for=""> Location</label>
+                                <input placeholder="Write country are you in..." type="text" name="location" value="{{user_profile.location}}" class="shadow-none settings-field">
+                            </div>
+                            
+                        </div> 
+        
+                        <div class="bg-gray-10 p-6 pt-0 flex justify-end space-x-3">
+                            <button type="submit" class="button bg-blue-700 btn-save-settings"> Save </button>
+                        </div>
+                    </form>
+        
+                    </div>
+        
+                </div>
+                <br>
+        
+            </div>
+        </div>
+    </div>
 <hr>
 
 <script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
@@ -460,11 +526,16 @@
     function PopUpShow3rd(){
         $("#popup3").show();
     }
+
+    function PopUpShow4th(){
+        $("#popup4").show();
+    }
     //Функция скрытия PopUp
     function PopUpHide(){
         $("#popup1").hide();
         $("#popup2").hide();
         $("#popup3").hide();
+        $("#popup4").hide();
     }
 </script>
 
