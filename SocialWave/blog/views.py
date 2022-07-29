@@ -274,13 +274,14 @@ def sign_up(request):
 
                     # Create User's profile
                     user_model = User.objects.get(username=username)
+                    
                     new_profile = Profile.objects.create(
                         user=user_model, 
                         id_user=user_model.id                            
                     )
 
                     new_profile.save()
-                    return redirect('settings')
+                    return redirect('posts_feed')
                     
             else:
                 messages.info(request, 'The USERNAME must be more than 2 characters and the PASSWORD more than 7')

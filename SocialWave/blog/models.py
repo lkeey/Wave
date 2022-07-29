@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from tkinter import CASCADE
 from django.db import models
 
 from django.contrib.auth.models import User
@@ -16,7 +15,7 @@ from datetime import datetime
 
 from django.contrib.auth import get_user_model
 
-import uuid
+from PIL import Image
 
 from django.contrib.postgres.fields import ArrayField
 
@@ -104,12 +103,24 @@ class Profile(models.Model):
     
     bio = models.TextField(blank=True)
     
-    profile_img = models.ImageField(upload_to='profile_images', default='blank-profile-img.png')
+    profile_img = models.ImageField(
+        upload_to='profile_images', 
+        default='blank-profile-img.png'
+        )
     
     location = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
         return self.user.username
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        img = Image.open(self.profile_img.path)
+
+        if img.height > 300 or img.width > 300:
+            output_size = (300, 300)
+            img.thumbnail(output_size)
+            img.save(self.profile_img.path)
 
 
 class Post(models.Model):
@@ -154,6 +165,16 @@ class Post(models.Model):
 
     def get_bookmark_count(self):
         return self.bookmarkpost_set.all().count()
+
+    def save(self):
+        super().save()
+        print("Pruning")
+        img = Image.open(self.image.path)
+
+        if img.height > 500 or img.width > 500:
+            output_size = (500, 500)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
 
 
 class Comment(models.Model):

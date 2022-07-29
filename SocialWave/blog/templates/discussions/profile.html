@@ -506,6 +506,37 @@
             </div>
         </div>
     </div>
+
+    <div class="b-container account text-center"> 
+
+        <a href="javascript:PopUpShow5th()">Account</a>
+    
+    </div>
+
+    <div class="b-popup" id="popup5">
+
+        <div class="close-btn text-center">
+            <a href="javascript:PopUpHide()"><i class="fa-solid fa-xmark"></i> Close</a>
+        </div>
+
+        <div class="b-popup-content">
+
+            <div class="option">
+                <a href="{% url 'log_out' %}"><i class="fa-solid fa-arrow-right-from-bracket danger-icon"></i> Log out</a>
+            </div>
+
+            <div class="option">
+                <a href="{% url 'sign_up' %}"><i class="fa-solid fa-users just-icon"></i>&nbsp; Register</a>
+            </div>
+
+            <div class="option">
+                <a href="{% url 'sign_in' %}"><i class="fa-solid fa-arrow-right-to-bracket success-icon"></i>&nbsp; Log in</a>
+            </div>
+
+        </div>
+
+    </div>
+
 <hr>
 
 <script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
@@ -517,18 +548,47 @@
     //Функция отображения PopUp
     function PopUpShow1st(){
         $("#popup1").show();
+
+        $("#popup2").hide();
+        $("#popup3").hide();
+        $("#popup4").hide();
+        $("#popup5").hide();
     }
 
     function PopUpShow2nd(){
         $("#popup2").show();
+
+        $("#popup1").hide();
+        $("#popup3").hide();
+        $("#popup4").hide();
+        $("#popup5").hide();
     }
 
     function PopUpShow3rd(){
         $("#popup3").show();
+
+        $("#popup1").hide();
+        $("#popup2").hide();
+        $("#popup4").hide();
+        $("#popup5").hide();
     }
 
     function PopUpShow4th(){
         $("#popup4").show();
+
+        $("#popup1").hide();
+        $("#popup2").hide();
+        $("#popup3").hide();
+        $("#popup5").hide();
+    }
+
+    function PopUpShow5th(){
+        $("#popup5").show();
+
+        $("#popup1").hide();
+        $("#popup2").hide();
+        $("#popup3").hide();
+        $("#popup4").hide();
     }
     //Функция скрытия PopUp
     function PopUpHide(){
@@ -536,6 +596,7 @@
         $("#popup2").hide();
         $("#popup3").hide();
         $("#popup4").hide();
+        $("#popup5").hide();
     }
 </script>
 
