@@ -182,7 +182,7 @@ class UserPostListView(ListView):
 
         query_posts_favourite = BookmarkPost.objects.filter(user=user).order_by('-obj')
 
-        query_comm_favourite = BookmarkComment.objects.filter(user=user).order_by('-obj')
+        # query_comm_favourite = BookmarkComment.objects.filter(user=user).order_by('-obj')
 
         # context = super().get_context_data(**kwargs)['blog_post_user_list'] = queryset
         context = {
@@ -192,7 +192,7 @@ class UserPostListView(ListView):
             'like_comm_user_list': query_comm_likes,
 
             'favourite_post_user_list': query_posts_favourite,
-            'favourite_comm_user_list': query_comm_favourite,
+            # 'favourite_comm_user_list': query_comm_favourite,
 
             'user_profile': user_profile,
         }

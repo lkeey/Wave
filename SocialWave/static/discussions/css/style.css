@@ -373,6 +373,7 @@ p {
     }
   }
 
+
   /* Comment Form */
 
 .input-comment {
@@ -699,8 +700,82 @@ p {
   font-size: 25px;
 }
 
-/* SIGN IN */
+/* SIGN IN & LOGGING*/
 
-.log_in {
-  background-color: red;
+.name-site {
+
+  font-size: 70px;
+  margin: 0 0 2vw 10vw;
+
+  font-weight: 500;
+
+} 
+
+.form-logging {
+  border-radius: 30px;
+
+  padding: 2vw 3vw;
+  margin: 2vw 0 2vw 5vw;
+
+  background-color: white;
+
+  width: 90vw;
+}
+
+.process {
+  font-weight: 500;
+  font-size: 40px;
+
+  margin: 0 0 1vw 2vw;
+}
+
+.logging-input {
+  border-radius: 30px;
+  border: 1px solid #7522bd;
+
+  padding: 1vw;
+  margin: 0 0 1vw 2vw;
+
+  display: block;
+
+  width: 25vw;
+
+  color: #7522bd;
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.check-data {
+  color: white;
+  background-color: #000000;
+
+  border-radius: 30px;
+
+  font-size: 20px;
+  font-weight: 500;
+
+  padding: 1vw 3vw;
+  margin-left: 2vw;
+}
+
+.create-acc {
+  font-size: 15px;
+  font-weight: 400;
+
+  text-align: center;
+
+  margin-top: 1vw ;
+  color: #000000;
+}
+
+.create-acc a {
+  color: #7522bd;
+}
+
+.warning-message {
+  margin-left: 5vw;
+
+  color: #ffffff;
+  font-size: 25px;
+  font-weight: 500;
 }

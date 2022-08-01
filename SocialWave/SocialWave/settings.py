@@ -218,6 +218,12 @@ STAICFILES_DIRS = [
 
 ]
 
+# STAICFILES_DIRS = [
+
+#     BASE_DIR / 'static'
+
+# ]
+
 STATICFILES_FINDERS = [
 
     "django.contrib.staticfiles.finders.FileSystemFinder",

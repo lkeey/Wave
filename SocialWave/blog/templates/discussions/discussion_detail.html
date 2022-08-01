@@ -157,13 +157,13 @@
         <div class="comment_by_user box">
 
             <div class="">
-                <a href="{% url 'profile_user' user_name=discussion_detail.author.username %}">
+                <a href="{% url 'profile_user' user_name=comm.author %}">
                     <img src="{{ comm.author.profile.all.0.profile_img.url }}" alt="None" class="img-profile-comm">
                 </a>
             </div>
 
             <div>
-                <a href="{% url 'profile_user' user_name=discussion_detail.author.username %}">
+                <a href="{% url 'profile_user' user_name=comm.author.username %}">
                     <h4 class="comm-user">{{ comm.author }}</h4>
                 </a>
 

@@ -512,10 +512,11 @@ p {
 }
 
 .b-popup{
-  margin-top: 1vw;
+  /* Регулировка положения вслывающего окна */
+  top: 55vh;
 
   width: 93vw;
-  min-height: 90vh;
+  min-height: 100vh;
   /* background-color: rgba(250, 253, 251, 0.2);   */
 
   left: 3vw;
@@ -526,18 +527,32 @@ p {
   position: absolute;
 
   border-radius: 20px;
-}
-.b-popup {
+
+  /* background-color: red; */
+
   margin: 1vw auto 3vw auto;
 
   padding:10px;
+}
+
+.b-popup-nesting {
+  /* background-color: red; */
+
+  top: 10vh;
+
+  left: -1vw;
+  right: 0vw;
+
+  position: relative;
+
 }
 
 .b-popup-content {
   margin: 5vw auto 3vw auto;
 
   padding:10px;
-}
+} 
+
 
 .close-btn {
   z-index: 2;
@@ -573,6 +588,36 @@ p {
 
   display: inline;
   
+  background-image: linear-gradient(60deg, rgb(205, 20, 20) 10%, #f60ac3 100%);
+
+}
+
+.likes-nesting-1 {
+  display: inline;
+
+  padding: 1vw 2vw;
+
+  top: 10vw;
+  
+  left: 10vw;
+
+  position: absolute;
+
+  background-image: linear-gradient(60deg, rgb(205, 20, 20) 10%, #f60ac3 100%);
+
+}
+
+.likes-nesting-2 {
+  display: inline;
+
+  padding: 1vw 2vw;
+
+  top: 10vw;
+
+  left: 20vw;
+
+  position: absolute;
+
   background-image: linear-gradient(60deg, rgb(205, 20, 20) 10%, #f60ac3 100%);
 
 }
@@ -779,3 +824,21 @@ p {
   font-size: 25px;
   font-weight: 500;
 }
+
+.url_go_to {
+  align-items: center;
+
+  display: block;
+
+  margin: 0 3vw;
+  padding: 1vw 3vw;
+
+  border-radius: 50px;
+  background-image: linear-gradient(60deg, #e1e1e1 10%, #ffffff 100%);
+
+  color: #000000;
+
+  font-size: 18px;
+  font-weight: 600;
+}
+
