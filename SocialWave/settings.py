@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_forms_materialize',
     
+    # вход через телегу
+    'django_telegram_login',
 
     'ckeditor',
 
