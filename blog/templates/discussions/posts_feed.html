@@ -61,6 +61,22 @@
     
 </script>
 
+<div>   
+  
+    {% for message in messages %}
+        
+        {% if message.tags == 'alert-success' %}
+            <h5 class="warning-message"><i class="wave-icon fa-solid fa-circle-dot"></i> {{ message }}</h5>
+
+        {% else %}
+            <h5 class="warning-message"><i class="success-icon fa-solid fa-circle-check"></i>  {{ message }}</h5>
+
+        {% endif %}
+
+    {% endfor %}
+
+</div>
+
 {% if all_posts|length > 0 %}
 
     {% for post in all_posts %}

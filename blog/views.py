@@ -1,5 +1,24 @@
-from operator import length_hint
-from pickletools import read_uint1
+from django.conf import settings
+
+# for telegram
+from django_telegram_login.widgets.constants import (
+    SMALL, 
+    MEDIUM, 
+    LARGE,
+    DISABLE_USER_PHOTO,
+)
+
+from django_telegram_login.widgets.generator import (
+    create_callback_login_widget,
+    create_redirect_login_widget,
+)
+from django_telegram_login.authentication import verify_telegram_authentication
+
+from django_telegram_login.errors import (
+    NotTelegramDataError, 
+    TelegramDataIsOutdatedError,
+)
+
 
 from django.http.response import HttpResponseRedirect
 
@@ -37,6 +56,11 @@ from .forms import PostCreateForm, CommentForm
 from django.contrib.auth.decorators import login_required
 
 import json
+
+
+bot_name = settings.TELEGRAM_BOT_NAME
+bot_token = settings.TELEGRAM_BOT_TOKEN
+redirect_url = settings.TELEGRAM_LOGIN_REDIRECT_URL
 
 # Create your views here.
 
@@ -138,7 +162,16 @@ def discussion_create(request):
 
             new_disccusion.save()
 
-            return redirect(new_disccusion.get_absolute_url())
+            # return redirect(new_disccusion.get_absolute_url())
+            data = {
+                "discussion_detail": new_disccusion,
+                "form": CommentForm,
+            }
+
+            messages.info(request, 'The post was created successfully')
+            messages.success(request, 'Now all SocialWave users will see it')
+
+            return render(request, 'discussions/discussion_detail.html', data)
 
     
     # если get-запрос, то вернуть пустую форму
@@ -226,6 +259,7 @@ class UserPostListView(ListView):
         return redirect('user_posts_list', username=request.user)
 
 # все посты
+@login_required(login_url='sign_in')
 def feed(request):
     
     data = {
@@ -241,7 +275,8 @@ def sign_up(request):
     if request.method == 'POST':
         
         username = request.POST['username']
-        email = request.POST['email']
+        # email = request.POST['email']
+        # telegram_id - default (0)
         password = request.POST['password']
         password2 = request.POST['password2']
 
@@ -250,18 +285,18 @@ def sign_up(request):
             if len(username) >= 3 and len(password) >= 8:
 
 
-                if User.objects.filter(email=email).exists():
-                    messages.info(request, "EMAIL WAS TAKEN")
-                    return redirect('sign_up')
+                # if User.objects.filter(email=email).exists():
+                #     messages.info(request, "EMAIL WAS TAKEN")
+                #     return redirect('sign_up')
 
-                elif User.objects.filter(username=username).exists():
-                    messages.info(request, "USERANAME WAS TAKEN")
+                if User.objects.filter(username=username).exists():
+                    messages.info(request, "Username was taken")
 
                 else:
                     # create User
                     user = User.objects.create_user(
                         username=username,
-                        email=email,
+                        # email=email,
                         password=password
                     )
 
@@ -281,14 +316,22 @@ def sign_up(request):
                     )
 
                     new_profile.save()
-                    return redirect('posts_feed')
+
+                    messages.info(request, f'Hello, {user.username}')
+                    
+                    data = {
+                            "all_posts": Post.objects.order_by('-date_created'),
+                            "form": CommentForm,
+                        }
+
+                    return render(request, 'discussions/posts_feed.html', data)
                     
             else:
-                messages.info(request, 'The USERNAME must be more than 2 characters and the PASSWORD more than 7')
+                messages.info(request, 'The username must be more than 2 characters and the password more than 7')
 
 
         else:
-            messages.info(request, 'PASSWORD IS NOT MATCHING')
+            messages.info(request, 'Password is not matching')
             return redirect('sign_up')
 
 
@@ -306,14 +349,25 @@ def sign_in(request):
         if user is not None:
             auth.login(request, user)
 
-            return redirect('posts_feed')
+            messages.info(request, f'Hello, {user.username}')
+            messages.success(request, 'We are glad to see you in SocialWave')
+
+            data = {
+                    "all_posts": Post.objects.order_by('-date_created'),
+                    "form": CommentForm,
+                }
+
+            return render(request, 'discussions/posts_feed.html', data)
 
         else:
-            messages.info(request, 'DATA IS INVALID')
+            messages.warning(request, 'Data is invalid')
 
         
+    telegram_login_widget = create_callback_login_widget(bot_name, size=SMALL)
 
-    return render(request, "discussions/sign_in.html")
+    context = {'telegram_login_widget': telegram_login_widget}
+
+    return render(request, "discussions/sign_in.html", context)
 
 
 # logging out
@@ -390,7 +444,7 @@ def settings(request):
 #         post.save()
 #         return redirect('posts_feed')
 
-
+@login_required(login_url='sign_in')
 def profile_user(request, user_name):
 
     # user_object = User.objects.get(username=pk)
@@ -520,3 +574,73 @@ class LikekView(View):
             }),
             content_type="application/json"
         )
+
+# вход через telegram
+def tele_entrance(request):
+
+    # Initially, the index page may have no get params in URL
+    # For example, if it is a home page, a user should be redirected from the widget
+    if not request.GET.get('hash'):
+        return HttpResponse('Handle the missing Telegram data in the response.')
+
+    try:
+        result = verify_telegram_authentication(
+            bot_token=bot_token, request_data=request.GET
+        )
+
+    except TelegramDataIsOutdatedError:
+        return HttpResponse('Authentication was received more than a day ago.')
+
+    except NotTelegramDataError:
+        return HttpResponse('The data is not related to Telegram!')
+
+    # Or handle it like you want. For example, save to DB. :)
+    return HttpResponse('Hello, ' + result['first_name'] + '!')
+
+
+# def tele_callback(request):
+#     if request.method == "POST":
+#         print("USER", request.user)
+#         print("USER-ID", request.user.id)
+
+#     telegram_login_widget = create_callback_login_widget(bot_name, size=SMALL)
+
+#     context = {'telegram_login_widget': telegram_login_widget}
+    
+
+#     return render(request, 'telegram_auth/callback.html', context)
+
+# вход по редиректу через телеграмм
+def tele_entrance(request):
+    if not request.GET.get('hash'):
+        return HttpResponse('Handle the missing Telegram data in the response.')
+
+    try:
+        result = verify_telegram_authentication(
+            bot_token=bot_token, request_data=request.GET
+        )
+
+    except TelegramDataIsOutdatedError:
+        return HttpResponse('Authentication was received more than a day ago.')
+
+    except NotTelegramDataError:
+        return HttpResponse('The data is not related to Telegram!')
+
+    # Or handle it like you want. For example, save to DB. :)
+    # return HttpResponse('Hello, ' + result['first_name'] + '!')
+
+    print("RESULT", result['username'], result['id'])
+
+    user = auth.authenticate(username=result['username'], telegram_id=result['id'])
+
+    # если пользователь с такими данными существует
+    if user is not None:
+        auth.login(request, user)
+
+        return redirect('posts_feed')
+    
+    # если пользователя не существует, то зарегистрировать
+
+    
+    
+

@@ -60,7 +60,19 @@
     
     
 </script>
+<div>
+    {% for message in messages %}
+            
+        {% if message.tags == 'alert-success' %}
+            <h5 class="warning-message"><i class="wave-icon fa-solid fa-circle-dot"></i> {{ message }}</h5>
 
+        {% else %}
+            <h5 class="warning-message"><i class="success-icon fa-solid fa-circle-check"></i>  {{ message }}</h5>
+
+        {% endif %}
+
+    {% endfor %}
+</div>
 <div class="post alert alert-info">
        <!-- DropDown -->
     <div class="dropdown" style="float:right;">
@@ -87,11 +99,11 @@
     </div>
 
     <h3 class="title">{{ discussion_detail.title }}</h3>
-    
-    <a href="{{ discussion_detail.image.url }}">
-        <img src="{{ discussion_detail.image.url }}" alt="None" class="post-image">
-    </a>
-
+    {% if discussion_detail.image %}
+        <a href="{{ discussion_detail.image.url }}">
+            <img src="{{ discussion_detail.image.url }}" alt="None" class="post-image">
+        </a>
+    {% endif %}
     <div class="content">@{{ discussion_detail.author }}: {{ discussion_detail.content|safe }}</div><br>
 
     <p class="date">{{ discussion_detail.date_created }}</p><br>
@@ -193,7 +205,7 @@
     {% endfor %}
 
     <div class="box text-center">
-        <form action="" method="POST" enctype="multipart/form-data">
+        <form action="{% url 'discussions_detail' pk=discussion_detail.pk %}" method="POST" enctype="multipart/form-data">
 
             {% csrf_token %}
     

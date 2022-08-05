@@ -289,9 +289,14 @@ os.environ["DJANGO+ALLOW_ASYNC_UNSAFE"] = 'true'
 # awesome forms
 # bootstrap4 may be
 CRISPY_ALLOWED_TEMPLATE_PACKS = ('bootstrap', 'uni_form', 'bootstrap3', 'bootstrap4', 'semantic-ui')
-
+    
 CRISPY_TEMPLATE_PACK = 'uni_form'
 
 # CRISPY_TEMPLATE_PACK = 'materialize_css_forms'
+
+# Информация про бота
+TELEGRAM_BOT_NAME = 'SocialWaveBot'
+TELEGRAM_BOT_TOKEN = '5482182333:AAH-seq0VT3kgXNLpdu9cui1reDy_5KDjkc'
+TELEGRAM_LOGIN_REDIRECT_URL = 'http://lkeey.pythonanywhere.com/'
 
 

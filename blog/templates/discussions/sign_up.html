@@ -32,7 +32,7 @@
                 <div>
                     
                     {% for message in messages %}
-                    <h5 class="warning-message">{{message}}</h5>
+                    <h5 class="warning-message"><i class="danger-icon fa-solid fa-circle-xmark"></i> {{message}}</h5>
                     {% endfor %}
                 </div>
                 
@@ -42,7 +42,7 @@
                     {% csrf_token %}
 
                     <input type="text" name="username" placeholder="Username" class="logging-input" >
-                    <input type="email" name="email" placeholder="Email" class="logging-input" >
+                    <!-- <input type="email" name="email" placeholder="Email" class="logging-input" > -->
                     <input type="password" name="password" placeholder="Password" class="logging-input">
                     <input type="password" name="password2" placeholder="Confirm Password" class="logging-input" >
 

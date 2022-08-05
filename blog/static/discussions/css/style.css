@@ -131,7 +131,10 @@ p {
 
     overflow: hidden;
     text-overflow: ellipsis;
+}
 
+.post-create {
+  margin: 2% 3% 10% 3%;
 }
 
 .post-image {
@@ -262,6 +265,10 @@ p {
   color: red;
 }
 
+.wave-icon {
+  color: purple;
+}
+
 .success-icon {
   color: rgb(0, 255, 0);
 }
@@ -383,6 +390,64 @@ p {
   
   margin-bottom: 1vw;
 
+}
+
+.input-post-title {
+  border: 1px solid #7522bd;
+  border-radius: 50px;
+
+  display: inline;
+  
+  margin: 1vw 5vw;
+
+  width: 50vw;
+
+  padding: 1vw;
+  color: #7522bd;
+
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.input-post-content {
+  
+  border: 3px solid #7522bd;
+  border-radius: 50px;
+
+  display: inline;
+  
+  margin: 1vw 5vw;
+
+  width: 80vw;
+
+  padding: 2vw;
+  color: #7522bd;
+
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.input-save-post {
+
+  margin: 1vw 31vw;
+  
+  display: block;
+
+  border-radius: 30px;
+  
+  font-weight: 500;
+  font-size: 22px;
+
+  color: white;
+
+  background-image: linear-gradient(60deg, rgb(155, 74, 248) 10%, #000000 100%);
+
+}
+
+.input-post-title:focus, .input-post-content:focus{
+  border: 3px solid #7522bd;
+  box-shadow: 10px 10px 100px #bc8de5;
+  outline: none;
 }
 
 .btn-send {
@@ -790,6 +855,7 @@ p {
   font-size: 20px;
 }
 
+
 .check-data {
   color: white;
   background-color: #000000;
@@ -818,12 +884,20 @@ p {
 }
 
 .warning-message {
+  display: inline-block;
   margin-left: 5vw;
 
-  color: #ffffff;
+  color: black;
   font-size: 25px;
   font-weight: 500;
+
+  background-color: #ffffff;
+  border-radius: 50px;
+
+  padding: 1vw;
+  width: max-content;
 }
+
 
 .url_go_to {
   align-items: center;

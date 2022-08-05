@@ -8,6 +8,30 @@ class PostCreateForm(ModelForm):
         model = Post
         fields = ('title', 'content')
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['title'].widget = Textarea(
+            attrs= {
+                'rows': 1,
+                'class':'input-post-title',
+                'placeholder': 'Enter The Title:',
+                
+            }
+        )
+
+        self.fields['content'].widget = Textarea(
+            attrs= {
+                'rows': 10,
+                'class':'input-comment',
+                'placeholder': 'Share Your Thoughts:',
+                
+            }
+        )
+        
+        self.fields['title'].widget.attrs['class'] = 'form-control, input-post-title'
+        self.fields['content'].widget.attrs['class'] = 'form-control, input-post-content'
+
 
 class CommentForm(ModelForm):
  

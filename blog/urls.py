@@ -46,6 +46,8 @@ urlpatterns = [
 
     path('log_out', views.log_out, name='log_out'),
 
+    path('tele-entrance', views.tele_entrance, name='tele-entrance'),
+
     path('settings', views.settings, name='settings'),
     
     path('<int:pk>/detail', PostDetailtView.as_view(), name='discussions_detail'),   

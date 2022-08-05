@@ -135,11 +135,12 @@
                     </div>
         
                     <h3 class="title">{{ post.title }}</h3>
-        
-                    <a href="{{ post.image.url }}">
-                        <img src="{{ post.image.url }}" alt="None" class="post-image">
-                    </a>
-                    
+                    {% if post.image %}
+                        <a href="{{ post.image }}">
+                            <img src="{{ post.image.url }}" alt="None" class="post-image">
+                        </a>
+                    {% endif %}
+
                     <div class="content">@{{ post.author }}: {{ post.content|safe }}</div><br>
         
                     <p class="date">{{ post.date_created }}</p><br>
@@ -352,6 +353,7 @@
 
             <div class="b-popup b-popup-nesting" id="PopUpShow2ndComments">
                 <br>
+                {% if like_comm_user_list|length >= 1 %}
                 {% for comm in like_comm_user_list %}
                     <br>
                     <div class="comment_by_user box">
@@ -395,6 +397,9 @@
                     
                 
                 {% endfor %}
+                {% else %}
+                    <h3 class="title">You haven't liked a single comment...</h3>
+                {% endif %}
                 
                 <div class="b-popup-content">
                     

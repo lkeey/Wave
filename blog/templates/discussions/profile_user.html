@@ -134,10 +134,11 @@
             </div>
             
             <h3 class="title">{{ post.title }}</h3>
-
-            <a href="{{ post.image.url }}">
-                <img src="{{ post.image.url }}" alt="None" class="post-image">
-            </a>
+            {% if post.image %}
+                <a href="{{ post.image.url }}">
+                    <img src="{{ post.image.url }}" alt="None" class="post-image">
+                </a>
+            {% endif %}
             
             <div class="content">@{{ post.author }}: {{ post.content|safe }}</div><br>
 

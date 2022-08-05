@@ -103,6 +103,8 @@ class Profile(models.Model):
     
     bio = models.TextField(blank=True)
     
+    telegram_id = models.IntegerField(default=0)
+
     profile_img = models.ImageField(
         upload_to='profile_images', 
         default='blank-profile-img.png'
@@ -134,16 +136,16 @@ class Post(models.Model):
                 )
 
 
-    title = models.CharField(max_length=200,
-        help_text='No more 200 symbols',
+    title = models.CharField('',max_length=200,
+        # help_text='No more 200 symbols',
         db_index=True,
     )
 
     image = models.ImageField(upload_to='post_images')
 
-    content = RichTextField(blank=True, null=True,
+    content = RichTextField('', blank=True, null=True,
                     max_length=5000,
-                    help_text="No more 5000 symbols",
+                    
             )
 
     date_created = models.DateTimeField(default=datetime.now)
@@ -168,13 +170,14 @@ class Post(models.Model):
 
     def save(self):
         super().save()
-        print("Pruning")
-        img = Image.open(self.image.path)
+        if self.image:
+            print("Pruning")
+            img = Image.open(self.image.path)
 
-        if img.height > 500 or img.width > 500:
-            output_size = (500, 500)
-            img.thumbnail(output_size)
-            img.save(self.image.path)
+            if img.height > 500 or img.width > 500:
+                output_size = (500, 500)
+                img.thumbnail(output_size)
+                img.save(self.image.path)
 
 
 class Comment(models.Model):
@@ -282,89 +285,3 @@ class CommentLike(LikesBase):
 
 
 
-# <div class="post alert alert-info">
-                # <div class="box">
-                #     <div class="">
-                #         <a href="{% url 'profile_user' user_name=post.author.username %}">
-                #             <img src="{{ post.author.profile.all.0.profile_img.url }}" alt="None" class="img-posts-feed">
-                            
-                #         </a>             
-                #     </div>
-                #     <div class="">
-                #         <a href="{% url 'profile_user' user_name=post.author.username %}">
-                #             <p class="author">{{ post.author }}</p>
-                #         </a>
-                #     </div>
-                # </div>
-                # <h3 class="title">{{ post.title }}</h3>
-        
-                # {% if post.image %}
-
-                #     <a href="{{ post.image.url }}">
-                #         <img src="{{ post.image.url }}" alt="None" class="post-image">
-                #     </a>
-                
-                # {% endif %}
-                    
-                #     <div class="content">@{{ post.author }}: {{ post.content|safe }}</div><br>
-        
-                #     <p class="date">{{ post.date_created }}</p><br>
-                    
-                #     <div class="py-3 px-4 space-y-3 box"> 
-                                       
-                #         <div data-type="post" data-id="{{ post.id }}" data-action="like" class="flex space-x-4 lg:font-bold data-likes text-center">
-                #             <a href="">
-                #                 <div class="p-2 rounded-full text-black " >
-                #                 <!-- <span class="glyphicon glyphicon-star">Count: </span> -->
-                #                 <!-- <span data-count="like">{{ post.amount_of_likes }}</span> -->
-                                
-                #                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="25" height="25" class="">
-                #                         <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                #                     </svg>
-                                    
-                #                     <!-- {% if post.amount_of_likes == 0 %}
-                #                     <p>No likes</p>
-                                    
-                #                     {% elif post.amount_of_likes == 1 %}
-                                    
-                #                     <p>Liked by {{post.amount_of_likes}} person</p>
-                #                     <p data-count="like"></p>
-                                    
-                #                     {% else %}
-                #                     <p data-count="like">Liked by {{post.amount_of_likes}} people</p>
-                                    
-                #                     {% endif %} -->
-                                    
-                #                     <p>Liked by </p>
-                #                     <p data-count="like">{{post.amount_of_likes}}</p>
-                #                     <p>people</p>
-                #                 </div>   
-                #              </a>
-                #         </div>
-        
-                #         <div class="data-comm text-center">
-        
-                #             <a href="{% url 'discussions_detail' pk=post.pk %}">
-                #                 <div class="p-2 rounded-full text-black " >
-                #                     <i class="fa-solid fa-comment-dots comment-icon"></i>
-                #                     {% if post.amount_of_comments == 0 %}
-                #                     <p>No Comments</p>
-                #                     {% elif post.amount_of_comments == 1 %}
-                #                     <p>Commented by {{post.amount_of_comments}} person</p>
-                #                     {% else %}
-                #                     <p>Commented by {{post.amount_of_comments}} people</p>
-                #                     {% endif %}
-                #                 </div>  
-                #             </a>
-        
-                #         </div>
-                     
-                #         <div data-id="{{ post.id }}" data-type="post" data-action="bookmark" title="Favourite" class="data-save data-save-profile text-center">
-                #             <a href="">
-                #                 <span class="glyphicon glyphicon-star"><i class="fa-solid fa-bookmark"></i> </span>
-                #                 <span data-count="bookmark">{{ post.get_bookmark_count }}</span>
-                #             </a>
-                            
-                #         </div>
-                #     </div>
-                # </div>

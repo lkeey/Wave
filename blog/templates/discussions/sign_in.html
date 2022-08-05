@@ -5,9 +5,6 @@
 
 {% block content %}
 
-
-    <div id="wrapper" class="log_in">
-
         <!-- header-->
         <div class="">
             <div class="">
@@ -28,8 +25,9 @@
                 <div>
                     
                     {% for message in messages %}
-                    <h5 class="warning-message">{{message}}</h5>
+                    <h5 class="warning-message"><i class="danger-icon fa-solid fa-circle-xmark"></i> {{message}}</h5>
                     {% endfor %}
+
                 </div>
 
 
@@ -43,6 +41,8 @@
                     <div class="create-acc">
                         <p class="text-base"> Not registered? <a href="{% url 'sign_up' %}" class=""> Create an account </a></p>
                     </div>
+                    <!---- Регистрация через telegram >-->
+                    <script async src="https://telegram.org/js/telegram-widget.js?19" data-telegram-login="SocialWaveBot" data-size="large" data-radius="20" data-auth-url="http://lkeey.pythonanywhere.com/tele-entrance" data-request-access="write"></script>
                 </form>
 
             </div>
@@ -51,6 +51,5 @@
 
     </div>
 
-    <script type="text/javascript" src="{% static 'discussions/script/background.js' %}"></script> 
 
 {% endblock %}
