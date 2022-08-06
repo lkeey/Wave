@@ -5,6 +5,8 @@ from .models import (
     BookmarkPost,
     BookmarkComment,
     CommentLike,
+    NotificationLike,
+    NotificationComment,
 )
 
 # Register your models here.
@@ -28,5 +30,8 @@ admin.site.register(PostLike)
 
 admin.site.register(CommentLike)
 admin.site.register(BookmarkComment)
+
+admin.site.register(NotificationLike)
+admin.site.register(NotificationComment)
 
 

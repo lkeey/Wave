@@ -1,0 +1,21 @@
+{% extends "discussions/base.html" %}
+
+{% block title %}Posts{% endblock %}
+
+{% block content_blog %}
+
+{% if all_notifications|length > 0 %}
+
+    {% for notification in all_notifications %}
+    
+        <h3>{{ notification.creator }} liked your post FOR {{ notification }} name of post is {{ notification.obj }}</h3>
+    
+        {% endfor %}
+
+{% else %}
+
+    <h3 class="title">You haven't got any notification...</h3>
+    
+{% endif %}
+
+{% endblock %}

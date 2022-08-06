@@ -916,3 +916,22 @@ p {
   font-weight: 600;
 }
 
+.notifications { 
+  justify-content: center;
+  display: flex;
+
+  background-color: white;
+  position: relative;
+
+  border-radius: 50px;
+
+  margin: 1vw 3vw 1vw 70vw;
+  padding: 1vw;
+
+  width: 20vw;
+
+  font-size: 25px;
+  font-weight: 400;
+}
+
+

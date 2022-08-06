@@ -77,6 +77,13 @@
 
 </div>
 
+<div class="notifications">
+    <input type="radio" id="radio-notifications" name="tabs" onclick="location.href = '{% url "notifications_user" user_name=user %}';" />
+
+    <label class="tab" for="radio-notifications"><i class="fa-solid fa-bell"></i> Notifications<span class="notification">2</span></label>
+
+</div>
+
 {% if all_posts|length > 0 %}
 
     {% for post in all_posts %}

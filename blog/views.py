@@ -46,7 +46,7 @@ from django.contrib import messages
 
 from django.views.generic.dates import timezone_today
 from .models import (
-    Post, Profile, 
+    NotificationLike, Post, Profile, 
     PostLike, CommentLike,
     BookmarkComment, BookmarkPost,
 )
@@ -469,6 +469,27 @@ def profile_user(request, user_name):
 
     return render(request, 'discussions/profile_user.html', context)
 
+@login_required(login_url='sign_in')
+def notifications_user(request, user_name):
+    user = get_object_or_404(
+            User, 
+            username=user_name
+        )
+
+    # all_notifications = NotificationLike.objects.get(user=user_name)
+    queryset = NotificationLike.objects.filter(user=user)
+    # user_posts = Post.objects.filter(author=user).order_by('-date_created')
+
+    # user_posts_length = len(user_posts)
+
+    context = {
+        'user_object': user,
+        'all_notifications': queryset,
+        # 'user_posts': user_posts,
+        # 'user_posts_length': user_posts_length,
+    }
+
+    return render(request, 'discussions/notifications.html', context)
 
 # @login_required
 # def add_comment(request, post_id):
@@ -546,15 +567,24 @@ class BookmarkView(View):
 class LikekView(View):
     # в данную переменную будет устанавливаться модель закладок, которую необходимо обработать
     model = None
- 
+    model_notificate = None
+
     def post(self, request, pk, id=0):
         print(f"DATA-LIKE: {pk}")
         user = auth.get_user(request)
 
+        # проверка на существование лайка
         like, created = self.model.objects.get_or_create(user=user, obj_id=pk)
 
-        print("MODEL-CLASS IS", like.obj)
+        print(f"USER {like.obj.author}\nCREATOR {user}\nOBJ_ID {pk}")
 
+        # проверка на существование уведомления
+        notification, created_notificate = self.model_notificate.objects.get_or_create(
+            user=like.obj.author,
+            creator=user, obj_id=pk
+        )
+
+        print("MODEL-CLASS IS", like.obj)
 
         if not created:
             like.delete()
@@ -566,6 +596,12 @@ class LikekView(View):
 
             like.obj.amount_of_likes += 1
             like.obj.save()
+
+        if not created_notificate:
+            print("DELETED NOTIFICATION")
+            notification.delete()
+
+        print("NOTITFICATION", notification, notification.creator)
 
         return HttpResponse(
             json.dumps({

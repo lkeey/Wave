@@ -28,7 +28,9 @@ from .models import (
     BookmarkPost,
     BookmarkComment,
     PostLike,
-    CommentLike
+    CommentLike,
+    NotificationLike,
+    NotificationComment,
 )
 
 from . import views
@@ -49,21 +51,23 @@ urlpatterns = [
     path('tele-entrance', views.tele_entrance, name='tele-entrance'),
 
     path('settings', views.settings, name='settings'),
+
+    path('notifications/<str:user_name>', views.notifications_user, name='notifications_user'),
     
     path('<int:pk>/detail', PostDetailtView.as_view(), name='discussions_detail'),   
 
     # path('like_post', views.like_post, name='like'),
         # like in feed and own-profile
-    path('post/<int:pk>/like/', LikekView.as_view(model=PostLike), name='like_post'),
+    path('post/<int:pk>/like/', LikekView.as_view(model=PostLike, model_notificate=NotificationLike), name='like_post'),
         # like in detail
-    path('<int:id>/post/<int:pk>/like/', LikekView.as_view(model=PostLike), name='like_post'),
+    path('<int:id>/post/<int:pk>/like/', LikekView.as_view(model=PostLike, model_notificate=NotificationLike), name='like_post'),
         # in users profile
-    path('profile/post/<int:pk>/like/', LikekView.as_view(model=PostLike), name='like_post'),
+    path('profile/post/<int:pk>/like/', LikekView.as_view(model=PostLike, model_notificate=NotificationLike), name='like_post'),
        
         # like comm in feed and own-profile
-    path('comment/<int:pk>/like/', LikekView.as_view(model=CommentLike), name='like_comm'),
+    path('comment/<int:pk>/like/', LikekView.as_view(model=CommentLike, model_notificate=NotificationComment), name='like_comm'),
         # like comm in detail
-    path('<int:id>/comment/<int:pk>/like/', LikekView.as_view(model=CommentLike), name='like_comm'),
+    path('<int:id>/comment/<int:pk>/like/', LikekView.as_view(model=CommentLike, model_notificate=NotificationComment), name='like_comm'),
 
     path('profile/<str:user_name>', views.profile_user, name='profile_user'),
 
