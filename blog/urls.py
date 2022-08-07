@@ -52,7 +52,7 @@ urlpatterns = [
 
     path('settings', views.settings, name='settings'),
 
-    path('notifications/<str:user_name>', views.notifications_user, name='notifications_user'),
+    path('notifications', views.notifications_user, name='notifications_user'),
     
     path('<int:pk>/detail', PostDetailtView.as_view(), name='discussions_detail'),   
 
@@ -76,8 +76,10 @@ urlpatterns = [
     # все посты
     path('', views.feed, name='posts_feed'),
 
+    path('success_notifications', views.success_notifications, name='success_notifications'),
+
     # profile
-    path('<str:username>', UserPostListView.as_view(), name='user_posts_list'),   
+    path('my_profile', UserPostListView.as_view(), name='user_posts_list'),   
   
     # to favourite in feed and profile
     path('post/<int:pk>/bookmark/',

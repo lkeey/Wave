@@ -189,6 +189,7 @@ p {
   width: 10vh; 
   height: 10vh;
   background-size: auto 300px;
+
 }
 
 .name-user {
@@ -934,4 +935,113 @@ p {
   font-weight: 400;
 }
 
+.header-notificate {
+  text-align: center;
+  margin: 0 1vw 1vw 2vw;
+}
 
+.header-notificate a {
+  display: inline;
+  position: absolute;
+
+  text-decoration: none;
+  color: white;
+
+  left: 5vw;
+
+  font-size: 30px;
+}
+
+
+.header-notificate h3{
+  /* margin-left: 37vw; */
+  display: inline;
+  position: relative;
+
+  font-weight: 600;
+  font-size: 40px;
+
+  color: black;
+}
+
+.icon-notificate {
+  font-weight: 600;
+  font-size: 40px;
+
+  color: black;
+}
+
+.header-notificate h3::before{
+  content: attr(data-text);
+  position: absolute;
+  color: white;
+  width: 16vw;
+
+  overflow: hidden;
+  white-space: nowrap;
+
+  border-right: 4px solid #fff;
+
+  animation: animate 8s linear infinite;
+
+  filter: drop-shadow(0 0 20px #fff) drop-shadow(0 0 10px #fff);
+
+}
+
+@keyframes animate {
+  0%, 10%, 100% {
+    width: 0;
+  }
+
+  70%, 90% {
+    width: 17vw;
+  }
+}
+
+.notification-field {
+  margin: 1vw;
+
+  padding: 1vw;
+
+  border: 1px solid black;
+  border-radius: 30px;
+
+  /* background-color: white; */
+}
+
+.data-notificate a{
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+
+  margin: 1vw;
+}
+
+.data-notificate h3 {
+  padding: 1vw;
+
+  font-size: 30px;
+  font-weight: 500;
+
+}
+
+.all-notifications {
+  margin-bottom: 5vw;
+}
+
+.date_created {
+  display: block;
+
+  font-size: 17px;
+  font-weight: 300;
+
+  margin-left: 5vw;
+
+  color: #c4c4c4;
+}
+
+.before-name {
+  font-size: 20px;
+  font-weight: 300;
+  margin: 1vw 2vw;
+}

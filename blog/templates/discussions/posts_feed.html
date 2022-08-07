@@ -78,10 +78,9 @@
 </div>
 
 <div class="notifications">
-    <input type="radio" id="radio-notifications" name="tabs" onclick="location.href = '{% url "notifications_user" user_name=user %}';" />
+    <input type="radio" id="radio-notifications" name="tabs" onclick="location.href = '{% url "notifications_user" %}';" />
 
-    <label class="tab" for="radio-notifications"><i class="fa-solid fa-bell"></i> Notifications<span class="notification">2</span></label>
-
+    <label class="tab" for="radio-notifications"><i class="fa-solid fa-bell"></i> Notifications<span class="notification">{{ user.profile.all.0.get_amount_notifications }}</span></label>
 </div>
 
 {% if all_posts|length > 0 %}

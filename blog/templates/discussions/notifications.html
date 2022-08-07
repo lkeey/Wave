@@ -4,18 +4,133 @@
 
 {% block content_blog %}
 
-{% if all_notifications|length > 0 %}
+<div class="header-notificate">
+    <a href="{% url 'success_notifications' %}">
+        <i class="fa-solid fa-arrow-left"></i>
+    </a>
 
-    {% for notification in all_notifications %}
+    <i class="fa-solid fa-bell icon-notificate"></i>
+
+    <h3 data-text="Notifications&nbsp;">
+        Notifications&nbsp;
+    </h3>
+</div>
+
+
+<div class="all-notifications">
+
+{% if all_notifications > 0 %}
+    {% if  queryset_likes_unread|length > 0 or queryset_comms_unread|length > 0%}
+        <hr class="">
+        <h3 class="before-name">NEW</h3>
+    {% endif %}
+
+    {% for notification in queryset_likes_unread %}
+            
+        <div class="box notification-field">
+            <div class="">
+                <a href="{% url 'profile_user' user_name=notification.creator.username %}">
+                    <img src="{{ notification.creator.profile.all.0.profile_img.url }}" alt="None" class="img-posts-feed"> 
+                </a>             
+            </div>
+            <div class="data-notificate">
+                
+                <a href="{% url 'profile_user' user_name=notification.creator.username %}">
+                    <p class="author">{{ notification.creator }}</p>
+                </a>
+            
+                <!-- <h3>New POST Creator - {{ notification.creator }} User - {{ notification }} Object - {{ notification.obj }} Read - {{ notification.readable }}</h3> -->
+                <h3>Liked Your Post - "{{ notification.obj }}"</h3>
+
+            </div>
+            <p class="date_created">{{ notification.date_created }}</p> 
+
+        </div>
+        <a class="url_go_to text-center" href="{% url 'discussions_detail' pk=notification.obj.pk %}"><i class="fa-solid fa-cloud-arrow-up"></i> Go to Post</a>
+    {% endfor %}
+
+    {% for notification in queryset_comms_unread %}
+
+        <div class="box notification-field">
+            <div class="">
+                <a href="{% url 'profile_user' user_name=notification.creator.username %}">
+                    <img src="{{ notification.creator.profile.all.0.profile_img.url }}" alt="None" class="img-posts-feed"> 
+                </a>             
+            </div>
+            <div class="data-notificate">
+                
+                <a href="{% url 'profile_user' user_name=notification.creator.username %}">
+                    <p class="author">{{ notification.creator }}</p>
+                </a>
+            
+                <!-- <h3>New POST Creator - {{ notification.creator }} User - {{ notification }} Object - {{ notification.obj }} Read - {{ notification.readable }}</h3> -->
+                <h3>Liked Your Comment - "{{ notification.obj.content|safe }}", To Post - "{{ notification.obj.post.title }}"</h3>
+            
+            </div>
+            <p class="date_created">{{ notification.date_created }}</p> 
+
+        </div>
+        <a class="url_go_to text-center" href="{% url 'discussions_detail' pk=notification.obj.post.pk %}"><i class="fa-solid fa-cloud-arrow-up"></i> Go to Comment</a>
+
+    {% endfor %}
+
     
-        <h3>{{ notification.creator }} liked your post FOR {{ notification }} name of post is {{ notification.obj }}</h3>
-    
-        {% endfor %}
+    <hr class="">
+    <h3 class="before-name">EARLIER</h3>
+
+    {% for notification in queryset_likes_read %}
+        
+        <div class="box notification-field">
+            <div class="">
+                <a href="{% url 'profile_user' user_name=notification.creator.username %}">
+                    <img src="{{ notification.creator.profile.all.0.profile_img.url }}" alt="None" class="img-posts-feed"> 
+                </a>             
+            </div>
+            <div class="data-notificate">
+                
+                <a href="{% url 'profile_user' user_name=notification.creator.username %}">
+                    <p class="author">{{ notification.creator }}</p>
+                </a>
+               
+                <!-- <h3>New POST Creator - {{ notification.creator }} User - {{ notification }} Object - {{ notification.obj }} Read - {{ notification.readable }}</h3> -->
+                <h3>Liked Your Post - "{{ notification.obj }}"</h3>
+
+            </div>
+            <p class="date_created">{{ notification.date_created }}</p> 
+
+        </div>
+        <a class="url_go_to text-center" href="{% url 'discussions_detail' pk=notification.obj.pk %}"><i class="fa-solid fa-cloud-arrow-up"></i> Go to Post</a>
+
+    {% endfor %}
+
+    {% for notification in queryset_comms_read %} 
+        <div class="box notification-field">
+        
+            <div class="">
+                <a href="{% url 'profile_user' user_name=notification.creator.username %}">
+                    <img src="{{ notification.creator.profile.all.0.profile_img.url }}" alt="None" class="img-posts-feed"> 
+                </a>             
+            </div>
+            <div class="data-notificate">
+                
+                <a href="{% url 'profile_user' user_name=notification.creator.username %}">
+                    <p class="author">{{ notification.creator }}</p>
+                </a>
+               
+                <h3>Liked Your Comment - "{{ notification.obj.content|safe }}", To Post - "{{ notification.obj.post.title }}"</h3>
+                
+            </div>
+
+            <p class="date_created">{{ notification.date_created }}</p> 
+        </div>
+        <a class="url_go_to text-center" href="{% url 'discussions_detail' pk=notification.obj.post.pk %}"><i class="fa-solid fa-cloud-arrow-up"></i> Go to Post</a>
+
+    {% endfor %}
 
 {% else %}
 
     <h3 class="title">You haven't got any notification...</h3>
     
 {% endif %}
-
+</div>
 {% endblock %}

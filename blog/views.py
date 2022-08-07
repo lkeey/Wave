@@ -46,7 +46,7 @@ from django.contrib import messages
 
 from django.views.generic.dates import timezone_today
 from .models import (
-    NotificationLike, Post, Profile, 
+    NotificationComment, NotificationLike, Post, Profile, 
     PostLike, CommentLike,
     BookmarkComment, BookmarkPost,
 )
@@ -200,10 +200,12 @@ class UserPostListView(ListView):
     # возвращает все посты
     # переопределяет стандартную функцию
     def get_context_data(self, **kwargs):
-        user = get_object_or_404(
-            User, 
-            username=self.kwargs.get('username')
-        )
+        # user = get_object_or_404(
+        #     User, 
+        #     username=self.kwargs.get('username')
+        # )
+
+        user = auth.get_user(self.request)
 
         user_profile = Profile.objects.get(user=user)
 
@@ -261,8 +263,10 @@ class UserPostListView(ListView):
 # все посты
 @login_required(login_url='sign_in')
 def feed(request):
-    
+    user = auth.get_user(request)
+
     data = {
+        "user": user,
         "all_posts": Post.objects.order_by('-date_created'),
         "form": CommentForm
     }
@@ -318,7 +322,8 @@ def sign_up(request):
                     new_profile.save()
 
                     messages.info(request, f'Hello, {user.username}')
-                    
+                    messages.success(request, 'We are glad to see you in SocialWave')
+
                     data = {
                             "all_posts": Post.objects.order_by('-date_created'),
                             "form": CommentForm,
@@ -470,26 +475,81 @@ def profile_user(request, user_name):
     return render(request, 'discussions/profile_user.html', context)
 
 @login_required(login_url='sign_in')
-def notifications_user(request, user_name):
-    user = get_object_or_404(
-            User, 
-            username=user_name
-        )
-
+def notifications_user(request):
+    # user = get_object_or_404(
+    #         User, 
+    #         username=user_name
+    #     )
+    user = auth.get_user(request)
     # all_notifications = NotificationLike.objects.get(user=user_name)
-    queryset = NotificationLike.objects.filter(user=user)
-    # user_posts = Post.objects.filter(author=user).order_by('-date_created')
+    
+    # queryset всех лайков
+    queryset_likes_read = NotificationLike.objects.filter(user=user, readable=True)
+    queryset_likes_unread = NotificationLike.objects.filter(user=user, readable=False)
 
-    # user_posts_length = len(user_posts)
+    # queryset всех коммов
+    queryset_comms_read = NotificationComment.objects.filter(user=user, readable=True)
+    queryset_comms_unread = NotificationComment.objects.filter(user=user, readable=False)
+   
+    # полный queryset
+    # queryset_all_read = queryset_likes_read.union(queryset_comms_read)
+    # queryset_all_unread = queryset_likes_unread.union(queryset_comms_unread)
 
+    print("queryset_likes_read", queryset_likes_read)
+    print("queryset_likes_unread", queryset_likes_unread)
+    print("queryset_comms_read", queryset_comms_read)
+    print("queryset_comms_unread", queryset_comms_unread)
+    # print("all_notifications_read", queryset_all_read)
+    # print("all_notifications_unread", queryset_all_unread)
+
+    # queryset_all_read = queryset_all.filter(readable=True)
+    # queryset_all_unread = queryset_all.filter(readable=False)
+
+    all_notifications = len(queryset_likes_read) + len(queryset_likes_unread) + len(queryset_comms_read) + len(queryset_comms_unread)
+    
     context = {
         'user_object': user,
-        'all_notifications': queryset,
-        # 'user_posts': user_posts,
-        # 'user_posts_length': user_posts_length,
+
+        'queryset_likes_read': queryset_likes_read,
+        'queryset_likes_unread': queryset_likes_unread,
+
+        'queryset_comms_read': queryset_comms_read,
+        'queryset_comms_unread': queryset_comms_unread,
+
+        'all_notifications': all_notifications,
+
+        # 'all_notifications_read': queryset_all_read,
+        # 'all_notifications_unread': queryset_all_unread,
+    
     }
 
     return render(request, 'discussions/notifications.html', context)
+
+def success_notifications(request):
+    user = auth.get_user(request)
+
+    queryset_likes = NotificationLike.objects.filter(user=user)
+    
+    # queryset всех коммов
+    queryset_comms = NotificationComment.objects.filter(user=user)
+   
+    # полный queryset
+    # queryset_all = queryset_likes.union(queryset_comms)
+
+    # Все уведомления были прочтены
+    for notification in queryset_likes:
+        if not notification.readable:
+            # print("CHANGE ON TRUE", notification.obj)
+            notification.readable = True
+            notification.save()
+
+    for notification in queryset_comms:
+        if not notification.readable:
+            # print("CHANGE ON TRUE", notification.obj)
+            notification.readable = True
+            notification.save()
+
+    return redirect('posts_feed')
 
 # @login_required
 # def add_comment(request, post_id):
@@ -601,7 +661,7 @@ class LikekView(View):
             print("DELETED NOTIFICATION")
             notification.delete()
 
-        print("NOTITFICATION", notification, notification.creator)
+        print("NOTITFICATION", notification, notification.creator, self.model_notificate)
 
         return HttpResponse(
             json.dumps({
