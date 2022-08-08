@@ -36,11 +36,18 @@
             <div class="data-notificate">
                 
                 <a href="{% url 'profile_user' user_name=notification.creator.username %}">
-                    <p class="author">{{ notification.creator }}</p>
+                    <p class="author">
+                        {% if notification.creator ==  user_object %}
+                            You
+                        {% else %}
+                            {{ notification.creator }}
+                        {% endif %}
+                    </p>
                 </a>
             
-                <!-- <h3>New POST Creator - {{ notification.creator }} User - {{ notification }} Object - {{ notification.obj }} Read - {{ notification.readable }}</h3> -->
-                <h3>Liked Your Post - "{{ notification.obj }}"</h3>
+                <h3>
+                    Liked Your Post - "{{ notification.obj }}"
+                </h3>
 
             </div>
             <p class="date_created">{{ notification.date_created }}</p> 
@@ -60,7 +67,13 @@
             <div class="data-notificate">
                 
                 <a href="{% url 'profile_user' user_name=notification.creator.username %}">
-                    <p class="author">{{ notification.creator }}</p>
+                    <p class="author">
+                        {% if notification.creator ==  user_object %}
+                            You
+                        {% else %}
+                            {{ notification.creator }}
+                        {% endif %}
+                    </p>
                 </a>
             
                 <!-- <h3>New POST Creator - {{ notification.creator }} User - {{ notification }} Object - {{ notification.obj }} Read - {{ notification.readable }}</h3> -->
@@ -89,7 +102,13 @@
             <div class="data-notificate">
                 
                 <a href="{% url 'profile_user' user_name=notification.creator.username %}">
-                    <p class="author">{{ notification.creator }}</p>
+                    <p class="author">
+                        {% if notification.creator ==  user_object %}
+                            You
+                        {% else %}
+                            {{ notification.creator }}
+                        {% endif %}
+                    </p>
                 </a>
                
                 <!-- <h3>New POST Creator - {{ notification.creator }} User - {{ notification }} Object - {{ notification.obj }} Read - {{ notification.readable }}</h3> -->
@@ -114,7 +133,13 @@
             <div class="data-notificate">
                 
                 <a href="{% url 'profile_user' user_name=notification.creator.username %}">
-                    <p class="author">{{ notification.creator }}</p>
+                    <p class="author">
+                        {% if notification.creator ==  user_object %}
+                            You
+                        {% else %}
+                            {{ notification.creator }}
+                        {% endif %}
+                    </p>
                 </a>
                
                 <h3>Liked Your Comment - "{{ notification.obj.content|safe }}", To Post - "{{ notification.obj.post.title }}"</h3>
