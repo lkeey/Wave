@@ -96,8 +96,12 @@
                 <h3 class="name-user">{{ user_profile.user.username }}</h3>
                 <h2 class="bio">{{ user_profile.bio }}</h2>
                 
-                <a type="button" href="" class="send-message profile-btn">Send a message</a>
-                <a type="button" href="#" class="add-friends profile-btn">Add to friends</a> 
+                <a type="button" href="{% url 'create_conversation' user_id=user_object.id %}" class="send-message profile-btn">
+                    Send a message
+                </a>
+                <a type="button" href="#" class="add-friends profile-btn">
+                    Add to friends
+                </a> 
             </div> 
         </div>
 

@@ -1,0 +1,71 @@
+{% extends "chat/base.html" %}
+
+{% block title %}Chat{% endblock %}
+
+{% load blog_tags %}  
+
+{% block content_chat %}
+<div class="container container-chat">
+    {% if not chat %}
+        <div class="panel panel-body">
+            "Невозможно начать беседу. Не найден пользователь или вы не имеете доступа к данной беседе."
+        </div>
+    {% else %}
+        {% load tz %}
+        {% if chat %}
+            <div class="header">
+                NAME OF CONTACT - 
+            
+                {% if chat.members.first == user %}
+                    {{chat.members.all.1}}
+                {% else %}
+                    {{chat.members.first}}
+                {% endif %}
+
+            </div>
+
+            <div id="messages" class="panel">
+                <div class="text-center">     
+                    {% for message in chat.message_set.all %}
+                    
+                        <p class="">
+                            {{ message.date_created }}
+                        </p>
+
+                        {% if message.author == user %}
+                            <div class="own_message">
+                                <h4 class="content-message">{{ message }}</h4>
+                                <p class="date-message">{% myDate message.date_created %}</p>
+                            </div>
+                        
+                        {% else %}
+                            <div class="other_message">
+                                <h4 class="content-message">{{ message }}</h4>
+                                <p class="date-message">{% myDate message.date_created %}</p>
+                            </div>
+                        {% endif %}
+
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        <div class="message_form text-center">
+            <form method="post">
+
+                <!-- <div class="component component-input"> -->
+                        {% csrf_token %}
+                        {{ form }}
+                <!-- </div> -->
+
+                <!-- <div class="component-submit"> -->
+                    <button type="submit" class="btn-send-message">
+                        Send <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                <!-- </div> -->
+
+            
+            </form>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

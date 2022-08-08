@@ -28,69 +28,6 @@ from django.contrib.contenttypes.fields import GenericRelation
 
 User = get_user_model()
 
-# class Discussion(models.Model):
-
-#     class Meta:
-#         verbose_name = 'Discussion'
-#         verbose_name_plural = 'Discussions'
-
-#     title = models.CharField(max_length=200,
-#         help_text='No more 200 symbols',
-#         db_index=True,
-#         )
-
-#     content = RichTextField(blank=True, null=True,
-#                     max_length=5000,
-#                     help_text="No more 5000 symbols",
-#             )
-
-#     date_created = models.DateTimeField(default=datetime.now)
-    
-#     date_updated = models.DateTimeField(auto_now=True)
-
-#     author = models.ForeignKey(User,
-#                 on_delete=models.CASCADE,
-#                 )
-#     slug = models.SlugField(max_length=50) # unique=True
-
-#     likes = models.ManyToManyField(
-#                     User, related_name='discussion_likes', 
-#                     blank=True,
-#                     verbose_name='Likes',
-#                     )
-#     saves_discussion = models.ManyToManyField(
-#             User, related_name="blog_discussion_save",
-#             blank=True,
-#             verbose_name='Saved posts' 
-#             )
-
-#     def save(self, *args, **kwargs):
-
-#         self.slug = slugify(self.title)
-
-#         # Post.objects.create(
-#         #     title=self.title,
-#         #     content=self.content,
-#         #     author=self.author,
-#         #     slug=self.slug,
-#         # ) 
-        
-#         super(Discussion, self).save(*args, **kwargs)
-
-#         print("All Okey")
-
-#     def total_likes(self):
-#         return self.likes.count()
-
-#     def total_saves_discussions(self):
-#         return self.saves_posts.count()
-
-#     def get_absolute_url(self):
-#         print("PK", self.pk)
-#         return reverse('discussions_detail', kwargs={"pk": self.pk})
-
-#     def __str__(self):
-#         return self.title
 
 class Profile(models.Model):
 
@@ -140,7 +77,7 @@ class Post(models.Model):
 
     author = models.ForeignKey(User,
                 on_delete=models.CASCADE,
-                )
+    )
 
 
     title = models.CharField('',max_length=200,

@@ -1,63 +1,71 @@
 from django.db import models
-import datetime
+
 from django.utils import timezone
 
 from django.contrib.auth import get_user_model
+
+from django.urls import reverse
 
 from blog.models import Profile
 
 User = get_user_model()
 
 # Create your models here.
-class Room(models.Model):
-    class Meta:
-        verbose_name = 'Room'
-        verbose_name_plural = 'Rooms'
 
+class Chat(models.Model):
     # DIALOG = 'D'
     # CHAT = 'C'
-    # CHAT_TYPE_CHOICES = (
-    #     (DIALOG, ('Dialog')),
-    #     (CHAT, ('Chat'))
+    # CHAT_CHOICES = (
+    #     (DIALOG, _('Dialog')),
+    #     (CHAT, _('Chat'))
     # )
 
-    # user_1 = models.ForeignKey(User,
-    #             on_delete=models.CASCADE,
-    # )
+    CHAT_CHOICES = (
+        ("D", "Dialog"),
+        ("C", "Chat"),     
+    )
 
-    # user_2 = models.ForeignKey(User,
-    #             on_delete=models.CASCADE,
-    # )
+    type = models.CharField(
+        "Type",
+        max_length=1,
+        choices=CHAT_CHOICES,
+        default="D",
+    )
 
-    # type = models.CharField(
-    #     max_length=1,
-    #     choices=CHAT_TYPE_CHOICES,
-    #     default=DIALOG
-    # )
+    members = models.ManyToManyField(
+        User, verbose_name = "Participant"
+    )
+ 
+    # @models.permalink
+    def get_absolute_url(self):
+        # return 'users:messages', (), {'chat_id': self.pk }
+        return reverse('messages', kwargs={"chat_id": self.pk})
 
-    members = models.ManyToManyField(User, verbose_name=("Участник"))
-
-    # def __str__(self):
-    #     return self.user_1, self.user_2
-
+ 
 class Message(models.Model):
-    value = models.CharField(max_length=1000000)
-    date = models.DateTimeField(default=timezone.now, blank=True)
-    # user = models.CharField(max_length=1000000)
+    class Meta:
+        verbose_name = 'Message'
+        verbose_name_plural = 'Messages'
 
-    # chat = models.ForeignKey(
-    #     Room, 
-    #     verbose_name=("Чат"),
-    #     on_delete=models.CASCADE,
-    #     )
+    chat = models.ForeignKey(
+        Chat,
+        on_delete=models.CASCADE,
+    )
+
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
     
-    # author = models.ForeignKey(
-    #     User,
-    #     on_delete=models.CASCADE,
-    # )
-
-    is_readed = models.BooleanField(default=False)
-
-    # room = models.CharField(max_length=1000000)
-     
-
+    message = models.TextField(
+        '', blank=True, 
+        null=False, max_length=1000,
+    )
+    
+    date_created = models.DateTimeField(default=timezone.now)
+    
+    readable = models.BooleanField(default=False)
+ 
+ 
+    def __str__(self):
+        return self.message
