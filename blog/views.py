@@ -258,7 +258,7 @@ class UserPostListView(ListView):
         user_profile.location = location
         user_profile.save()
 
-        return redirect('user_posts_list', username=request.user)
+        return redirect('user_posts_list')
 
 # все посты
 @login_required(login_url='sign_in')

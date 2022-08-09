@@ -270,6 +270,10 @@ p {
   color: purple;
 }
 
+.unwave-icon {
+  color: grey;
+}
+
 .success-icon {
   color: rgb(0, 255, 0);
 }
@@ -390,7 +394,6 @@ p {
   display: inline;
   
   margin-bottom: 1vw;
-
 }
 
 .input-post-title {
@@ -464,6 +467,13 @@ p {
 
   margin-bottom: 3vw;
 
+  /* background-color: red; */
+}
+
+.image-comment {
+  display: inline;
+  margin-bottom: 3.5vw;
+  margin-right: 1vw;
 }
 
 /* Comments */

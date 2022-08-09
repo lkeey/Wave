@@ -13,15 +13,29 @@
     {% else %}
         {% load tz %}
         {% if chat %}
-            <div class="header">
-                NAME OF CONTACT - 
-            
-                {% if chat.members.first == user %}
-                    {{chat.members.all.1}}
-                {% else %}
-                    {{chat.members.first}}
-                {% endif %}
+        
+            <div class="name-with-conversation">
+                <div class="box">
+                    {% get_companion user chat as companion %}
+                    
+                    <div class="">
+                        <a href="{% url 'home' %}">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </a>
+                    </div>
 
+                    <div class="">
+                        <a href="{% url 'profile_user' user_name=companion %}">
+                            <img src="{{ companion.profile.first.profile_img.url }}" alt="None" class="img-posts-feed img-chatting">  
+                        </a>             
+                    </div>
+                    <div class="interlocutor">
+                        <h3>{{companion}}</h3><br>
+                        <p>{{companion.profile.first.bio}}</p>
+                    </div>
+                </div>
+
+                
             </div>
 
             <div id="messages" class="panel">
@@ -49,19 +63,19 @@
                 </div>
             </div>
         {% endif %}
-        <div class="message_form text-center">
+        <div class="message_form box text-center">
             <form method="post">
 
-                <!-- <div class="component component-input"> -->
-                        {% csrf_token %}
-                        {{ form }}
-                <!-- </div> -->
+                <div class="col-9">
+                    {% csrf_token %}
+                    {{ form }}
+                </div>
 
-                <!-- <div class="component-submit"> -->
-                    <button type="submit" class="btn-send-message">
+                <div class="section-send">
+                    <button type="submit" class="btn btn-send-message" data-text="WOW">
                         Send <i class="fa-solid fa-paper-plane"></i>
                     </button>
-                <!-- </div> -->
+                </div>
 
             
             </form>

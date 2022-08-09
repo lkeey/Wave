@@ -84,7 +84,7 @@ class DialogsView(View):
         chats = Chat.objects.filter(members__in=[request.user.id])
         
         data = {
-            'user_profile': request.user, 
+            'user': request.user, 
             'chats': chats
         }
         
@@ -116,6 +116,9 @@ class MessagesView(View):
         form = MessageForm(data=request.POST)
         if form.is_valid():
             message = form.save(commit=False)
+            print("CREATE MESSAGE", message)
+            
+            # if len(message.text) >= 1:
             message.chat_id = chat_id
             message.author = request.user
             message.save()

@@ -58,7 +58,7 @@ class Message(models.Model):
     )
     
     message = models.TextField(
-        '', blank=True, 
+        '', blank=True,
         null=False, max_length=1000,
     )
     

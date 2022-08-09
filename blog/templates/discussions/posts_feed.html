@@ -78,7 +78,7 @@
 </div>
 
 <div class="notifications">
-    <input type="radio" id="radio-notifications" name="tabs" onclick="location.href = '{% url "notifications_user" %}';" />
+    <input type="radio" id="radio-notifications" name="tabs" onclick="location.href = '{% url 'notifications_user' %}';" />
 
     <label class="tab" for="radio-notifications"><i class="fa-solid fa-bell"></i> Notifications<span class="notification">{{ user.profile.all.0.get_amount_notifications }}</span></label>
 </div>
@@ -182,11 +182,15 @@
             </div>
 
             <div class="box text-center">
+                
                 <form action="{% url 'discussions_detail' pk=post.id %}" method="POST" enctype="multipart/form-data">
-        
+                    <div class="">
+                        <img src="{{ user.profile.all.0.profile_img.url }}" alt="None" class="img-posts-feed image-comment">            
+                    </div>
+
                     {% csrf_token %}
             
-                    <div class="col-11 ">
+                    <div class="col-9">
 
                         {{ form }}
         
@@ -196,6 +200,7 @@
                         <input type="submit" value="SEND" class="btn btn-send"><br>
                     </div>
                 </form>
+                
             </div>  
 
             

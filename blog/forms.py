@@ -46,8 +46,7 @@ class CommentForm(ModelForm):
             attrs= {
                 'rows': 2,
                 'class':'input-comment',
-                'placeholder': 'Write here you comment:',
-                
+                'placeholder': 'Сomment',  
             }
         )
 

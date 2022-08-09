@@ -12,8 +12,10 @@ class MessageForm(ModelForm):
 
         self.fields['message'].widget = Textarea(
             attrs= {
+                'type': "text",
                 'rows': 1,
                 'class':'send-field',
                 'placeholder': 'Message',
+                # 'min_length': 1,
             }
         )

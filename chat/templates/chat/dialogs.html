@@ -7,27 +7,106 @@
 {% block content_blog %}
 
 <div class="panel">
-    {% load tz %}
+    <div class="header box">
+        <div class="">
+            <img src="{{ user.profile.first.profile_img.url }}" alt="None" class="img-posts-feed img-chatting-profile">           
+        </div>
+
+        <div>
+            <h3>Chats</h3>
+        </div>
+
+        <div class="search">
+            
+            <input type="text" id="search" name="search" class="search-click" name="" placeholder="Search here..."  />  
+            
+            <span>
+                <i class="fa fa-search"></i>
+            </span>
+        </div>
+
+        <!-- <div class="input-group col-md-4">
+            <input class="form-control py-2 border-right-0 border" type="search" value="search" id="example-search-input">
+            <span class="input-group-append">
+              <button class="btn btn-outline-secondary border-left-0 border" type="button">
+                    <i class="fa fa-search"></i>
+              </button>
+            </span>
+        </div> -->
+    </div>
+
+    {% load tz %}   
+
     {% if chats.count == 0 %}
         <div class="panel panel-body">You haven't got any conversation...</div>
     {% endif %}
+    
     {% for chat in chats %}
         {% if chat.message_set.count != 0 %}
             {% with last_message=chat.message_set.last %}
+            {% get_companion user chat as companion %}
+                <a class="chat-home" href="{{ chat.get_absolute_url }}">
+                    <div class="box box-chats">
+
+                        <div class="">
+                            <img src="{{ companion.profile.first.profile_img.url }}" alt="None" class="img-posts-feed img-chatting">           
+                        </div>
+
+                        <div class="interlocutor">
+                            <h3>{{companion}}</h3><br>
+                            <div class="message_last_info">
+                                {% if last_message.author == user %}
+                                  <p class="last_mess_author">You:</p>  
+                                {% else %}
+                                    <p class="last_mess_author">{{last_message.author}}:</p>
+                                {% endif %}
+                               <label class="last_message">{{last_message}}</label>
+                            
+                                {% if last_message.readable %} 
+                                    <!-- Прочитано -->
+                                    <i class="read-icon fa-solid fa-circle"></i>
+                                {% else %}
+                                    <i class="unread-icon fa-solid fa-circle"></i>
+                                    <!-- Непрочитано -->
+
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    </div>
+                </a>
+            {% endwith %}
+        {% endif %}
+    {% endfor %}
+    
+    <!-- {% for chat in chats %}
+    
+        {% if chat.message_set.count != 0 %}
+            {% with last_message=chat.message_set.last %}
+            {{last_message}}
                 {% get_companion user chat as companion %}
-                <a class="list-group-item {% if companion == last_message.author and not last_message.is_readed %}unreaded{% endif %}" href="{{ chat.get_absolute_url }}">
-                    <img class="avatar-messages" src="{{ companion.userprofile.get_avatar }}">
+                
+                <a class="list-group-item 
+                {% if companion == last_message.author and not last_message.readable %}
+                readable{% endif %}" 
+                href="{{ chat.get_absolute_url }}">
+                    
+                <img class="avatar-messages" src="{{ companion.profile.first.profile_img.url }}">
                     <div class="reply-body">
                         <ul class="list-inline">
                             <li class="drop-left-padding">
                                 <strong class="list-group-item-heading">{{ companion.username }}</strong>
                             </li>
-                            <li class="pull-right text-muted"><small>{{ last_message.pub_date|utc }}</small></li>
+                            <li class="pull-right text-muted"><small>{{ last_message.date_created|utc }}</small></li>
                         </ul>
                         {% if companion != last_message.author %}
                             <div>
-                                <img class="avatar-rounded-sm" src="{{ last_message.author.userprofile.get_avatar }}">
-                                <div class="attached-reply-body {% if not last_message.is_readed %}unreaded{% endif %}">{{ last_message.message|truncatechars_html:"200"|safe|striptags }}</div>
+                                <img class="avatar-rounded-sm" src="{{ last_message.author.profile.first.profile_img.url }}">
+                                
+                                <div class="attached-reply-body 
+                                {% if not last_message.readable %}
+                                unreaded{% endif %}">
+                                {{ last_message.message|truncatechars_html:"200"|safe|striptags }}</div>
                             </div>
                         {% else %}
                             <div>{{ last_message.message|truncatechars_html:"200"|safe|striptags }}</div>
@@ -36,7 +115,7 @@
                 </a>
             {% endwith %}
         {% endif %}
-    {% endfor %}
+    {% endfor %} -->
 </div>
 
 {% endblock %}
