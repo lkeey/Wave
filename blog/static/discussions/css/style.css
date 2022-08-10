@@ -192,6 +192,12 @@ p {
 
 }
 
+.box-info-user {
+  position: absolute;
+
+  margin-top: 1vw;
+}
+
 .name-user {
   font-weight: 700;
   font-size: 40px;
@@ -992,13 +998,13 @@ p {
 
   border-right: 4px solid #fff;
 
-  animation: animate 8s linear infinite;
+  animation: animate_rotate 8s linear infinite;
 
   filter: drop-shadow(0 0 20px #fff) drop-shadow(0 0 10px #fff);
 
 }
 
-@keyframes animate {
+@keyframes animate_rotate {
   0%, 10%, 100% {
     width: 0;
   }

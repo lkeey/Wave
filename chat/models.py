@@ -12,6 +12,12 @@ User = get_user_model()
 
 # Create your models here.
 
+
+class ChatManager(models.Manager):
+    def get_amount_unreaded(self):
+        return super().get_queryset().filter(readable=False)
+
+
 class Chat(models.Model):
     
     DIALOG = 'D'
@@ -32,13 +38,13 @@ class Chat(models.Model):
     members = models.ManyToManyField(
         User, verbose_name = "Participant"
     )
- 
+    
     # @models.permalink
     def get_absolute_url(self):
         # return 'users:messages', (), {'chat_id': self.pk }
         return reverse('messages', kwargs={"chat_id": self.pk})
 
- 
+
 class Message(models.Model):
     class Meta:
         verbose_name = 'Message'
@@ -63,17 +69,7 @@ class Message(models.Model):
     
     readable = models.BooleanField(default=False)
  
- 
+    unreaded_objects = ChatManager()
+
     def __str__(self):
         return self.message
-
-class ChatManager(models.Manager):
-    use_for_related_fields = True
- 
-    # Метод принимает пользователя, для которого должна производиться выборка
-    # Если пользователь не добавлен, то будет возвращены все диалоги,
-    # в которых хотя бы одно сообщение не прочитано
-    def unreaded(self, user=None):
-        qs = self.get_queryset().exclude(last_message__isnull=True).filter(last_message__is_readed=False)
-        return qs.exclude(last_message__author=user) if user else qs
- 

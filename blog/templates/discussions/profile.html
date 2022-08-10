@@ -56,9 +56,7 @@
             // Лайк
         $('[data-action="like"]').click(to_likes);
     });
-
-    
-    
+  
 </script>
 
 <div class="avatar">
@@ -77,19 +75,22 @@
 
         <div class="box">
             
-            <div class="img-profile">
+            <!-- <div class="img-profile">
                 <a href="{{ user_profile.profile_img.url }}">
                     <img src="{{ user_profile.profile_img.url }}" alt="None" class="img-user">
                 </a>
-            </div>
+            </div> -->
 
             <div class="box-image">
-                <div class="content-image">
-                    <img src="{{ user_profile.profile_img.url }}" alt="None" class="img-user">
-                </div>
+                <a href="{{ user_profile.profile_img.url }}">
+                    <div class="content-image">
+                            <img src="{{ user_profile.profile_img.url }}" alt="None" class="img-user">
+                        
+                    </div>
+                </a>
             </div>
             
-            <div>
+            <div class="box-info-user">
                 <h3 class="name-user">{{ user_profile.user.username }}</h3>
                 <h2 class="bio">{{ user_profile.bio }}</h2>
             </div> 

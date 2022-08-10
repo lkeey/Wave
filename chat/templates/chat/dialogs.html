@@ -65,7 +65,7 @@
                                 {% else %}
                                     <p class="last_mess_author">{{last_message.author}}:</p>
                                 {% endif %}
-                               <label class="last_message">{{last_message}}</label>
+                               <label class="last_message">{{last_message}} {% get_companion user chat as companion %} {% get_count_unreaded chat companion %}</label>
                             
                                 {% if last_message.readable %} 
                                     <!-- Прочитано -->
@@ -84,43 +84,7 @@
         {% endif %}
     {% endfor %}
     
-    <!-- {% for chat in chats %}
     
-        {% if chat.message_set.count != 0 %}
-            {% with last_message=chat.message_set.last %}
-            {{last_message}}
-                {% get_companion user chat as companion %}
-                
-                <a class="list-group-item 
-                {% if companion == last_message.author and not last_message.readable %}
-                readable{% endif %}" 
-                href="{{ chat.get_absolute_url }}">
-                    
-                <img class="avatar-messages" src="{{ companion.profile.first.profile_img.url }}">
-                    <div class="reply-body">
-                        <ul class="list-inline">
-                            <li class="drop-left-padding">
-                                <strong class="list-group-item-heading">{{ companion.username }}</strong>
-                            </li>
-                            <li class="pull-right text-muted"><small>{{ last_message.date_created|utc }}</small></li>
-                        </ul>
-                        {% if companion != last_message.author %}
-                            <div>
-                                <img class="avatar-rounded-sm" src="{{ last_message.author.profile.first.profile_img.url }}">
-                                
-                                <div class="attached-reply-body 
-                                {% if not last_message.readable %}
-                                unreaded{% endif %}">
-                                {{ last_message.message|truncatechars_html:"200"|safe|striptags }}</div>
-                            </div>
-                        {% else %}
-                            <div>{{ last_message.message|truncatechars_html:"200"|safe|striptags }}</div>
-                        {% endif %}
-                    </div>
-                </a>
-            {% endwith %}
-        {% endif %}
-    {% endfor %} -->
 </div>
 
 {% endblock %}

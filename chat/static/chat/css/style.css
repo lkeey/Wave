@@ -353,9 +353,11 @@ input {
 
 /* BORDER-ANIMATION-IMG */
 .box-image {
+    margin-right: 4%;
     position: relative;
-    width: 400px;
-    height: 400px;
+    display: inline;
+    width: 30vh;
+    height: 30vh;
     background: rgba(0, 0, 0, 0.5) ;
     border-radius: 50%;
 
@@ -402,8 +404,8 @@ input {
 .content-image {
     position: absolute;
 
-    inset: 30px;
-    border: 6px solid white;
+    inset: 10px;
+    /* border: 6px solid white; */
 
     z-index: 3;
     border-radius: 50%;

@@ -86,16 +86,24 @@
     <div class="container">
 
         <div class="box">
-            <div class="img-profile">
+            <!-- <div class="img-profile">
                 <a href="{{ user_profile.profile_img.url }}">
                     <img src="{{ user_profile.profile_img.url }}" alt="None" class="img-user">
                 </a>
-            </div>
+            </div> -->
 
-            <div>
+            <div class="box-image">
+                <a href="{{ user_profile.profile_img.url }}">
+                    <div class="content-image">
+                        <img src="{{ user_profile.profile_img.url }}" alt="None" class="img-user">
+                    </div>
+                </a>
+            </div>
+            
+            <div class="box-info-user">
                 <h3 class="name-user">{{ user_profile.user.username }}</h3>
                 <h2 class="bio">{{ user_profile.bio }}</h2>
-                
+            
                 <a type="button" href="{% url 'create_conversation' user_id=user_object.id %}" class="send-message profile-btn">
                     Send a message
                 </a>
@@ -103,6 +111,13 @@
                     Add to friends
                 </a> 
             </div> 
+            
+            <!-- <div>
+                <h3 class="name-user">{{ user_profile.user.username }}</h3>
+                <h2 class="bio">{{ user_profile.bio }}</h2>
+                
+                
+            </div>  -->
         </div>
 
     </div>
@@ -125,6 +140,7 @@
             </div>
 
             <div class="box">
+
                 <div class="">
                     <a href="{% url 'profile_user' user_name=post.author.username %}">
                         <img src="{{ post.author.profile.all.0.profile_img.url }}" alt="None" class="img-profile-comm">
@@ -135,6 +151,7 @@
                         <p class="author">{{ post.author }}</p>
                     </a>
                 </div>
+                
             </div>
             
             <h3 class="title">{{ post.title }}</h3>

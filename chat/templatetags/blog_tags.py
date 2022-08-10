@@ -1,5 +1,6 @@
 from django import template
 from django import template  
+from chat.models import Message
 
 register = template.Library()
 
@@ -17,3 +18,11 @@ def myDate(value):
     # dateformatted = value.strftime("%b %d, %Y at %I:%M %p")
     dateformatted = value.strftime("%I:%M %p")
     return dateformatted
+
+@register.simple_tag
+def get_count_unreaded(chat, participant):
+    count = Message.unreaded_objects.get_amount_unreaded().all().filter(chat=chat, author=participant).count()
+    # names = Message.unreaded_objects.all().filter(chat=chat.id)
+    
+    return count
+
