@@ -33,11 +33,12 @@
   
 }
 
-.message_form:hover .btn-send-message {
+.message_form:hover  .btn-send-message {
     margin-bottom: 4vw;
     background-color: white;
     color: rgb(123, 69, 223);
 }
+
 
 input {
     list-style: none;
@@ -45,17 +46,19 @@ input {
 .own_message {
     color: white;
 
-    margin: 1vw 1vw 1vw 50vw;
+    margin: 1vw 1vw 1vw 0vw;
     padding: .5vw;
 
     border-radius: 20px;
     background-image: linear-gradient(60deg, rgb(123, 69, 223) 10%, #7522bd 100%);
+
+    /* background-color: red; */
 }
 
 .other_message {
     color: white;
 
-    margin: 1vw 50vw 1vw 1vw;
+    margin: 1vw 0vw 1vw 1vw;
     padding: .5vw;
 
     border-radius: 20px;
@@ -91,6 +94,27 @@ input {
 
     margin-bottom: 3.5vw;
     padding: 1vw;
+
+    border: 1px solid white;
+    border-radius: 100px;
+}
+
+.first-message {
+    position: relative;
+
+
+    display: inline-block;
+
+    margin: 3vw 0 4vw 0;
+    padding: 1vw;
+
+    background-color: white;
+    color: rgb(123, 69, 223);
+
+    font-size: 20px;
+    font-weight: 500;
+
+    width: 30vw;
 
     border: 1px solid white;
     border-radius: 100px;
@@ -291,4 +315,113 @@ input {
     height: 50px;
     left: 0%;
     padding: 10px;
+}
+
+.date-created-mess {
+    display: block;
+}
+
+.mess-own-readable {
+    display: inline-block;
+
+    width: 5vw;
+
+    margin: 0vw 0vw 0vw 40vw;
+
+    padding-left: 3vw;
+    
+
+    /* background-color: red; */
+}
+
+.mess-other-readable {
+    display: inline-block;
+
+    width: 5vw;
+    margin: 0vw 50vw 0vw 0vw;
+
+
+    padding-right: 3vw;
+    
+
+    /* background-color: red; */
+}
+
+.mess-other-readable :hover {
+   content: "READ"; 
+}
+
+/* BORDER-ANIMATION-IMG */
+.box-image {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    background: rgba(0, 0, 0, 0.5) ;
+    border-radius: 50%;
+
+    overflow: hidden;
+}
+
+.box-image::before {
+    content: '';
+    position: absolute;
+    
+    inset: -10px 0px;
+    background: linear-gradient(315deg, #00ccff, #d400d4);
+    transition: 0.5s;
+
+    animation: animate 4s linear infinite;
+}
+
+.box-image:hover::before {
+    inset: -20px 50px;
+}
+
+@keyframes animate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.box-image::after {
+    content: '';
+
+    position: absolute;
+
+    inset: 6px;
+    background: black;
+
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.content-image {
+    position: absolute;
+
+    inset: 30px;
+    border: 6px solid white;
+
+    z-index: 3;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.content-image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    transition: 0.5s;
+    pointer-events: none;
+}
+
+.box-image :hover .content-image img {
+    opacity: 0;
 }

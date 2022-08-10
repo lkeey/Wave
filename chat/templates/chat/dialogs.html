@@ -38,7 +38,12 @@
     {% load tz %}   
 
     {% if chats.count == 0 %}
-        <div class="panel panel-body">You haven't got any conversation...</div>
+        <div class="title">You haven't got any conversation...
+            <a href="">
+                Здесь должна быть ссылка на список всех пользователей
+            </a>
+        </div>
+        
     {% endif %}
     
     {% for chat in chats %}

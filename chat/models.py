@@ -13,23 +13,20 @@ User = get_user_model()
 # Create your models here.
 
 class Chat(models.Model):
-    # DIALOG = 'D'
-    # CHAT = 'C'
-    # CHAT_CHOICES = (
-    #     (DIALOG, _('Dialog')),
-    #     (CHAT, _('Chat'))
-    # )
+    
+    DIALOG = 'D'
+    CHAT = 'C'
 
     CHAT_CHOICES = (
-        ("D", "Dialog"),
-        ("C", "Chat"),     
+        (DIALOG, "Dialog"),
+        (CHAT, "Chat"),     
     )
 
     type = models.CharField(
         "Type",
         max_length=1,
         choices=CHAT_CHOICES,
-        default="D",
+        default=DIALOG,
     )
 
     members = models.ManyToManyField(
@@ -69,3 +66,14 @@ class Message(models.Model):
  
     def __str__(self):
         return self.message
+
+class ChatManager(models.Manager):
+    use_for_related_fields = True
+ 
+    # Метод принимает пользователя, для которого должна производиться выборка
+    # Если пользователь не добавлен, то будет возвращены все диалоги,
+    # в которых хотя бы одно сообщение не прочитано
+    def unreaded(self, user=None):
+        qs = self.get_queryset().exclude(last_message__isnull=True).filter(last_message__is_readed=False)
+        return qs.exclude(last_message__author=user) if user else qs
+ 

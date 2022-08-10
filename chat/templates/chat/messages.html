@@ -40,26 +40,56 @@
 
             <div id="messages" class="panel">
                 <div class="text-center">     
-                    {% for message in chat.message_set.all %}
-                    
-                        <p class="">
-                            {{ message.date_created }}
-                        </p>
-
-                        {% if message.author == user %}
-                            <div class="own_message">
-                                <h4 class="content-message">{{ message }}</h4>
-                                <p class="date-message">{% myDate message.date_created %}</p>
-                            </div>
+                    {% if chat.message_set.all|length > 0 %}
+                        {% for message in chat.message_set.all %}
                         
-                        {% else %}
-                            <div class="other_message">
-                                <h4 class="content-message">{{ message }}</h4>
-                                <p class="date-message">{% myDate message.date_created %}</p>
-                            </div>
-                        {% endif %}
+                            <p class="date-created-mess">
+                                {{ message.date_created }}
+                            </p>
+                        
+                            
 
-                    {% endfor %}
+                            {% if message.author == user %}
+                            <div class="box">
+                                <div class="mess-own-readable">
+                                    {% if message.readable %} 
+                                            <!-- Прочитано -->
+                                            <i class="read-icon fa-solid fa-circle"></i>
+                                    {% else %}
+                                        <i class="unread-icon fa-solid fa-circle"></i>
+                                        <!-- Непрочитано -->
+                                    {% endif %}
+                                </div>
+                                <div class="own_message">
+                                    
+                                    <h4 class="content-message">{{ message }}</h4>
+                                    <p class="date-message">{% myDate message.date_created %}</p>
+                                </div>
+                            </div>
+
+                            {% else %}
+                            <div class="box">   
+                                <div class="other_message">
+                                    <h4 class="content-message">{{ message }}</h4>
+                                    <p class="date-message">{% myDate message.date_created %}</p>
+                                </div>
+                                <div class="mess-other-readable">
+                                    {% if message.readable %} 
+                                            <!-- Прочитано -->
+                                            <i class="read-icon fa-solid fa-circle"></i>
+                                    {% else %}
+                                        <i class="unread-icon fa-solid fa-circle"></i>
+                                        <!-- Непрочитано -->
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <div class="first-message">
+                           <p>Send First Message In This Chat</p> 
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         {% endif %}
@@ -72,12 +102,11 @@
                 </div>
 
                 <div class="section-send">
-                    <button type="submit" class="btn btn-send-message" data-text="WOW">
+                    <button type="submit" class="btn btn-send-message">
                         Send <i class="fa-solid fa-paper-plane"></i>
                     </button>
                 </div>
 
-            
             </form>
         </div>
     {% endif %}

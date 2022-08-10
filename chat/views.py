@@ -98,9 +98,14 @@ class MessagesView(View):
         try:
             chat = Chat.objects.get(id=chat_id)
             if request.user in chat.members.all():
+                # все сообщения станут прочитанными, 
+                # если сообщения отправлено другим пользователем
+
                 chat.message_set.filter(readable=False).exclude(author=request.user).update(readable=True)
+            
             else:
                 chat = None
+
         except Chat.DoesNotExist:
             chat = None
 
@@ -128,8 +133,17 @@ class MessagesView(View):
 # Создание диалога
 class CreateDialogView(View):
     def get(self, request, user_id):
-        chats = Chat.objects.filter(members__in=[request.user.id, user_id], type=Chat.type).annotate(c=Count('members')).filter(c=2)
+
+        # проверка - есть ли чат с такими пользователями
+        # если он есть, то должно быть только два человека в нем
+        # иначе диалог является чатом
+
+        chats = Chat.objects.filter(
+            members__in=[request.user.id, user_id], 
+            type=Chat.DIALOG).annotate(c=Count('members')).filter(c=2)
         
+        print("AMOUNT CHATS", chats)
+
         if chats.count() == 0:
             print("1st -", request.user.id)
             print("2nd -", user_id)
@@ -139,6 +153,7 @@ class CreateDialogView(View):
             chat.members.add(user_id)
         
         else:
+            print("SEARCH DIALOG")
             chat = chats.first()
 
         # return redirect(reverse('chat:messages', kwargs={'chat_id': chat.id}))
