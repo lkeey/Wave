@@ -427,3 +427,12 @@ input {
 .box-image :hover .content-image img {
     opacity: 0;
 }
+
+.amount-unreaded {
+    margin-left: 60vw;
+    background-color: #d400d4;
+    color: white;
+
+    font-size: 20px;
+    font-weight: 700;
+}

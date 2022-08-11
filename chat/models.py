@@ -17,6 +17,8 @@ class ChatManager(models.Manager):
     def get_amount_unreaded(self):
         return super().get_queryset().filter(readable=False)
 
+    def get_amount_unreaded_all(self):
+        return super().get_queryset().filter(members__in=False)
 
 class Chat(models.Model):
     
@@ -38,7 +40,8 @@ class Chat(models.Model):
     members = models.ManyToManyField(
         User, verbose_name = "Participant"
     )
-    
+
+
     # @models.permalink
     def get_absolute_url(self):
         # return 'users:messages', (), {'chat_id': self.pk }

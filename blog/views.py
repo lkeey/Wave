@@ -1,5 +1,7 @@
 from django.conf import settings
 
+from django.contrib.sessions.models import Session
+from django.utils import timezone
 # for telegram
 from django_telegram_login.widgets.constants import (
     SMALL, 
@@ -58,6 +60,7 @@ from django.contrib.auth.decorators import login_required
 import json
 
 
+
 bot_name = settings.TELEGRAM_BOT_NAME
 bot_token = settings.TELEGRAM_BOT_TOKEN
 redirect_url = settings.TELEGRAM_LOGIN_REDIRECT_URL
@@ -84,7 +87,6 @@ redirect_url = settings.TELEGRAM_LOGIN_REDIRECT_URL
 #         context['discussions post_user_list'] = queryset.order_by('-date_created')
         
 #         return context
-
 class PostDetailtView(FormMixin, DetailView):
     model = Post
 
@@ -263,12 +265,15 @@ class UserPostListView(ListView):
 # все посты
 @login_required(login_url='sign_in')
 def feed(request):
+
+    
     user = auth.get_user(request)
 
     data = {
         "user": user,
         "all_posts": Post.objects.order_by('-date_created'),
-        "form": CommentForm
+        "form": CommentForm,
+
     }
 
     return render(request, 'discussions/posts_feed.html', data)
@@ -737,6 +742,5 @@ def tele_entrance(request):
     
     # если пользователя не существует, то зарегистрировать
 
-    
     
 

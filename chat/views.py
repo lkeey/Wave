@@ -1,3 +1,4 @@
+from email import message
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
@@ -5,10 +6,12 @@ from .models import Chat, Message
 from .forms import MessageForm
 from django.db.models import Count
 
-from django.contrib.auth.models import User, auth
+# from django.contrib.auth.models import User, auth
 from django.http import HttpResponse, JsonResponse
 
 from django.views.generic import View
+
+from django.db.models import Q
 
 
 # Просмотр всех диалогов
@@ -18,11 +21,14 @@ class DialogsView(View):
 
         chats = Chat.objects.filter(members__in=[request.user.id])
 
+        count = Message.unreaded_objects.get_amount_unreaded().all().filter(chat__members__in=[request.user.id]).exclude(author=request.user)
+
         # print("UNREADED", Message.unreaded_objects.get_amount_unreaded().all().count())
 
         data = {
             'user': request.user, 
             'chats': chats,
+            # 'count': count,
 # считаются сообщения, которые отправлены собеседником 
 # (blog_tags.py - get_count_unreaded)
             'unreaded_dialogs': Message.unreaded_objects.get_amount_unreaded().all()
@@ -49,10 +55,12 @@ class MessagesView(View):
         except Chat.DoesNotExist:
             chat = None
 
+
         context = {
                 'user': request.user,
                 'chat': chat,
-                'form': MessageForm()
+                'form': MessageForm(),
+                
             }
 
         return render(request,'chat/messages.html', context)

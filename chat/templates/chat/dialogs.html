@@ -45,7 +45,6 @@
         </div>
         
     {% endif %}
-    
     {% for chat in chats %}
         {% if chat.message_set.count != 0 %}
             {% with last_message=chat.message_set.last %}
@@ -65,7 +64,7 @@
                                 {% else %}
                                     <p class="last_mess_author">{{last_message.author}}:</p>
                                 {% endif %}
-                               <label class="last_message">{{last_message}} {% get_companion user chat as companion %} {% get_count_unreaded chat companion %}</label>
+                               <label class="last_message">{{last_message}} {% get_companion user chat as companion %} </label>
                             
                                 {% if last_message.readable %} 
                                     <!-- Прочитано -->
@@ -74,6 +73,12 @@
                                     <i class="unread-icon fa-solid fa-circle"></i>
                                     <!-- Непрочитано -->
 
+                                {% endif %}
+
+                                {% get_count_unreaded chat companion as amount %}
+                                {% if amount > 0 %}
+                                    <!-- есть непрочитанные сообщения -->
+                                    <label class="tab"><span class="notification amount-unreaded">{{ amount }}</span></label>
                                 {% endif %}
                             </div>
                         </div>

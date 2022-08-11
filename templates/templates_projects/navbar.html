@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load blog_tags %}  
     <!-- <footer> 
         <ul>
             <div class="row justify-content-around tabs">
@@ -40,7 +40,15 @@
             </label>
 
             <input type="radio" id="radio-3" name="tabs" onclick="location.href = '{% url "home" %}';"/>
-            <label class="tab" for="radio-3"><i class="fa-solid fa-comment"></i> Chat</label>
+            <label class="tab" for="radio-3">
+                <i class="fa-solid fa-comment"></i> 
+                Chat
+                {% get_all_unreaded user as amount %}
+                    {% if amount > 0 %}
+                        <!-- есть непрочитанные сообщения -->
+                        <span class="notification">{{ amount }}</span>
+                    {% endif %}
+            </label>
             
             <input type="radio" id="radio-4" name="tabs" onclick="location.href = '{% url "user_posts_list" %}';" />
             <label class="tab" for="radio-4"><i class="fa-solid fa-house-flood-water"></i> Profile<span class="notification">2</span></label>

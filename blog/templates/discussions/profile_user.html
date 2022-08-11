@@ -92,13 +92,13 @@
                 </a>
             </div> -->
 
-            <div class="box-image">
-                <a href="{{ user_profile.profile_img.url }}">
-                    <div class="content-image">
-                        <img src="{{ user_profile.profile_img.url }}" alt="None" class="img-user">
-                    </div>
-                </a>
-            </div>
+            <a href="{{ user_profile.profile_img.url }}">
+                <div class="box-image">
+                        <div class="content-image">
+                                <img src="{{ user_profile.profile_img.url }}" alt="None" class="img-user">
+                        </div>
+                </div>
+            </a>
             
             <div class="box-info-user">
                 <h3 class="name-user">{{ user_profile.user.username }}</h3>
