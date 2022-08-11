@@ -1,8 +1,10 @@
 from email import message
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
-from .models import Chat, Message
+from django.contrib import messages
+
+from .models import Chat, Message, User
 from .forms import MessageForm
 from django.db.models import Count
 
@@ -96,10 +98,17 @@ class CreateDialogView(View):
             print("1st -", request.user.id)
             print("2nd -", user_id)
 
-            chat = Chat.objects.create()
-            chat.members.add(request.user.id)
-            chat.members.add(user_id)
-        
+            if int(request.user.id) == int(user_id):
+                user = get_object_or_404(User, id=user_id
+                )
+                messages.error(request, 'Access denied')
+                return redirect('profile_user', user_name=user.username) 
+   
+            else:
+                print(request.user.id == user_id)
+                chat = Chat.objects.create()
+                chat.members.add(request.user.id)
+                chat.members.add(user_id)
         else:
             print("SEARCH DIALOG")
             chat = chats.first()

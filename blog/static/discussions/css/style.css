@@ -1061,3 +1061,10 @@ p {
   font-weight: 300;
   margin: 1vw 2vw;
 }
+
+.content-comm-notificate {
+  color: white;
+
+  font-size: 25px;
+  font-weight: 800;
+}

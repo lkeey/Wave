@@ -48,7 +48,7 @@ from django.contrib import messages
 
 from django.views.generic.dates import timezone_today
 from .models import (
-    NotificationComment, NotificationLike, Post, Profile, 
+    NotificationComment, NotificationCommentCreated, NotificationLike, Post, Profile, 
     PostLike, CommentLike,
     BookmarkComment, BookmarkPost,
 )
@@ -87,6 +87,20 @@ redirect_url = settings.TELEGRAM_LOGIN_REDIRECT_URL
 #         context['discussions post_user_list'] = queryset.order_by('-date_created')
         
 #         return context
+
+@login_required(login_url='sign_in')
+def show_all_users(request):
+    user = auth.get_user(request)
+
+    users = User.objects.all()
+
+    data = {
+        'user': user,
+        'users': users,
+    }
+
+    return render(request, 'discussions/catalog_users.html', data)
+
 class PostDetailtView(FormMixin, DetailView):
     model = Post
 
@@ -122,6 +136,20 @@ class PostDetailtView(FormMixin, DetailView):
         post.save()
 
         self.object.save()
+
+        # создание уведомления о создании комментария
+
+        # проверка на существование уведомления
+        notification, created_notificate = NotificationCommentCreated.objects.get_or_create(
+            user=post.author,
+            creator=request.user, obj_id=self.object.id
+        )
+
+        if not created_notificate:
+            print("DELETED NOTIFICATION COMM")
+            notification.delete()
+
+        print("NOTITFICATION COMM", notification, notification.creator)
 
         return super().form_valid(form)
 
@@ -265,7 +293,6 @@ class UserPostListView(ListView):
 # все посты
 @login_required(login_url='sign_in')
 def feed(request):
-
     
     user = auth.get_user(request)
 
@@ -273,7 +300,6 @@ def feed(request):
         "user": user,
         "all_posts": Post.objects.order_by('-date_created'),
         "form": CommentForm,
-
     }
 
     return render(request, 'discussions/posts_feed.html', data)
@@ -496,21 +522,34 @@ def notifications_user(request):
     queryset_comms_read = NotificationComment.objects.filter(user=user, readable=True)
     queryset_comms_unread = NotificationComment.objects.filter(user=user, readable=False)
    
+
+    queryset_comms_created_read = NotificationCommentCreated.objects.filter(user=user, readable=True)
+    queryset_comms_created_unread = NotificationCommentCreated.objects.filter(user=user, readable=False)
+    
     # полный queryset
     # queryset_all_read = queryset_likes_read.union(queryset_comms_read)
     # queryset_all_unread = queryset_likes_unread.union(queryset_comms_unread)
 
     print("queryset_likes_read", queryset_likes_read)
     print("queryset_likes_unread", queryset_likes_unread)
+
     print("queryset_comms_read", queryset_comms_read)
     print("queryset_comms_unread", queryset_comms_unread)
+
+    print("queryset_comms_created_read", queryset_comms_created_read)
+    print("queryset_comms_created_unread", queryset_comms_created_unread)
+
     # print("all_notifications_read", queryset_all_read)
     # print("all_notifications_unread", queryset_all_unread)
 
     # queryset_all_read = queryset_all.filter(readable=True)
     # queryset_all_unread = queryset_all.filter(readable=False)
 
-    all_notifications = len(queryset_likes_read) + len(queryset_likes_unread) + len(queryset_comms_read) + len(queryset_comms_unread)
+    all_notifications = (
+        queryset_likes_read.count() + queryset_likes_unread.count() + 
+        queryset_comms_read.count() + queryset_comms_unread.count() +
+        queryset_comms_created_read.count() + queryset_comms_created_unread.count()
+    )
     
     context = {
         'user_object': user,
@@ -520,6 +559,9 @@ def notifications_user(request):
 
         'queryset_comms_read': queryset_comms_read,
         'queryset_comms_unread': queryset_comms_unread,
+
+        'queryset_comms_created_read': queryset_comms_created_read,
+        'queryset_comms_created_unread': queryset_comms_created_unread,
 
         'all_notifications': all_notifications,
 
@@ -532,28 +574,30 @@ def notifications_user(request):
 
 def success_notifications(request):
     user = auth.get_user(request)
-
-    queryset_likes = NotificationLike.objects.filter(user=user)
-    
-    # queryset всех коммов
-    queryset_comms = NotificationComment.objects.filter(user=user)
-   
-    # полный queryset
-    # queryset_all = queryset_likes.union(queryset_comms)
-
     # Все уведомления были прочтены
-    for notification in queryset_likes:
-        if not notification.readable:
-            # print("CHANGE ON TRUE", notification.obj)
-            notification.readable = True
-            notification.save()
+    
+    # queryset всех лайков на посты
+    NotificationLike.objects.filter(user=user).update(readable=True)
+    
+    # queryset всех лайков на коммы
+    NotificationComment.objects.filter(user=user).update(readable=True)
+   
+    # queryset всех коммов на пост
+    NotificationCommentCreated.objects.filter(user=user).update(readable=True)
+    
+    # for notification in queryset_likes:
+    #     if not notification.readable:
+    #         # print("CHANGE ON TRUE", notification.obj)
+    #         notification.readable = True
+    #         notification.save()
 
-    for notification in queryset_comms:
-        if not notification.readable:
-            # print("CHANGE ON TRUE", notification.obj)
-            notification.readable = True
-            notification.save()
+    # for notification in queryset_comms:
+    #     if not notification.readable:
+    #         # print("CHANGE ON TRUE", notification.obj)
+    #         notification.readable = True
+    #         notification.save()
 
+    
     return redirect('posts_feed')
 
 # @login_required

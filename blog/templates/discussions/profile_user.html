@@ -60,7 +60,24 @@
     
     
 </script>
+<div>   
+  
+    {% for message in messages %}
+        
+        {% if message.tags == 'alert-success' %}
+            <h5 class="warning-message"><i class="wave-icon fa-solid fa-circle-dot"></i> {{ message }}</h5>
 
+        {% elif message.tags == 'alert-error' %}
+            <h5 class="warning-message"><i class="danger-icon fa-solid fa-triangle-exclamation"></i> {{ message }}</h5>
+
+        {% else %}
+            <h5 class="warning-message"><i class="success-icon fa-solid fa-circle-check"></i>  {{ message }}</h5>
+
+        {% endif %}
+
+    {% endfor %}
+
+</div>
 <br>
 <div class="avatar">
     <!-- <p>

@@ -99,6 +99,8 @@ urlpatterns = [
     path('comment/<int:pk>/bookmark/',
         login_required(BookmarkView.as_view(model=BookmarkComment)),
         name='comment_bookmark'),
+
+    path('all', views.show_all_users, name='all_users')
     
 ]
 

@@ -55,9 +55,11 @@ class Profile(models.Model):
 
     # возвращает количество уведомлений
     def get_amount_notifications(self):
-        likes = len(NotificationLike.objects.filter(user=self.user, readable=False))
-        comms = len(NotificationComment.objects.filter(user=self.user, readable=False))
-        return likes + comms
+        likes = NotificationLike.objects.filter(user=self.user, readable=False).count()
+        comms = NotificationComment.objects.filter(user=self.user, readable=False).count()
+        comms_created = NotificationCommentCreated.objects.filter(user=self.user, readable=False).count()
+        
+        return likes + comms + comms_created
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -268,5 +270,15 @@ class NotificationComment(NotitificationBase):
         Comment,
         on_delete=models.CASCADE,
         related_name="user_notifications_like"
+    )
+
+class NotificationCommentCreated(NotitificationBase):
+    class Meta:
+        db_table = "notificate_comment_post_created"
+
+    obj = models.ForeignKey(
+        Comment,
+        on_delete=models.CASCADE,
+        related_name="user_notifications_comm"
     )
 

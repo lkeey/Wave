@@ -1,0 +1,28 @@
+{% extends "discussions/base.html" %}
+
+{% block title %}Profile {{ user_profile.user.username }}{% endblock %}
+
+{% block content_blog %}
+    {{user}}
+    {{users}}
+
+    {% for user in users %}
+        {% if user.profile.first %}
+            
+            <div class="box box-chats">
+
+                <div class="">
+                    <a href="{% url 'profile_user' user_name=user %}">
+                        <img src="{{ user.profile.first.profile_img.url }}" alt="None" class="img-posts-feed img-chatting">           
+                    </a>
+                </div>
+
+                <div class="interlocutor">
+                    <h3>{{user.username}}</h3><br>
+                    
+                </div>
+
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

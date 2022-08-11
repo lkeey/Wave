@@ -206,10 +206,13 @@
 
     <div class="box text-center">
         <form action="{% url 'discussions_detail' pk=discussion_detail.pk %}" method="POST" enctype="multipart/form-data">
+            <div class="">
+                <img src="{{ user.profile.all.0.profile_img.url }}" alt="None" class="img-posts-feed image-comment">            
+            </div>
 
             {% csrf_token %}
     
-            <div class="col-10 ">
+            <div class="col-9">
 
                 {{ form }}
 

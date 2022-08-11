@@ -203,46 +203,6 @@
                 </form>
                 
             </div>  
-
-            
-
-            <!--
-            {% for comment in comments %}
-                <a name="comment-{{ comment.id }}"></a>
-                <div class="row" id="{{ comment.id }}">
-                    <div class="col-md-{{ comment.get_col }} col-md-offset-{{ comment.get_offset }}">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <strong>{{ comment.author_id.get_full_name|default:comment.author_id.username }}</strong>&nbsp;&nbsp;
-                                {{ comment.pub_date }}
-                                <a href="#comment-{{ comment.id }}">#Comm</a>
-                            </div>
-                            <div class="panel-body">
-                                <div>{{ comment.content|safe }}</div>
-                                {% if form %}
-                                <a class="btn btn-default btn-xs pull-right"
-                                                onclick="return show_comments_form({{ comment.id }})">
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-            
-                <h3 id="write_comment"><a onclick="return show_comments_form('write_comment')">Написать комментарий</a></h3>
-                <form id="comment_form" action="" method="post">
-                {% csrf_token %}
-                    <button type="submit" class="btn btn-primary">&nbsp;&nbsp;Комментировать</button>
-                </form>
-            
-                <div class="panel panel-warning">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Комментарии</h3>
-                    </div>
-                    <div class="panel-body">
-                        Только авторизованные пользователи могут оставлять комментарии.<br />
-                    </div>
-                </div> -->
             
         </div>
     {% endfor %}

@@ -25,6 +25,37 @@
         <h3 class="before-name">NEW</h3>
     {% endif %}
 
+    {% for notification in queryset_comms_created_unread %}
+        <div class="box notification-field">
+            <div class="">
+                <a href="{% url 'profile_user' user_name=notification.creator.username %}">
+                    <img src="{{ notification.creator.profile.all.0.profile_img.url }}" alt="None" class="img-posts-feed"> 
+                </a>             
+            </div>
+            <div class="data-notificate">
+                
+                <a href="{% url 'profile_user' user_name=notification.creator.username %}">
+                    <p class="author">
+                        {% if notification.creator ==  user_object %}
+                            You
+                        {% else %}
+                            {{ notification.creator }}
+                        {% endif %}
+                    </p>
+                </a>
+            
+                <h3>
+                    Commented Your Post - "{{ notification.obj.post.title }}" - <p class="content-comm-notificate">{{ notification.obj.content }}</p>
+                </h3>
+
+            </div>
+            <p class="date_created">{{ notification.date_created }}</p> 
+
+        </div>
+        <a class="url_go_to text-center" href="{% url 'discussions_detail' pk=notification.obj.post.pk %}"><i class="fa-solid fa-cloud-arrow-up"></i> Go to Post</a>
+
+    {% endfor %}
+
     {% for notification in queryset_likes_unread %}
             
         <div class="box notification-field">
@@ -90,6 +121,37 @@
     
     <hr class="">
     <h3 class="before-name">EARLIER</h3>
+
+    {% for notification in queryset_comms_created_read %}
+        <div class="box notification-field">
+            <div class="">
+                <a href="{% url 'profile_user' user_name=notification.creator.username %}">
+                    <img src="{{ notification.creator.profile.all.0.profile_img.url }}" alt="None" class="img-posts-feed"> 
+                </a>             
+            </div>
+            <div class="data-notificate">
+                
+                <a href="{% url 'profile_user' user_name=notification.creator.username %}">
+                    <p class="author">
+                        {% if notification.creator ==  user_object %}
+                            You
+                        {% else %}
+                            {{ notification.creator }}
+                        {% endif %}
+                    </p>
+                </a>
+            
+                <h3>
+                    Commented Your Post - "{{ notification.obj.post.title }}" - <p class="content-comm-notificate">{{ notification.obj.content }}</p>
+                </h3>
+
+            </div>
+            <p class="date_created">{{ notification.date_created }}</p> 
+
+        </div>
+        <a class="url_go_to text-center" href="{% url 'discussions_detail' pk=notification.obj.post.pk %}"><i class="fa-solid fa-cloud-arrow-up"></i> Go to Post</a>
+
+    {% endfor %}
 
     {% for notification in queryset_likes_read %}
         
