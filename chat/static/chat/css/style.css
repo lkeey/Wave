@@ -436,3 +436,13 @@ input {
     font-size: 20px;
     font-weight: 700;
 }
+
+.title a {
+    margin-top: 1vw;
+    display: block;
+    font-size: 35px;
+    font-weight: 600;
+
+    color: white;
+    text-decoration: underline;
+}

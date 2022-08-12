@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     'chat.apps.ChatConfig',  
     # 'chat',
 
+    'friend',
+
     # packages install
     'crispy_forms',
     'crispy_forms_materialize',

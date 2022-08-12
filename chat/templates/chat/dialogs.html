@@ -45,8 +45,8 @@
 
     {% if chats.count == 0 %}
         <div class="title">You haven't got any conversation...
-            <a href="">
-                Здесь должна быть ссылка на список всех пользователей
+            <a href="{% url 'all_users' %}">
+                You can find friends here
             </a>
         </div>
         

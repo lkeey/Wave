@@ -1068,3 +1068,44 @@ p {
   font-size: 25px;
   font-weight: 800;
 }
+
+.profiles-all {
+  margin-right: 10vw;
+}
+
+.content-user {
+  top: 15vh;
+  left: 20vw;
+  right: 20vw;
+
+  width: 60vw;
+  min-height: 50vh;
+
+  background-image: linear-gradient(45deg, rgb(254, 9, 135) 10%, #eaff00 100%);
+
+  border-radius: 50px;
+}
+
+.close-btn-users {
+  z-index: 2;
+
+
+  font-size: 35px;
+  font-weight: 900;
+
+  position: fixed;
+
+  left: 71vw;
+  top: 20vh;
+
+  border-radius: 50px;
+  width: 5vw;
+}
+
+.close-btn-users a {
+  color: #ffffff;
+}
+
+.url_user {
+  margin: 1vw 3vw 0 3vw;
+}

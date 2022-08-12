@@ -3,26 +3,112 @@
 {% block title %}Profile {{ user_profile.user.username }}{% endblock %}
 
 {% block content_blog %}
-    {{user}}
-    {{users}}
+<script>
+    //$(document).ready(function(){
+        //Скрыть PopUp при загрузке страницы    
+     //   PopUpHide();
+    //});
+
+    //Функция отображения PopUp
+    function PopUpShowProfileInfo( user ){
+        //alert( user );
+        //document.getElementById( user ).show();
+        //$(f"#PopUpShowProfileInfo{user}").show();
+        $(`#${user}`).show();
+    }
+
+    //Функция скрытия PopUp
+    function PopUpHide( user ){
+        //alert( user );
+        //document.getElementById( user ).hide();
+        $(`#${user}`).hide();
+        //alert('HIDE');
+    }   
+
+</script>
+
+    <!-- {{user}}
+    {{users}} -->
 
     {% for user in users %}
         {% if user.profile.first %}
-            
-            <div class="box box-chats">
 
-                <div class="">
-                    <a href="{% url 'profile_user' user_name=user %}">
-                        <img src="{{ user.profile.first.profile_img.url }}" alt="None" class="img-posts-feed img-chatting">           
-                    </a>
-                </div>
+            <a href="javascript:PopUpShowProfileInfo('{{user}}')">
+                
+                <div class="box box-chats">
 
-                <div class="interlocutor">
-                    <h3>{{user.username}}</h3><br>
+                        <div class="">
+                            <img src="{{ user.profile.first.profile_img.url }}" alt="None" class="img-posts-feed img-chatting">           
+                        </div>
+
+                        <div class="interlocutor profiles-all">
+                            <h3>{{user.username}}</h3><br>      
+                        </div>
+
                     
+
+                    <a type="button" href="{% url 'create_conversation' user_id=user.id %}" class="send-message profile-btn">
+                        Send a message
+                    </a>
+                    <a type="button" href="#" class="add-friends profile-btn">
+                        Add to friends
+                    </a> 
+
+                </div>
+            </a>
+        
+            <div class="b-popup content-user" id="{{user}}">
+                <!-- ALL POSTS -->
+        
+                <div class="b-popup-content">
+                    
+                        <div class="container">
+                            <div class="text-center close-btn-users">
+                                <a href='javascript:PopUpHide("{{user}}")'><i class="fa-solid fa-xmark"></i></a>
+                            </div>
+
+                            <div class="box">
+                                <!-- <div class="img-profile">
+                                    <a href="{{ user_profile.profile_img.url }}">
+                                        <img src="{{ user_profile.profile_img.url }}" alt="None" class="img-user">
+                                    </a>
+                                </div> -->
+                    
+                                <a href="{{ user.profile_img.url }}">
+                                    <div class="box-image">
+                                        <div class="content-image">
+                                            <img src="{{ user.profile.first.profile_img.url }}" alt="None" class="img-user">
+                                        </div>
+                                    </div>
+                                </a>
+                                
+                                <div class="box-info-user">
+                                    <h3 class="name-user">{{ user.username }}</h3>
+                                    <h2 class="bio">{{ user.profile.first.bio }}</h2>
+                                
+                                    <a type="button" href="{% url 'create_conversation' user_id=user.id %}" class="send-message profile-btn">
+                                        Send a message
+                                    </a>
+                                    <a type="button" href="#" class="add-friends profile-btn">
+                                        Add to friends
+                                    </a> 
+                                </div> 
+                                
+                            </div>
+                            <a class="url_go_to text-center url_user" href="{% url 'profile_user' user_name=user.username %}">
+                                <i class="fa-solid fa-cloud-arrow-up"></i>
+                                Go to {{user}}
+                            </a>
+
+                        </div>
+
+                 
                 </div>
 
             </div>
+    
+        <script>PopUpHide('{{user}}');</script>
         {% endif %}
     {% endfor %}
+
 {% endblock %}

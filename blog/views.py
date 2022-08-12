@@ -47,6 +47,9 @@ from django.http import HttpResponse
 from django.contrib import messages
 
 from django.views.generic.dates import timezone_today
+
+from friend.models import FriendList, FriendRequest
+
 from .models import (
     NotificationComment, NotificationCommentCreated, NotificationLike, Post, Profile, 
     PostLike, CommentLike,
@@ -59,7 +62,9 @@ from django.contrib.auth.decorators import login_required
 
 import json
 
+from friend.utils import get_friend_request_or_false
 
+from friend.friend_request_status import FriendRequestStatus
 
 bot_name = settings.TELEGRAM_BOT_NAME
 bot_token = settings.TELEGRAM_BOT_TOKEN
@@ -482,6 +487,7 @@ def settings(request):
 
 @login_required(login_url='sign_in')
 def profile_user(request, user_name):
+    user_global = request.user
 
     # user_object = User.objects.get(username=pk)
 
@@ -496,11 +502,75 @@ def profile_user(request, user_name):
 
     user_posts_length = len(user_posts)
 
+    # Friend Requests
+
+    try:
+        friend_list = FriendList.objects.get(user=user)
+
+    except FriendList.DoesNotExist: 
+        friend_list = FriendList(user=user)
+        friend_list.save()
+
+    friends = friend_list.friends.all()
+
+    # BASE VARIABLES
+    is_self = True
+    is_friend = False
+    pending_friend_request_id = None
+    friend_requests = None
+
+    if user != user_global:
+        # не является собой
+        is_self = False
+
+        if friends.filter(pk=user.id):
+            # есть в друзьях
+            is_friend = True
+
+        else:
+            is_friend = False
+            # CASES
+
+            if get_friend_request_or_false(sender=user, receiver=user_global) != False:
+                # Запрос отправлен от кого-то мне(пользователю)
+                request_sent = FriendRequestStatus.THEM_SENT_TO_YOU.value
+                pending_friend_request_id = get_friend_request_or_false(
+                    sender=user, receiver=user_global
+                ).id
+
+            elif get_friend_request_or_false(sender=user, receiver=user_global) != False:
+                # Я(пользователь) отправил кому-то запрос
+                request_sent = FriendRequestStatus.YOU_SENT_TO_THEM.value
+
+            else:
+                # Запрос НИКЕМ не был отправлен
+                request_sent = FriendRequestStatus.NO_REQUEST_SENT.value
+
+    else:
+        print("WARNING")
+        # написать сообщение в шаблоне 
+        try:
+            friend_requests = FriendRequest.objects.filter(
+                receiver=user, 
+                is_active=True)
+        except:
+            pass
+
     context = {
         'user_object': user,
         'user_profile': user_profile,
         'user_posts': user_posts,
         'user_posts_length': user_posts_length,
+
+        'is_self': is_self,
+        'is_friend': is_friend,
+
+        'friends': friends,
+
+        'request_sent': request_sent,
+        'friend_requests': friend_requests,
+
+        'pending_friend_request_id': pending_friend_request_id,
     }
 
     return render(request, 'discussions/profile_user.html', context)
