@@ -142,6 +142,44 @@
                 
             </div>  -->
         </div>
+        {% if friend_requests %}
+            <hr>
+            <div class="list-friends">
+                <h3>FRIENDS </h3>
+                <p>{{friend_requests|length}}</p>
+                {{friend_requests}}
+                {% for friend in friends %}
+                    {{friend}}
+                {% endfor %}
+            </div>
+            <hr>
+        {% endif %}
+
+        {% if is_friend == False and is_self == False %}
+            <!-- You sent them -->
+            {% if request_sent == 1 %}
+               <input type="submit" name="" id="" value="предложить отменить заявку"> 
+            
+            <!-- Them sent you -->
+            {% elif request_sent == 0 %}
+                <input type="submit" name="" id="" value="предложить принять заявку"> 
+
+            <!-- No request have been sent -->
+            {% elif request_sent == -1 %}
+                <button class="btn btn-primary" id="id_send_friend_request">
+                    Send Request
+                </button>
+                {{ request_sent }}
+                <input type="submit" name="" id="" value="предложить сделать заявку"> 
+
+            {% endif %}
+        
+        {% elif is_friend %}
+        
+        <input type="submit" name="" id="" value="являетесь друзьями, но можно удалить"> 
+
+        {% endif %}
+
 
     </div>
 
@@ -253,5 +291,23 @@
 <h3 class="title">You haven't got any post...</h3>
 
 {% endif %}
+{{user}} {{user_object}}
+<script type="text/javascript">
+
+    function onFriendRequestSent(){
+        //alert("RELOADING")
+        location.reload();
+    }
+
+    var SendFriendRequestBtn = document.getElementById("id_send_friend_request")
+    if (SendFriendRequestBtn != null){
+        SendFriendRequestBtn.addEventListener("click", function(){
+            SendFriendRequest("{{user_object.id}}", onFriendRequestSent)
+        })
+    }
+
+</script>
+
+{% include "friend/snippets/send_friend_request.html" %}
 
 {% endblock %}

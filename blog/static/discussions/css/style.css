@@ -1109,3 +1109,17 @@ p {
 .url_user {
   margin: 1vw 3vw 0 3vw;
 }
+
+.list-friends h3{
+  color: white;
+  font-size: 25px;
+  font-weight: 500;
+
+  display: inline;
+}
+
+.list-friends p {
+  color: rgb(179, 179, 179);
+  font-size: 25px;
+  font-weight: 300;
+}

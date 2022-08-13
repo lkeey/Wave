@@ -518,31 +518,37 @@ def profile_user(request, user_name):
     is_friend = False
     pending_friend_request_id = None
     friend_requests = None
+    request_sent = None
 
     if user != user_global:
         # не является собой
         is_self = False
 
-        if friends.filter(pk=user.id):
+        if friends.filter(pk=user_global.id):
+            print("HERE")
             # есть в друзьях
             is_friend = True
 
         else:
+            print("HERE2")
             is_friend = False
             # CASES
 
             if get_friend_request_or_false(sender=user, receiver=user_global) != False:
+                print("THEM")
                 # Запрос отправлен от кого-то мне(пользователю)
                 request_sent = FriendRequestStatus.THEM_SENT_TO_YOU.value
                 pending_friend_request_id = get_friend_request_or_false(
                     sender=user, receiver=user_global
                 ).id
 
-            elif get_friend_request_or_false(sender=user, receiver=user_global) != False:
+            elif get_friend_request_or_false(sender=user_global, receiver=user) != False:
                 # Я(пользователь) отправил кому-то запрос
+                print("YOU")
                 request_sent = FriendRequestStatus.YOU_SENT_TO_THEM.value
 
             else:
+                print("NONE")
                 # Запрос НИКЕМ не был отправлен
                 request_sent = FriendRequestStatus.NO_REQUEST_SENT.value
 
@@ -551,13 +557,15 @@ def profile_user(request, user_name):
         # написать сообщение в шаблоне 
         try:
             friend_requests = FriendRequest.objects.filter(
-                receiver=user, 
+                receiver=user,
                 is_active=True)
+            print(friend_requests)
         except:
             pass
 
     context = {
         'user_object': user,
+
         'user_profile': user_profile,
         'user_posts': user_posts,
         'user_posts_length': user_posts_length,

@@ -28,6 +28,8 @@ urlpatterns = [
     
     path('chat/', include('chat.urls')),
 
+    path('friend/', include('friend.urls')),
+
     path('', include('blog.urls')),
         
 
