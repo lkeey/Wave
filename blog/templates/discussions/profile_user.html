@@ -145,6 +145,7 @@
         {% if friend_requests %}
             <hr>
             <div class="list-friends">
+                <a href="{% url 'friend_requests' user_id=user_object.id %}">Ссылка для просмотра всех заявок</a>
                 <h3>FRIENDS </h3>
                 <p>{{friend_requests|length}}</p>
                 {{friend_requests}}
