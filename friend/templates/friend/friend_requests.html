@@ -60,7 +60,7 @@
 			</a>
 			<div class="d-flex flex-row card-right flex-grow-1 justify-content-end mx-2">
 	  			<span id="id_cancel_{{request.sender.id}}" class="decline-friend-request material-icons p-1" onclick='triggerDeclineFriendRequest("{{request.id}}")'>cancel</span>
-	  			<span id="id_confirm_{{request.sender.id}}" class="confirm-friend-request material-icons p-1" onclick='triggerAcceptFriendRequest("{{request.id}}")'>check</span>
+	  			<span id="id_confirm_{{request.sender.id}}" class="confirm-friend-request material-icons p-1" onclick='triggerAcceptFriendRequest("{{request.id}}")'>check - {{request.id}}</span>
 			</div>
 		</div>
 		{% if forloop.counter|divisibleby:2 %}
@@ -90,7 +90,8 @@
 	}
 
 	function triggerAcceptFriendRequest(friend_request_id){
-		//acceptFriendRequest(friend_request_id, onFriendRequestAccepted)
+		alert(friend_request_id);
+		acceptFriendRequest(friend_request_id, onFriendRequestAccepted)
 	}
 
 	function triggerDeclineFriendRequest(friend_request_id){
@@ -98,7 +99,7 @@
 	}
 </script>
 
-{#% include 'friend/snippets/accept_friend_request.html' %#}
+{% include 'friend/snippets/accept_friend_request.html' %}
 {#% include 'friend/snippets/decline_friend_request.html' %#}
 
 

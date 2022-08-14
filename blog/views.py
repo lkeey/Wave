@@ -489,8 +489,6 @@ def settings(request):
 def profile_user(request, user_name):
     user_global = request.user
 
-    # user_object = User.objects.get(username=pk)
-
     user = get_object_or_404(
             User, 
             username=user_name
@@ -506,12 +504,16 @@ def profile_user(request, user_name):
 
     try:
         friend_list = FriendList.objects.get(user=user)
-
+        print("friend_list", friend_list)
     except FriendList.DoesNotExist: 
         friend_list = FriendList(user=user)
         friend_list.save()
 
+
     friends = friend_list.friends.all()
+
+    print("FRIENDS", friends)
+
 
     # BASE VARIABLES
     is_self = True
@@ -525,7 +527,7 @@ def profile_user(request, user_name):
         is_self = False
 
         if friends.filter(pk=user_global.id):
-            print("HERE")
+            
             # есть в друзьях
             is_friend = True
 
@@ -557,11 +559,12 @@ def profile_user(request, user_name):
         # написать сообщение в шаблоне 
         try:
             friend_requests = FriendRequest.objects.filter(
-                receiver=user,
+                receiver=user_global,
                 is_active=True)
-            print(friend_requests)
+            print("friend_requests",friend_requests)
         except:
             pass
+     
 
     context = {
         'user_object': user,
@@ -574,6 +577,7 @@ def profile_user(request, user_name):
         'is_friend': is_friend,
 
         'friends': friends,
+        'request': request,
 
         'request_sent': request_sent,
         'friend_requests': friend_requests,

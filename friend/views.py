@@ -77,3 +77,34 @@ def send_friend_request(request, *args, **kwargs):
         json.dumps(payload),
         content_type="application/json"
     )   
+
+def accept_friend_request(request, *args, **kwargs):
+    user = request.user
+    payload = {}
+
+    if request.method == "GET":
+        friend_request_id = kwargs.get("friend_request_id")
+        if friend_request_id:
+            friend_request = FriendRequest.objects.get(pk=friend_request_id)
+            # receiver is user
+            if friend_request.receiver == user:
+                if friend_request:
+                    # found the request
+                    print(f"request - {friend_request.receiver} - {friend_request.sender}")
+                    friend_request.accept()
+                    payload["response"] = "Friend Request Accepted"
+
+                else:
+                    payload["response"] = "Something Wrong"
+            else:
+                payload["response"] = "Thats not your request"
+        else:
+            payload["response"] = "Unable to accept"
+    
+    return HttpResponse(
+        json.dumps(payload),
+        content_type="application/json"
+    )
+        
+
+        

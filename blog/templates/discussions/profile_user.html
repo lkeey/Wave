@@ -163,6 +163,13 @@
             
             <!-- Them sent you -->
             {% elif request_sent == 0 %}
+                    
+                <span id="id_confirm_{{pending_friend_request_id.sender.id}}" 
+                    class="confirm-friend-request material-icons p-1" 
+                    onclick='triggerAcceptFriendRequest("{{pending_friend_request_id}}")'>
+                    check - {{pending_friend_request_id}}
+                </span>
+                {{request}}
                 <input type="submit" name="" id="" value="предложить принять заявку"> 
 
             <!-- No request have been sent -->
@@ -300,6 +307,15 @@
         location.reload();
     }
 
+    function onFriendRequestAccepted(){ 
+        location.reload();
+    }
+
+    function triggerAcceptFriendRequest(friend_request_id){
+        alert(friend_request_id);
+        acceptFriendRequest(friend_request_id, onFriendRequestAccepted)
+    }
+
     var SendFriendRequestBtn = document.getElementById("id_send_friend_request")
     if (SendFriendRequestBtn != null){
         SendFriendRequestBtn.addEventListener("click", function(){
@@ -307,8 +323,10 @@
         })
     }
 
+
 </script>
 
 {% include "friend/snippets/send_friend_request.html" %}
+{% include "friend/snippets/accept_friend_request.html" %}
 
 {% endblock %}

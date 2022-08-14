@@ -26,12 +26,15 @@ class FriendList(models.Model):
     def __str__(self):
         return self.user.username
 
-    def aff_friend(self, account):
+    def add_friend(self, account):
         # Add a new friend
 
         if not account in self.friends.all():
             self.friends.add(account)
             self.save()
+
+            print(f"ADDING {self} - {account} - {self.friends.all()}")
+
 
     def remove_friend(self, account):
         # remove a friend
@@ -100,7 +103,7 @@ class FriendRequest(models.Model):
 
             sender_friend_list = FriendList.objects.get(user=self.sender)
             if sender_friend_list:
-                receiver_friend_list.add_friend(self.receiver)
+                sender_friend_list.add_friend(self.receiver)
 
                 self.is_active = False
                 self.save()
