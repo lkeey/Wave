@@ -70,17 +70,18 @@
                                 {% else %}
                                     <p class="last_mess_author">{{last_message.author}}:</p>
                                 {% endif %}
-                               <label class="last_message">{{last_message}} {% get_companion user chat as companion %} </label>
-                            
-                                {% if last_message.readable %} 
-                                    <!-- Прочитано -->
-                                    <i class="read-icon fa-solid fa-circle"></i>
-                                {% else %}
-                                    <i class="unread-icon fa-solid fa-circle"></i>
-                                    <!-- Непрочитано -->
-
-                                {% endif %}
-
+                                <label class="last_message">{{last_message}} {% get_companion user chat as companion %} </label>
+                                
+                               <div class="mess-other-readable">
+                                    {% if last_message.readable %} 
+                                        <!-- Прочитано -->
+                                        <i class="read-icon fa-solid fa-circle"></i>
+                                    {% else %}
+                                        <i class="unread-icon fa-solid fa-circle"></i>
+                                        <!-- Непрочитано -->
+                                    {% endif %}
+                                </div>
+                                
                                 {% get_count_unreaded chat companion as amount %}
                                 {% if amount > 0 %}
                                     <!-- есть непрочитанные сообщения -->

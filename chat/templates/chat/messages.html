@@ -46,30 +46,28 @@
                             <p class="date-created-mess">
                                 {{ message.date_created }}
                             </p>
-                        
-                            
 
                             {% if message.author == user %}
-                            <div class="box">
+                            <div class="">
                                 <div class="mess-own-readable">
                                     {% if message.readable %} 
-                                            <!-- Прочитано -->
-                                            <i class="read-icon fa-solid fa-circle"></i>
+                                        <!-- Прочитано -->
+                                        <i class="read-icon fa-solid fa-circle"></i>
                                     {% else %}
                                         <i class="unread-icon fa-solid fa-circle"></i>
                                         <!-- Непрочитано -->
                                     {% endif %}
                                 </div>
-                                <div class="own_message">
-                                    
+                                <div class="container-messages own_message">  
                                     <h4 class="content-message">{{ message }}</h4>
                                     <p class="date-message">{% myDate message.date_created %}</p>
                                 </div>
+                                
                             </div>
 
                             {% else %}
-                            <div class="box">   
-                                <div class="other_message">
+                            <div class="">   
+                                <div class="container-messages other_message">
                                     <h4 class="content-message">{{ message }}</h4>
                                     <p class="date-message">{% myDate message.date_created %}</p>
                                 </div>
@@ -85,6 +83,7 @@
                             </div>
                             {% endif %}
                         {% endfor %}
+                        
                     {% else %}
                         <div class="first-message">
                            <p>Send First Message In This Chat</p> 

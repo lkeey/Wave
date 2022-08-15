@@ -39,11 +39,11 @@
     color: rgb(123, 69, 223);
 }
 
-
 input {
     list-style: none;
 }
-.own_message {
+.own_message { 
+
     color: white;
 
     margin: 1vw 1vw 1vw 0vw;
@@ -53,6 +53,12 @@ input {
     background-image: linear-gradient(60deg, rgb(123, 69, 223) 10%, #7522bd 100%);
 
     /* background-color: red; */
+    
+    /* max-width: min-content; */
+    max-width: 45%;
+
+    display: inline-block;
+    
 }
 
 .other_message {
@@ -63,12 +69,14 @@ input {
 
     border-radius: 20px;
     background-image: linear-gradient(60deg, rgb(237, 42, 224) 10%, #9d3ef0 100%);
+
+    max-width: 45%;
+    display: inline-block;
 } 
 
 .content-message {
     text-align: left;
 
-    margin: 0;
     font-size: 20px;
     font-weight: 600;
 }
@@ -252,26 +260,29 @@ input {
     border-top: 1px solid white;
 }
 
-.last_message {
-    font-size: 20px;
-    font-weight: 500;
-
-    color: black;
-}
 
 .message_last_info label {
-
     display: inline-block;
 
     font-size: 20px;
     font-weight: 300;
 
     color: #000000;
+    max-width: 20%;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* background-color: red; */
+}
+
+.message_last_info {
+    max-width: 45%;
 }
 
 .read-icon {
     color: #9d3ef0;
-  }
+}
   
 .unread-icon {
     color: rgb(207, 207, 207);
@@ -324,13 +335,12 @@ input {
 .mess-own-readable {
     display: inline-block;
 
-    width: 5vw;
+    /* width: 5vw; */
 
-    margin: 0vw 0vw 0vw 40vw;
 
+    margin-left: 45%;
     padding-left: 3vw;
     
-
     /* background-color: red; */
 }
 
@@ -342,7 +352,7 @@ input {
 
 
     padding-right: 3vw;
-    
+    margin-right: 45%;
 
     /* background-color: red; */
 }

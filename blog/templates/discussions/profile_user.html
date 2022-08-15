@@ -130,82 +130,90 @@
                 <a type="button" href="{% url 'create_conversation' user_id=user_object.id %}" class="send-message profile-btn">
                     Send a message
                 </a>
-                <a type="button" href="#" class="add-friends profile-btn">
-                    Add to friends
-                </a> 
+                <!-- Type of button to add to friends -->
+                {% if is_friend == False and is_self == False %}
+                    <!-- You sent them -->
+                    {% if request_sent == 1 %}
+                        <a type="button" href="#" onclick='triggerCancelFriendRequest("{{pending_friend_request_id}}")' class="add-friends profile-btn">
+                            <i class="fa-solid fa-user-large-slash"></i> Cancel Friend Request
+                        </a>
+                    
+                    <!-- Them sent you -->
+                    {% elif request_sent == 0 %}
+                            
+                        <span id="id_confirm_{{pending_friend_request_id.sender.id}}" 
+                            class="confirm-friend-request material-icons p-1" 
+                            onclick='triggerAcceptFriendRequest("{{pending_friend_request_id}}")'>
+                            
+                            <a type="button" href="#" class="add-friends profile-btn">
+                                <i class="fa-solid fa-user-clock"></i> Access Friend Request
+                            </a>
+                        </span>
+                        
+                    <!-- No request have been sent -->
+                    {% elif request_sent == -1 %}
+                        <a type="button" href="#" class="add-friends profile-btn" id="id_send_friend_request">
+                            <i class="fa-solid fa-user-plus"></i> Add to friends
+                        </a>
+
+                    {% endif %}
+                
+                {% elif is_friend %}
+                    
+                    <a type="button" href="#" class="add-friends profile-btn" id="id_unfriend_btn">
+                        <i class="fa-solid fa-user-check"></i> Unfriend (Добавить дроупдаун) - FRIENDS
+                    </a>
+
+                {% endif %}
+                    <!-- <a type="button" href="#" class="add-friends profile-btn">
+                        Add to friends - BETA
+                    </a>  -->
             </div> 
             
-            <!-- <div>
-                <h3 class="name-user">{{ user_profile.user.username }}</h3>
-                <h2 class="bio">{{ user_profile.bio }}</h2>
-                
-                
-            </div>  -->
         </div>
-        {% if friend_requests %}
-            <hr>
-            <div class="list-friends">
-                <a href="{% url 'friend_requests' user_id=user_object.id %}">Ссылка для просмотра всех заявок</a>
-                <h3>FRIENDS REQUESTS</h3>
-                <p>{{friend_requests|length}}</p>
-                {{friend_requests}}
-                {% for friend in friends %}
-                    {{friend}}
-                {% endfor %}
-            </div>
-            <hr>
-        {% endif %}
 
-        {% if is_friend == False and is_self == False %}
-            <!-- You sent them -->
-            {% if request_sent == 1 %}
-                <button class="confirm-friend-request material-icons p-1" 
-                    onclick='triggerCancelFriendRequest("{{pending_friend_request_id}}")'>
-                    cancel - {{pending_friend_request_id}}
-                </button>
-
-                <input type="submit" name="" id="" value="предложить отменить заявку"> 
-            
-            <!-- Them sent you -->
-            {% elif request_sent == 0 %}
+        <div class="followers">
+            {% if friend_requests %}
+                <hr>
+                <div class="list-friends">
+                    <i class="fa-solid fa-users-line"></i>
+                    <p>{{friend_requests|length}}</p>
+                    {% if friend_requests|length == 0 %}
+                        <h3>follower</h3>
+                    {% else %}
+                        <h3>follower</h3>
+                    {% endif %}
                     
-                <span id="id_confirm_{{pending_friend_request_id.sender.id}}" 
-                    class="confirm-friend-request material-icons p-1" 
-                    onclick='triggerAcceptFriendRequest("{{pending_friend_request_id}}")'>
-                    <button class="btn btn-primary">
-                        check - {{pending_friend_request_id}}
-                    </button>
+                </div>
+                <hr>
+            {% endif %}
+        </div>
 
-                    <!-- <button class="confirm-friend-request material-icons p-1" 
-                    onclick='triggerDeclineFriendRequest("{{pending_friend_request_id}}")'>
-                    cancel - {{pending_friend_request_id}}
-                    </button> -->
+        <div class="friends">
+            {% if friends %}
 
-
-                </span>
-                {{request}}
-                <input type="submit" name="" id="" value="предложить принять заявку"> 
-
-            <!-- No request have been sent -->
-            {% elif request_sent == -1 %}
-                <button class="btn btn-primary" id="id_send_friend_request">
-                    Send Request
-                </button>
-                {{ request_sent }}
-                <input type="submit" name="" id="" value="предложить сделать заявку"> 
+                {% if friends|length == 1 %}
+                    <h3>1 FRIEND</h3>
+                {% else %}
+                    <h3>FRIENDS {{friends|length}}</h3>
+                    <p>Mutual</p>
+                {% endif %}
 
             {% endif %}
+
+            {% for friend in friends %}
+                <div class="user-friend-profile text-center">
+
+                    <a href="{% url 'profile_user' user_name=friend.username %}">
+                        <img src="{{friend.profile.first.profile_img.url}}" alt="None" class="img-profile-comm">
+                    </a>
+
+                    <h4>{{friend.username}}</h4>
+
+                </div>
+            {% endfor %}
+        </div>
         
-        {% elif is_friend %}
-        <button class="btn btn-primary" id="id_unfriend_btn">
-            Unfriend
-        </button>
-
-        <input type="submit" name="" id="" value="являетесь друзьями, но можно удалить"> 
-
-        {% endif %}
-
-
     </div>
 
 </div>
@@ -313,10 +321,10 @@
 
 {% else %}
 
-<h3 class="title">You haven't got any post...</h3>
+<h3 class="title no-posts">{{user_object}} haven't any post...</h3>
 
 {% endif %}
-{{user}} {{user_object}}
+
 <script type="text/javascript">
 
     function onFriendRequestSent(){

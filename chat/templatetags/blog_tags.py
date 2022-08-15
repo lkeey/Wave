@@ -1,10 +1,11 @@
 from django import template
-from django import template  
+from django import template
+from blog.models import PostLike
 from chat.models import Message, Chat
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 
 register = template.Library()
-
 
 @register.simple_tag
 def get_companion(user, chat):
@@ -33,4 +34,13 @@ def get_all_unreaded(user):
     count = Message.unreaded_objects.get_amount_unreaded().all().filter(chat__members__in=[user.id]).exclude(author=user).count()
 
     return count
+
+@register.simple_tag
+def was_liked(user, id):
+
+    try:
+        PostLike.objects.get(user=user, obj_id=id)
+        return True
+    except PostLike.DoesNotExist:
+        return False
 
