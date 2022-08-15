@@ -137,7 +137,7 @@ def remove_friend(request, *args, **kwargs):
     )
 
 
-def decline_friend_request(request, *args, **kwargs):
+def cancell_friend_request(request, *args, **kwargs):
     user = request.user
     payload = {}
 
@@ -149,8 +149,8 @@ def decline_friend_request(request, *args, **kwargs):
             # if friend_request.receiver == user:
             if friend_request:
                 # found the request
-                friend_request.decline()
-                payload['response'] = "Friend Request Decline"
+                friend_request.cancel()
+                payload['response'] = "Friend Request Cancelled"
 
             else:
                 payload["response"] = "Smth went wrong"

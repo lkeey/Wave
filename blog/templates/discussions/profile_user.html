@@ -146,7 +146,7 @@
             <hr>
             <div class="list-friends">
                 <a href="{% url 'friend_requests' user_id=user_object.id %}">Ссылка для просмотра всех заявок</a>
-                <h3>FRIENDS </h3>
+                <h3>FRIENDS REQUESTS</h3>
                 <p>{{friend_requests|length}}</p>
                 {{friend_requests}}
                 {% for friend in friends %}
@@ -160,10 +160,11 @@
             <!-- You sent them -->
             {% if request_sent == 1 %}
                 <button class="confirm-friend-request material-icons p-1" 
-                onclick='triggerDeclineFriendRequest("{{pending_friend_request_id}}")'>
-                cancel - {{pending_friend_request_id}}
+                    onclick='triggerCancelFriendRequest("{{pending_friend_request_id}}")'>
+                    cancel - {{pending_friend_request_id}}
                 </button>
-               <input type="submit" name="" id="" value="предложить отменить заявку"> 
+
+                <input type="submit" name="" id="" value="предложить отменить заявку"> 
             
             <!-- Them sent you -->
             {% elif request_sent == 0 %}
@@ -175,10 +176,10 @@
                         check - {{pending_friend_request_id}}
                     </button>
 
-                    <button class="confirm-friend-request material-icons p-1" 
+                    <!-- <button class="confirm-friend-request material-icons p-1" 
                     onclick='triggerDeclineFriendRequest("{{pending_friend_request_id}}")'>
                     cancel - {{pending_friend_request_id}}
-                    </button>
+                    </button> -->
 
 
                 </span>
@@ -341,9 +342,9 @@
         acceptFriendRequest(friend_request_id, onFriendRequestAccepted)
     }
 
-    function triggerDeclineFriendRequest(friend_request_id){
-        alert("cansel - "+friend_request_id);
-		declineFriendRequest(friend_request_id, onFriendRequestCancelled)
+    function triggerCancelFriendRequest(friend_request_id){
+        alert("cancel - "+friend_request_id);
+		cancelFriendRequest(friend_request_id, onFriendRequestCancelled)
 	}
 
     var SendFriendRequestBtn = document.getElementById("id_send_friend_request")
@@ -366,6 +367,6 @@
 {% include "friend/snippets/send_friend_request.html" %}
 {% include "friend/snippets/accept_friend_request.html" %}
 {% include "friend/snippets/remove_friend.html" %}
-{% include 'friend/snippets/decline_friend_request.html' %}
+{% include 'friend/snippets/cancel_friend_request.html' %}
 
 {% endblock %}

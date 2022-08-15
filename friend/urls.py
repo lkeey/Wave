@@ -5,7 +5,7 @@ from friend.views import (
     friend_requests,
     accept_friend_request,
     remove_friend,
-    decline_friend_request
+    cancell_friend_request
 )
 
 urlpatterns = [
@@ -18,5 +18,5 @@ urlpatterns = [
     # удаление
     path("friend_remove", remove_friend, name="remove_friend"),
     # отмена
-    path("friend_request_decline/<friend_request_id>/", decline_friend_request, name="decline_friend"),
+    path("friend_request_decline/<friend_request_id>/", cancell_friend_request, name="decline_friend"),
 ]

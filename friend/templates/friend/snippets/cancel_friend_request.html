@@ -1,6 +1,6 @@
 <script type="text/javascript">
 
-    function declineFriendRequest(friend_request_id, uiUpdateFunction){
+    function cancelFriendRequest(friend_request_id, uiUpdateFunction){
         var url = "{% url 'decline_friend' friend_request_id=-1 %}".replace("-1", friend_request_id)
 
         $.ajax ({
@@ -9,7 +9,7 @@
             url: url,
             timeout: 5000,
             success: function(data){
-                if (data.response == "Friend Request Decline"){
+                if (data.response == "Friend Request Cancelled"){
 
                 } else if (data.response != null){
                     alert(data["response"])
