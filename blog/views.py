@@ -540,12 +540,17 @@ def profile_user(request, user_name):
                 print("THEM")
                 # Запрос отправлен от кого-то мне(пользователю)
                 request_sent = FriendRequestStatus.THEM_SENT_TO_YOU.value
+                
                 pending_friend_request_id = get_friend_request_or_false(
                     sender=user, receiver=user_global
                 ).id
 
             elif get_friend_request_or_false(sender=user_global, receiver=user) != False:
                 # Я(пользователь) отправил кому-то запрос
+                pending_friend_request_id = get_friend_request_or_false(
+                    sender=user_global, receiver=user
+                ).id
+
                 print("YOU")
                 request_sent = FriendRequestStatus.YOU_SENT_TO_THEM.value
 

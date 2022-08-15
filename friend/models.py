@@ -54,6 +54,37 @@ class FriendList(models.Model):
         friend_list = FriendList.objects.get(user=removee)
         friend_list.remove_friend(self.user)
 
+        # Send friend request from removee 
+        #   Technology for Followers
+
+        try:
+            # Get any friend request (active and not-active)
+        
+            friend_requests = FriendRequest.objects.filter(
+                sender=removee,
+                receiver=self.user
+            )
+
+            try:
+                for req in friend_requests:
+                    if req.is_active:
+                        raise Exception("request already sent")
+                    
+                friend_request = FriendRequest(sender=removee, receiver=self.user)
+                friend_request.save()
+                print("REquEST_FR", friend_request)
+
+            except Exception as _Ex:
+                raise Exception(_Ex)
+      
+        except FriendRequest.DoesNotExist:
+            print("EXC")
+            # There are no friends, so create one
+            friend_request = FriendRequest(sender=removee, receiver=self.user)
+            friend_request.save()
+
+    
+
     def is_mutual_friend(self, friend):
         # Is this a friend
 

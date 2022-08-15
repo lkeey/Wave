@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 import json
 
-from friend.models import FriendRequest
+from friend.models import FriendList, FriendRequest
 # Create your views here.
 
 def friend_requests(request, *args, **kwargs):
@@ -106,5 +106,62 @@ def accept_friend_request(request, *args, **kwargs):
         content_type="application/json"
     )
         
+def remove_friend(request, *args, **kwargs):
+    user = request.user
+    payload = {}
 
-        
+    if request.method == "POST":
+        user_id = request.POST.get("receiver_user_id")
+        if user_id:
+# чтобы сделать подписчиков после удаления из друзей,
+# нужно отправлять следующий запрос на дружбу:
+#   receiver = request.user
+#   sender = removee = receiver_user_id
+#           + добавить в метод
+            try:
+                removee = User.objects.get(pk=user_id)
+                friend_list = FriendList.objects.get(user=user)
+                friend_list.unfriend(removee)
+
+                payload["response"] = "Successfully removed"
+
+            except:
+                payload["response"] = "Something wrong"
+  
+        else:
+            payload["response"] = "Something wrong"
+
+    return HttpResponse(
+        json.dumps(payload),
+        content_type="application/json"
+    )
+
+
+def decline_friend_request(request, *args, **kwargs):
+    user = request.user
+    payload = {}
+
+    if request.method == "GET":
+        friend_request_id = kwargs.get("friend_request_id")
+        if friend_request_id:
+            friend_request = FriendRequest.objects.get(pk=friend_request_id)
+            
+            # if friend_request.receiver == user:
+            if friend_request:
+                # found the request
+                friend_request.decline()
+                payload['response'] = "Friend Request Decline"
+
+            else:
+                payload["response"] = "Smth went wrong"
+
+            # else:
+            #     payload["response"] = "Thats not your request"
+        else:
+            payload["response"] = "Unable to decline"
+
+    return HttpResponse(
+        json.dumps(payload),
+        content_type="application/json"
+    )
+

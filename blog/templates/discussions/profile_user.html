@@ -159,6 +159,10 @@
         {% if is_friend == False and is_self == False %}
             <!-- You sent them -->
             {% if request_sent == 1 %}
+                <button class="confirm-friend-request material-icons p-1" 
+                onclick='triggerDeclineFriendRequest("{{pending_friend_request_id}}")'>
+                cancel - {{pending_friend_request_id}}
+                </button>
                <input type="submit" name="" id="" value="предложить отменить заявку"> 
             
             <!-- Them sent you -->
@@ -167,7 +171,16 @@
                 <span id="id_confirm_{{pending_friend_request_id.sender.id}}" 
                     class="confirm-friend-request material-icons p-1" 
                     onclick='triggerAcceptFriendRequest("{{pending_friend_request_id}}")'>
-                    check - {{pending_friend_request_id}}
+                    <button class="btn btn-primary">
+                        check - {{pending_friend_request_id}}
+                    </button>
+
+                    <button class="confirm-friend-request material-icons p-1" 
+                    onclick='triggerDeclineFriendRequest("{{pending_friend_request_id}}")'>
+                    cancel - {{pending_friend_request_id}}
+                    </button>
+
+
                 </span>
                 {{request}}
                 <input type="submit" name="" id="" value="предложить принять заявку"> 
@@ -183,7 +196,10 @@
             {% endif %}
         
         {% elif is_friend %}
-        
+        <button class="btn btn-primary" id="id_unfriend_btn">
+            Unfriend
+        </button>
+
         <input type="submit" name="" id="" value="являетесь друзьями, но можно удалить"> 
 
         {% endif %}
@@ -311,10 +327,24 @@
         location.reload();
     }
 
+    function onFriendRemoved(){ 
+        location.reload();
+    }
+
+    function onFriendRequestCancelled(){ 
+        location.reload();
+    }
+
+
     function triggerAcceptFriendRequest(friend_request_id){
         alert(friend_request_id);
         acceptFriendRequest(friend_request_id, onFriendRequestAccepted)
     }
+
+    function triggerDeclineFriendRequest(friend_request_id){
+        alert("cansel - "+friend_request_id);
+		declineFriendRequest(friend_request_id, onFriendRequestCancelled)
+	}
 
     var SendFriendRequestBtn = document.getElementById("id_send_friend_request")
     if (SendFriendRequestBtn != null){
@@ -323,10 +353,19 @@
         })
     }
 
+    var removeFriendBtn = document.getElementById("id_unfriend_btn")
+	if (removeFriendBtn != null){
+		removeFriendBtn.addEventListener("click", function(){
+			removeFriend("{{user_object.id}}", onFriendRemoved)
+		})
+	}
+
 
 </script>
 
 {% include "friend/snippets/send_friend_request.html" %}
 {% include "friend/snippets/accept_friend_request.html" %}
+{% include "friend/snippets/remove_friend.html" %}
+{% include 'friend/snippets/decline_friend_request.html' %}
 
 {% endblock %}
