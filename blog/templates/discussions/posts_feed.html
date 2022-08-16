@@ -9,7 +9,7 @@
 
 {% include "discussions/like_favourite.html" %}
 
-<div>   
+<div class="col-5">   
 
     {% for message in messages %}
         
@@ -24,19 +24,26 @@
     {% endfor %}
 
 </div>
+<div class="box d-flex justify-content-between">
+    <div class="notifications friend-requests col-6">
+        <input type="radio" id="radio-friends" name="tabs" onclick="location.href = '{% url 'friend_requests' user_id=user.id %}';" />
 
-<div class="notifications">
-   
-    <input type="radio" id="radio-notifications" name="tabs" onclick="location.href = '{% url 'notifications_user' %}';" />
+        <label class="tab" for="radio-friends"><i class="fa-solid fa-user-plus"></i> Friend-Requests<span class="notification">{{ friend_requests_count }}</span></label>
+    </div>
 
-    <label class="tab" for="radio-notifications"><i class="fa-solid fa-bell"></i> Notifications<span class="notification">{{ user.profile.all.0.get_amount_notifications }}</span></label>
+    <div class="notifications col-6">
+    
+        <input type="radio" id="radio-notifications" name="tabs" onclick="location.href = '{% url 'notifications_user' %}';" />
+
+        <label class="tab" for="radio-notifications"><i class="fa-solid fa-bell"></i> Notifications<span class="notification">{{ user.profile.all.0.get_amount_notifications }}</span></label>
+    </div>
 </div>
 
 {% if all_posts|length > 0 %}
 
     {% for post in all_posts %}
         <!-- Post model -->
-        {% include "discussions/post_model.html" with post=post comments=False %}
+        {% include "discussions/post_model.html" with post=post comments=False category="all-posts" %}
     {% endfor %}
 
 {% else %}

@@ -26,6 +26,7 @@
         var type = current.data('type');
         var pk = current.data('id');
         var action = current.data('action');
+        var category = current.data('category');
         
         $.ajax({
             url : type + "/" + pk + "/" + action + "/",
@@ -33,12 +34,11 @@
             data : { 'obj' : pk },
      
             success : function (json) {
-                alert(pk)
-                alert(type)
+                //alert(category)
                 if (type == "post"){
-                    const like_classes = document.getElementById(pk).classList;
-                    alert(like_classes)
-                    like_classes.toggle("was_liked")
+                    const like_classes = document.getElementById(pk+category).classList;
+                    //alert(like_classes)
+                    like_classes.toggle("was_liked")    
                 } else{
                     //alert(pk)
                     const like_classes = document.getElementById("comm"+pk).classList;

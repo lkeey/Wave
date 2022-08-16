@@ -22,7 +22,7 @@
      </footer> -->
 
 
-     <div class="container container-tab col-md-12">
+     <div class="container container-tab col-12">
         <div class="tabs">
            
             <input type="radio" id="radio-1" name="tabs" onclick="location.href = '{% url "posts_feed" %}';"/>
@@ -39,8 +39,15 @@
             <i class="fa-solid fa-circle-plus"></i> Create
             </label>
 
-            <input type="radio" id="radio-3" name="tabs" onclick="location.href = '{% url "home" %}';"/>
+            <input type="radio" id="radio-3" name="tabs" onclick="location.href = '{% url "all_users" %}';"/>
+
             <label class="tab" for="radio-3">
+                <i class="fa-solid fa-laptop-code"></i> Users   
+            </label>
+
+
+            <input type="radio" id="radio-4" name="tabs" onclick="location.href = '{% url "home" %}';"/>
+            <label class="tab" for="radio-4">
                 <i class="fa-solid fa-comment"></i> 
                 Chat
                 {% get_all_unreaded user as amount %}
@@ -50,8 +57,8 @@
                     {% endif %}
             </label>
             
-            <input type="radio" id="radio-4" name="tabs" onclick="location.href = '{% url "user_posts_list" %}';" />
-            <label class="tab" for="radio-4"><i class="fa-solid fa-house-flood-water"></i> Profile<span class="notification">2</span></label>
+            <input type="radio" id="radio-5" name="tabs" onclick="location.href = '{% url "user_posts_list" %}';" />
+            <label class="tab" for="radio-5"><i class="fa-solid fa-house-flood-water"></i> Profile<span class="notification">2</span></label>
             
             <span class="glider"></span>
         </div>
@@ -71,12 +78,15 @@
         } else if (location.pathname === '{% url "create_post" %}'){
             //alert("2_nd TAB");
             document.getElementById("radio-2").checked = true;
-        } else if (location.pathname === '{% url "home" %}'){
+        } else if (location.pathname === '{% url "all_users" %}'){
             //alert("3_rd TAB");
             document.getElementById("radio-3").checked = true;
-        } else {
+        } else if (location.pathname === '{% url "home" %}'){
             //alert("4_th TAB");
             document.getElementById("radio-4").checked = true;
+        } else {
+            //alert("5_th TAB");
+            document.getElementById("radio-5").checked = true;
 
         };
 

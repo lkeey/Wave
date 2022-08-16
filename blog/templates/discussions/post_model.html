@@ -2,8 +2,8 @@
 
 
 <!-- GET POST, COMMENTS, LINK -->
-<div class="post alert alert-info">
-    <div class="box">
+<div class="post alert alert-info col-11">
+    <div class="box col-5">
         <div class="">
             <a href="{% url 'profile_user' user_name=post.author.username %}">
                 <img src="{{ post.author.profile.all.0.profile_img.url }}" alt="None" class="img-posts-feed">       
@@ -15,7 +15,7 @@
             </a>
         </div>
     </div>
-    <h3 class="title">{{ post.title }}</h3>
+    <h3 class="title col-12">{{ post.title }}</h3>
     
     <!-- <h1>{{post.author.profile}}</h1>
     {% for comm in post.author.profile.all %}         
@@ -24,24 +24,25 @@
     <h2>awd{{post.author.profile.all.0.profile_img}}</h2> -->
 
     {% if post.image %}
-
-        <a href="{{ post.image.url }}">
+        
+        <a href="{{ post.image.url }}" class="">
             <img src="{{ post.image.url }}" alt="None" class="post-image">
         </a>
-    
+ 
     {% endif %}
-    <div class="content">@{{ post.author }}: {{ post.content|safe }}</div><br>
+    <div class="content col-5">@{{ post.author }}: {{ post.content|safe }}</div><br>
 
-    <p class="date">{{ post.date_created }}</p><br>
+    <p class="date col-12">{{ post.date_created }}</p><br>
 
   
     <div class="py-3 px-4 space-y-3 box"> 
         {% was_liked user post.id as liked %}         
-        <div id="{{ post.id }}"
+        <div id="{{ post.id }}{{ category }}"
         data-type="post"
         data-id="{{ post.id }}" 
         data-action="like" 
-        class="flex space-x-4 lg:font-bold data-likes text-center {% if liked %} was_liked {% endif%}">
+        data-category="{{ category }}" 
+        class="flex space-x-4 lg:font-bold data-likes text-center {% if liked %} was_liked {% endif%} col-4 ">
             <a href="">
                 <div class="p-2 rounded-full text-black " >
                 <!-- <span class="glyphicon glyphicon-star">Count: </span> -->
@@ -58,7 +59,7 @@
              </a>
         </div>
 
-        <div class="data-comm text-center">
+        <div class="data-comm text-center col-4">
 
             <a href="{% url 'discussions_detail' pk=post.pk %}">
                 <div class="p-2 rounded-full text-black " >
@@ -76,7 +77,7 @@
         </div>
  
         <div data-id="{{ post.id }}" data-type="post" data-action="bookmark" title="Favourite" 
-        class="data-save {% if favorites %} data-save-profile {% endif %} text-center">
+        class="data-save {% if favorites %} data-save-profile {% endif %} text-center col-4 ">
             <a href="">
                 <span class="glyphicon glyphicon-star"><i class="fa-solid fa-bookmark"></i> </span>
                 <span data-count="bookmark">{{ post.get_bookmark_count }}</span>
@@ -137,7 +138,7 @@
     <div class="box text-center">
         
         <form action="{% url 'discussions_detail' pk=post.id %}" method="POST" enctype="multipart/form-data">
-            <div class="">
+            <div class="col-1">
                 <img src="{{ user.profile.all.0.profile_img.url }}" alt="None" class="img-posts-feed image-comment">            
             </div>
 

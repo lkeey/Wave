@@ -42,13 +42,51 @@
                 <h3 class="name-user">{{ user_profile.user.username }}</h3>
                 <h2 class="bio">{{ user_profile.bio }}</h2>
             </div> 
-            <a href="{% url 'friend_requests' user_id=user.id %}">Ссылка для просмотра всех заявок</a>
     
         </div>
+        <div class="followers">
+            {% if friend_requests %}
+                <hr>
+                <div class="list-friends">
+                    <i class="fa-solid fa-users-line"></i>
+                    <p>{{friend_requests|length}}</p>
+                    {% if friend_requests|length == 0 %}
+                        <h3>follower</h3>
+                    {% else %}
+                        <h3>follower</h3>
+                    {% endif %}
+                </div>
+                <hr>
+            {% endif %}
+        </div>
 
+        <div class="friends">
+            {% if friends %}
+
+                {% if friends|length == 1 %}
+                    <h3>1 FRIEND</h3>
+                {% else %}
+                    <h3>FRIENDS {{friends|length}}</h3>
+                    <p>Mutual</p>
+                {% endif %}
+
+            {% endif %}
+
+            {% for friend in friends %}
+                <div class="user-friend-profile text-center">
+
+                    <a href="{% url 'profile_user' user_name=friend.username %}">
+                        <img src="{{friend.profile.first.profile_img.url}}" alt="None" class="img-profile-comm">
+                    </a>
+
+                    <h4>{{friend.username}}</h4>
+
+                </div>
+            {% endfor %}
+        </div>
     </div>
-
-    <div class="b-container activity"> 
+    
+    <div class="b-container activity col-4"> 
 
         <a href="javascript:PopUpShow1st()">Here You Can See Your Activity</a>
     
@@ -67,7 +105,7 @@
             {% for post in blog_post_user_list %}
             <!-- Post model -->
 
-            {% include "discussions/post_model.html" with post=post comments=False favorites=True %}
+            {% include "discussions/post_model.html" with post=post comments=False favorites=True category="activity" %}
             
             {% endfor %}
         
@@ -81,7 +119,7 @@
 
     </div>
 
-    <div class="b-container likes"> 
+    <div class="b-container likes col-6"> 
 
         <a href="javascript:PopUpShow2nd()">Take a look at the posts you liked</a>
     
@@ -96,7 +134,7 @@
         <div class="b-popup-content">
 
             <!-- POSTS -->
-            <div class="b-container likes-nesting-1"> 
+            <div class="b-container likes-nesting-1 col-1"> 
 
                 <a href="javascript:PopUpShow2ndPosts()">Posts</a>
             
@@ -109,7 +147,7 @@
                         {% for post in like_post_user_list %}
                             <!-- Post model -->
                           
-                            {% include "discussions/post_model.html" with post=post.obj comments=False link=True favorites=True %}
+                            {% include "discussions/post_model.html" with post=post.obj comments=False link=True favorites=True category="liked" %}
 
                         {% endfor %}
                     
@@ -123,7 +161,7 @@
             </div>
 
             <!-- COMMENTS -->
-            <div class="b-container likes-nesting-2"> 
+            <div class="b-container likes-nesting-2 col-2"> 
 
                 <a href="javascript:PopUpShow2ndComments()">Comments</a>
             
@@ -192,7 +230,7 @@
     </div>
 
 
-    <div class="b-container favourites"> 
+    <div class="b-container favourites col-3"> 
 
         <a href="javascript:PopUpShow3rd()">Favourites</a>
     
@@ -208,7 +246,7 @@
             {% if favourite_post_user_list|length > 0 %}
             {% for post in favourite_post_user_list %}
                 <!-- Post model -->
-                {% include "discussions/post_model.html" with post=post.obj comments=False link=True favorites=True %}
+                {% include "discussions/post_model.html" with post=post.obj comments=False link=True favorites=True category="favourites" %}
 
             {% endfor %}
         

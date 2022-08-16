@@ -303,20 +303,31 @@ input {
     background-size: 22px;
     background-position: 13px;
     border-radius: 10px;
-    width: 50px;
+    width: 10%;
     height: 50px;
     padding: 25px;
     transition: all 1s;
 }
+
 .search-click:focus {
-    width: 300px;
+    width: 45%;
     padding-left: 50px;
+
+    border-radius: 50px;
+
+    border: 3px solid #7522bd;
+
+    color: #7522bd;
+
+    box-shadow: 10px 10px 100px #bc8de5;
 }
+
 .search-click {
     position: relative;
     overflow: hidden;
     height: 50px;
 }
+
 .search-click input {
     background: transparent;
     border: 1px solid #ccc;
@@ -455,4 +466,12 @@ input {
 
     color: white;
     text-decoration: underline;
+}
+
+.search {
+    /* justify-content: center; */
+    text-align: center;
+    /* background-color: red; */
+
+    padding: 1vw;
 }

@@ -29,7 +29,17 @@
 
     <!-- {{user}}
     {{users}} -->
+    <div class="search">
 
+        <form onsubmit="return executeQuery();">
+            <input type="text" id="search" name="search" class="search-click" name="" placeholder="Search here..."  />  
+        </form>   
+
+        <span>
+            <i class="fa fa-search"></i>
+        </span>
+    </div>
+    
     {% for user in users %}
         {% if user.profile.first %}
 
@@ -50,10 +60,7 @@
                     <a type="button" href="{% url 'create_conversation' user_id=user.id %}" class="send-message profile-btn">
                         Send a message
                     </a>
-                    <a type="button" href="#" class="add-friends profile-btn">
-                        Add to friends
-                    </a> 
-
+                    
                 </div>
             </a>
         
@@ -89,6 +96,9 @@
                                     <a type="button" href="{% url 'create_conversation' user_id=user.id %}" class="send-message profile-btn">
                                         Send a message
                                     </a>
+                                    
+                                    
+                                    
                                     <a type="button" href="#" class="add-friends profile-btn">
                                         Add to friends
                                     </a> 
@@ -110,5 +120,17 @@
         <script>PopUpHide('{{user}}');</script>
         {% endif %}
     {% endfor %}
+
+<script type="text/javascript">
+    
+    function execute(){
+        var query = document.getElementById("search").value()
+
+        window.location.replace("{% url 'all_users' %}?search="+query)
+        
+        return false
+    }
+
+</script>
 
 {% endblock %}

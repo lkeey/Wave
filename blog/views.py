@@ -1,3 +1,4 @@
+from re import search
 from django.conf import settings
 
 from django.contrib.sessions.models import Session
@@ -99,12 +100,39 @@ def show_all_users(request):
 
     users = User.objects.all()
 
+    data = {}
+
+    try:
+        friend_list = FriendList.objects.get(user=user)
+        print("friend_list", friend_list)
+    except FriendList.DoesNotExist: 
+        friend_list = FriendList(user=user)
+        friend_list.save()
+
+    friends = friend_list.friends.all()     
+
+    if request.method == "GET":
+        search_query = request.GET.get("search")
+        if search_query:
+            if len(search_query) > 0:
+                search_results = users.filter(
+                    username_icontains=search_query
+                     ).distinct()
+
     data = {
-        'user': user,
+        'user_global': user,
         'users': users,
+        'friends': friends,
+        # 'search_results': search_results,
     }
 
     return render(request, 'discussions/catalog_users.html', data)
+
+
+def profiles_search_view(request, *args, **kwargs):
+    context = {} 
+
+    return render 
 
 class PostDetailtView(FormMixin, DetailView):
     model = Post
@@ -252,6 +280,25 @@ class UserPostListView(ListView):
 
         query_posts_favourite = BookmarkPost.objects.filter(user=user).order_by('-obj')
 
+        friend_requests = None
+        friend_list = None
+
+        try:
+            friend_list = FriendList.objects.get(user=user)
+
+        except FriendList.DoesNotExist: 
+            friend_list = FriendList(user=user)
+            friend_list.save()
+
+        friends = friend_list.friends.all()
+
+        try:
+            friend_requests = FriendRequest.objects.filter(
+                receiver=user,
+                is_active=True)
+        except:
+            pass
+
         # query_comm_favourite = BookmarkComment.objects.filter(user=user).order_by('-obj')
 
         # context = super().get_context_data(**kwargs)['blog_post_user_list'] = queryset
@@ -267,6 +314,9 @@ class UserPostListView(ListView):
             # 'favourite_comm_user_list': query_comm_favourite,
 
             'user_profile': user_profile,
+
+            'friend_requests': friend_requests,
+            'friends': friends,
 
             "form": CommentForm,
         }
@@ -305,10 +355,15 @@ def feed(request):
     
     user = auth.get_user(request)
 
+    friend_requests = FriendRequest.objects.filter(
+            receiver=user.id, is_active=True
+        )
+
     data = {
         "user": user,
         "all_posts": Post.objects.order_by('-date_created'),
         "form": CommentForm,
+        "friend_requests_count": friend_requests.count(),
     }
 
     return render(request, 'discussions/posts_feed.html', data)
@@ -878,6 +933,4 @@ def tele_entrance(request):
         return redirect('posts_feed')
     
     # если пользователя не существует, то зарегистрировать
-
-    
 

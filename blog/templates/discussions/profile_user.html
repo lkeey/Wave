@@ -27,7 +27,9 @@
 
 </div>
 <br>
-<div class="avatar">
+<div class="avatar ">
+    <!-- DropDown -->
+    
     <!-- <p>
         <a href="{{ user_profile.profile_img.url }}">
             <img src="{{ user_profile.profile_img.url }}" alt="None" class="img-user">
@@ -56,7 +58,7 @@
         friend_requests{{friend_requests}}
         pending_friend_request_id{{pending_friend_request_id}}
         
-        <div class="box">
+        <div class="box col-12">
             <!-- <div class="img-profile">
                 <a href="{{ user_profile.profile_img.url }}">
                     <img src="{{ user_profile.profile_img.url }}" alt="None" class="img-user">
@@ -64,14 +66,14 @@
             </div> -->
 
             <a href="{{ user_profile.profile_img.url }}">
-                <div class="box-image">
+                <div class="box-image ">
                         <div class="content-image">
                                 <img src="{{ user_profile.profile_img.url }}" alt="None" class="img-user">
                         </div>
                 </div>
             </a>
             
-            <div class="box-info-user">
+            <div class="box-info-user col-3">
                 <h3 class="name-user">{{ user_profile.user.username }}</h3>
                 <h2 class="bio">{{ user_profile.bio }}</h2>
             
@@ -107,15 +109,21 @@
                     {% endif %}
                 
                 {% elif is_friend %}
-                    
+                <div class="avatar"></div>
+                <div class="dropdown dropdown-profile">
+                    <button class="dropbtn dropbtn-profile"><i class="fa-solid fa-sliders"></i></button>
+                    <div class="dropdown-content">
+                      <a href="{% url 'settings' %}"><i class="fa-solid fa-gears"></i> Settings</a>
+                      <a href="{% url 'log_out' %}"><i class="fa-solid fa-arrow-right-from-bracket danger-icon"></i> Log out</a>
+                    </div>
+                </div>
+
                     <a type="button" href="#" class="add-friends profile-btn" id="id_unfriend_btn">
                         <i class="fa-solid fa-user-check"></i> Unfriend (Добавить дроупдаун) - FRIENDS
                     </a>
 
                 {% endif %}
-                    <!-- <a type="button" href="#" class="add-friends profile-btn">
-                        Add to friends - BETA
-                    </a>  -->
+                   
             </div> 
             
         </div>
@@ -203,12 +211,12 @@
 
 
     function triggerAcceptFriendRequest(friend_request_id){
-        alert(friend_request_id);
+        //alert(friend_request_id);
         acceptFriendRequest(friend_request_id, onFriendRequestAccepted)
     }
 
     function triggerCancelFriendRequest(friend_request_id){
-        alert("cancel - "+friend_request_id);
+        //alert("cancel - "+friend_request_id);
 		cancelFriendRequest(friend_request_id, onFriendRequestCancelled)
 	}
 
