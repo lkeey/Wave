@@ -256,6 +256,8 @@ class UserPostListView(ListView):
 
         # context = super().get_context_data(**kwargs)['blog_post_user_list'] = queryset
         context = {
+            'user': user,
+
             'blog_post_user_list': queryset_posts,
 
             'like_post_user_list': query_posts_likes,
@@ -265,6 +267,8 @@ class UserPostListView(ListView):
             # 'favourite_comm_user_list': query_comm_favourite,
 
             'user_profile': user_profile,
+
+            "form": CommentForm,
         }
         return context
 
@@ -588,6 +592,8 @@ def profile_user(request, user_name):
         'friend_requests': friend_requests,
 
         'pending_friend_request_id': pending_friend_request_id,
+
+        "form": CommentForm,
     }
 
     return render(request, 'discussions/profile_user.html', context)

@@ -1,6 +1,6 @@
 from django import template
 from django import template
-from blog.models import PostLike
+from blog.models import CommentLike, PostLike
 from chat.models import Message, Chat
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
@@ -44,3 +44,11 @@ def was_liked(user, id):
     except PostLike.DoesNotExist:
         return False
 
+@register.simple_tag
+def was_liked_comm(user, id):
+
+    try:
+        CommentLike.objects.get(user=user, obj_id=id)
+        return True
+    except CommentLike.DoesNotExist:
+        return False

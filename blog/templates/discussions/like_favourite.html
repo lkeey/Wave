@@ -1,0 +1,67 @@
+<script>
+    
+    function to_bookmarks()
+    {
+        var current = $(this);
+        var type = current.data('type');
+        var pk = current.data('id');
+        var action = current.data('action');
+     
+        $.ajax({
+            url : type + "/" + pk + "/" + action + "/",       
+            type : 'POST',
+            data : { 'obj' : pk },
+     
+            success : function (json) {
+                current.find("[data-count='" + action + "']").text(json.count);
+            }
+        });
+     
+        return false;
+    }
+
+    function to_likes()
+    {
+        var current = $(this);
+        var type = current.data('type');
+        var pk = current.data('id');
+        var action = current.data('action');
+        
+        $.ajax({
+            url : type + "/" + pk + "/" + action + "/",
+            type : 'POST',
+            data : { 'obj' : pk },
+     
+            success : function (json) {
+                alert(pk)
+                alert(type)
+                if (type == "post"){
+                    const like_classes = document.getElementById(pk).classList;
+                    alert(like_classes)
+                    like_classes.toggle("was_liked")
+                } else{
+                    //alert(pk)
+                    const like_classes = document.getElementById("comm"+pk).classList;
+                    like_classes.toggle("was_liked")
+                }
+                current.find("[data-count='" + action + "']").text(json.count);
+            }
+        });
+     
+        return false;
+    }
+
+     
+    // Подключение обработчика
+
+    
+    $(function() {
+            // В избранное
+        $('[data-action="bookmark"]').click(to_bookmarks);
+            // Лайк
+        $('[data-action="like"]').click(to_likes);
+    });
+
+
+    
+</script>
