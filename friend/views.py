@@ -32,8 +32,12 @@ def send_friend_request(request, *args, **kwargs):
 
     payload = {}
 
+
     if request.method == "POST":
         user_id = request.POST.get("receiver_user_id")
+
+        # request.session['user_id'] = user_id
+
         if user_id:
             receiver = User.objects.get(pk=user_id)
 
@@ -91,6 +95,9 @@ def accept_friend_request(request, *args, **kwargs):
                 if friend_request:
                     # found the request
                     print(f"request - {friend_request.receiver} - {friend_request.sender}")
+                    
+                    # request.session['user_id'] = friend_request.sender
+
                     friend_request.accept()
                     payload["response"] = "Friend Request Accepted"
 
@@ -113,6 +120,8 @@ def remove_friend(request, *args, **kwargs):
     if request.method == "POST":
         user_id = request.POST.get("receiver_user_id")
         if user_id:
+            # request.session['user_id'] = user_id
+
 # чтобы сделать подписчиков после удаления из друзей,
 # нужно отправлять следующий запрос на дружбу:
 #   receiver = request.user
@@ -148,6 +157,8 @@ def cancell_friend_request(request, *args, **kwargs):
             
             # if friend_request.receiver == user:
             if friend_request:
+                # request.session['user_id'] = friend_request.sender
+
                 # found the request
                 friend_request.cancel()
                 payload['response'] = "Friend Request Cancelled"

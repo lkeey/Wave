@@ -43,7 +43,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # https://docs.djandefgoproject.com/en/4.0/ref/contrib/
 # messages/
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotAllowed
 
 from django.contrib import messages
 
@@ -933,4 +933,3 @@ def tele_entrance(request):
         return redirect('posts_feed')
     
     # если пользователя не существует, то зарегистрировать
-

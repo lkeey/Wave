@@ -190,53 +190,7 @@
 
 {% endif %}
 
-<script type="text/javascript">
-
-    function onFriendRequestSent(){
-        //alert("RELOADING")
-        location.reload();
-    }
-
-    function onFriendRequestAccepted(){ 
-        location.reload();
-    }
-
-    function onFriendRemoved(){ 
-        location.reload();
-    }
-
-    function onFriendRequestCancelled(){ 
-        location.reload();
-    }
-
-
-    function triggerAcceptFriendRequest(friend_request_id){
-        //alert(friend_request_id);
-        acceptFriendRequest(friend_request_id, onFriendRequestAccepted)
-    }
-
-    function triggerCancelFriendRequest(friend_request_id){
-        //alert("cancel - "+friend_request_id);
-		cancelFriendRequest(friend_request_id, onFriendRequestCancelled)
-	}
-
-    var SendFriendRequestBtn = document.getElementById("id_send_friend_request")
-    if (SendFriendRequestBtn != null){
-        SendFriendRequestBtn.addEventListener("click", function(){
-            SendFriendRequest("{{user_object.id}}", onFriendRequestSent)
-        })
-    }
-
-    var removeFriendBtn = document.getElementById("id_unfriend_btn")
-	if (removeFriendBtn != null){
-		removeFriendBtn.addEventListener("click", function(){
-			removeFriend("{{user_object.id}}", onFriendRemoved)
-		})
-	}
-
-
-</script>
-
+{% include "friend/snippets/friend_events.html" %}
 {% include "friend/snippets/send_friend_request.html" %}
 {% include "friend/snippets/accept_friend_request.html" %}
 {% include "friend/snippets/remove_friend.html" %}

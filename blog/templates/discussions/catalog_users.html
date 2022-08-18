@@ -2,19 +2,32 @@
 
 {% block title %}Profile {{ user_profile.user.username }}{% endblock %}
 
+{% load blog_tags %}
+
 {% block content_blog %}
 <script>
+    //http://cleanjs.ru/articles/krasivye-vsplyvayushhie-dialogovye-okna.html
+   // alert(sessionStorage.user_id)
+
     //$(document).ready(function(){
         //Скрыть PopUp при загрузке страницы    
      //   PopUpHide();
     //});
 
     //Функция отображения PopUp
-    function PopUpShowProfileInfo( user ){
+    function PopUpShowProfileInfo( user, user_id ){
+        //alert(user_id)
+        //alert(window.currentUser.name)
         //alert( user );
         //document.getElementById( user ).show();
         //$(f"#PopUpShowProfileInfo{user}").show();
-        $(`#${user}`).show();
+        
+    
+        window.currentUser.id = user_id
+        window.currentUser.user = user   
+
+        $(`#${window.currentUser.user}`).show();
+        //alert(window.currentUser.user)  
     }
 
     //Функция скрытия PopUp
@@ -23,8 +36,9 @@
         //document.getElementById( user ).hide();
         $(`#${user}`).hide();
         //alert('HIDE');
-    }   
-
+    }  
+    
+  
 </script>
 
     <!-- {{user}}
@@ -42,8 +56,10 @@
     
     {% for user in users %}
         {% if user.profile.first %}
-
-            <a href="javascript:PopUpShowProfileInfo('{{user}}')">
+            {% get_user_data user user_global as data%}
+            <h3>DATA {{data}} - {{user}} - {{user_global}}</h3>
+            
+            <a href="javascript:PopUpShowProfileInfo('{{user}}', '{{user.id}}')">
                 
                 <div class="box box-chats">
 
@@ -65,10 +81,9 @@
             </a>
         
             <div class="b-popup content-user" id="{{user}}">
-                <!-- ALL POSTS -->
-        
+ 
                 <div class="b-popup-content">
-                    
+                        
                         <div class="container">
                             <div class="text-center close-btn-users">
                                 <a href='javascript:PopUpHide("{{user}}")'><i class="fa-solid fa-xmark"></i></a>
@@ -96,12 +111,55 @@
                                     <a type="button" href="{% url 'create_conversation' user_id=user.id %}" class="send-message profile-btn">
                                         Send a message
                                     </a>
+                                
+                                    <!-- Type of button to add to friends -->
+                                    {% if data.is_friend == False and data.is_self == False %}
+                                    <!-- You sent them -->
+                                    {% if data.request_sent == 1 %}
+                                        <a type="button" href="#" onclick='triggerCancelFriendRequest("{{data.pending_friend_request_id}}")' class="add-friends profile-btn">
+                                            <i class="fa-solid fa-user-large-slash"></i> Cancel Friend Request
+                                        </a>
                                     
+                                    <!-- Them sent you -->
+                                    {% elif data.request_sent == 0 %}
+                                            
+                                        <span id="id_confirm_{{data.pending_friend_request_id.sender.id}}" 
+                                            class="confirm-friend-request material-icons p-1" 
+                                            onclick='triggerAcceptFriendRequest("{{data.pending_friend_request_id}}")'>
+                                            
+                                            <a type="button" href="#" class="add-friends profile-btn">
+                                                <i class="fa-solid fa-user-clock"></i> Access Friend Request
+                                            </a>
+                                        </span>
+                                        
+                                    <!-- No request have been sent -->
+                                    {% elif data.request_sent == -1 %}
+                                        <a type="button" href="#" class="add-friends profile-btn" id="id_send_friend_request">
+                                            <i class="fa-solid fa-user-plus"></i> Add to friends
+                                        </a>
+
+                                    {% endif %}
+                                
+                                {% elif data.is_friend %}
+                                <div class="avatar"></div>
+                                <div class="dropdown dropdown-profile">
+                                    <button class="dropbtn dropbtn-profile"><i class="fa-solid fa-sliders"></i></button>
+                                    <div class="dropdown-content">
+                                    <a href="{% url 'settings' %}"><i class="fa-solid fa-gears"></i> Settings</a>
+                                    <a href="{% url 'log_out' %}"><i class="fa-solid fa-arrow-right-from-bracket danger-icon"></i> Log out</a>
+                                    </div>
+                                </div>
+
+                                    <a type="button" href="#" class="add-friends profile-btn" id="id_unfriend_btn">
+                                        <i class="fa-solid fa-user-check"></i> Unfriend (Добавить дроупдаун) - FRIENDS
+                                    </a>
+
+                                {% endif %}
                                     
-                                    
-                                    <a type="button" href="#" class="add-friends profile-btn">
+                                    <!-- <a type="button" href="#" class="add-friends profile-btn">
                                         Add to friends
-                                    </a> 
+                                    </a>  -->
+
                                 </div> 
                                 
                             </div>
@@ -131,6 +189,15 @@
         return false
     }
 
+    
+
 </script>
+
+{% include "friend/snippets/friend_events.html" with show=True  user_object=window.currentUser.name %}
+{% include "friend/snippets/send_friend_request.html" %}
+{% include "friend/snippets/accept_friend_request.html" %}
+{% include "friend/snippets/remove_friend.html" %}
+{% include 'friend/snippets/cancel_friend_request.html' %}
+
 
 {% endblock %}
