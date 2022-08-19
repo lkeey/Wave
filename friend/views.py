@@ -3,6 +3,8 @@ from django.http import HttpResponse
 
 from django.contrib.auth.models import User
 
+from django.contrib import messages
+
 import json
 
 from friend.models import FriendList, FriendRequest
@@ -50,8 +52,11 @@ def send_friend_request(request, *args, **kwargs):
                 )
                 # find if any of them is active
                 try:
-                    for request in friend_requests:
-                        if request.is_active:
+                    for req in friend_requests:
+                        if req.is_active:
+
+                            messages.error(request, f'Friend Request Already Sent!')
+
                             raise Exception("You already sent them a friend request")
                 
                     # if none are active, then create a new friend request
@@ -59,10 +64,13 @@ def send_friend_request(request, *args, **kwargs):
                     friend_request.save()
                     payload['result'] = "success"
                     payload['response'] = "Friend Request Sent"
+                    messages.success(request, f'Friend Request To {receiver} Successfully Sent!')
+
                     
                 except Exception as _Ex:
                     payload['result'] = "error"
                     payload["response"] = str(_Ex)
+                    messages.error(request, f'Error Occured!')
 
                 
             except FriendRequest.DoesNotExist:
@@ -70,14 +78,16 @@ def send_friend_request(request, *args, **kwargs):
                 friend_request = FriendRequest(sender=user, receiver=receiver)
                 friend_request.save()
                 payload['friend_request'] = "Friend Request Sent"
-
+                messages.success(request, f'Friend Request To {receiver} Successfully Sent!')
+            
             if payload["response"] == None:
                 payload["response"] = "Something Wrong"
-
+                messages.error(request, f'Error Occured!')
         else:
             payload["response"] = "Unable to send friend request"   
+            messages.error(request, f'Error Occured!')
 
-    return HttpResponse(
+    return HttpResponse(    
         json.dumps(payload),
         content_type="application/json"
     )   
@@ -100,14 +110,20 @@ def accept_friend_request(request, *args, **kwargs):
 
                     friend_request.accept()
                     payload["response"] = "Friend Request Accepted"
+                    messages.info(request, f'Friend Request From {friend_request.sender} Was Accepted')
 
                 else:
                     payload["response"] = "Something Wrong"
+                    messages.error(request, f'Error Occured!')
+
             else:
                 payload["response"] = "Thats not your request"
+                messages.error(request, f'Error Occured!')
+
         else:
             payload["response"] = "Unable to accept"
-    
+            messages.error(request, f'Error Occured!')
+
     return HttpResponse(
         json.dumps(payload),
         content_type="application/json"
@@ -133,12 +149,15 @@ def remove_friend(request, *args, **kwargs):
                 friend_list.unfriend(removee)
 
                 payload["response"] = "Successfully removed"
+                messages.warning(request, f'{removee} Was Removed From Your Friend List')
 
             except:
                 payload["response"] = "Something wrong"
-  
+                messages.error(request, f'Error Occured!')
+
         else:
             payload["response"] = "Something wrong"
+            messages.error(request, f'Error Occured!')
 
     return HttpResponse(
         json.dumps(payload),
@@ -162,14 +181,17 @@ def cancell_friend_request(request, *args, **kwargs):
                 # found the request
                 friend_request.cancel()
                 payload['response'] = "Friend Request Cancelled"
-
+                
+                messages.warning(request, f'Friend Request For {friend_request.receiver} Was Cancelled')
+            
             else:
                 payload["response"] = "Smth went wrong"
-
+                messages.error(request, f'Error Occured!')
             # else:
             #     payload["response"] = "Thats not your request"
         else:
             payload["response"] = "Unable to decline"
+            messages.error(request, f'Error Occured!')
 
     return HttpResponse(
         json.dumps(payload),

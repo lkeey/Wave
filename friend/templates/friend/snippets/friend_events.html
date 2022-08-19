@@ -1,26 +1,33 @@
+<!-- GET HREF -->
+
 <script type="text/javascript">
     $(document).ready(function() {
         // executes when HTML-Document is loaded and DOM is ready
         //alert("document is ready");
 
-        try {
-            $(`#${window.currentUser.user}`).show();     
-        } catch (err) {
-            //alert(err);
+            //try {
+            //  alert(window.currentUser.user); 
+    //
+    //          $(`#${window.currentUser.user}`).show();
+    //
+    //      } catch (err) {
+        //        alert(err);
+                
 
-            window.currentUser = {
-                user: false,
-                id: false
-              };
+        window.currentUser = {
+            user: false,
+            id: false
+            };
 
-            //alert(window.currentUser.user)
-        }
+           // alert(window.currentUser.user)
+        //}
 
     });
 
     function onFriendRequestSent(){
         
         location.reload();
+        
     }
 
     function onFriendRequestAccepted(){ 
