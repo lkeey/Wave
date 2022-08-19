@@ -157,23 +157,25 @@
                 {% if friends|length == 1 %}
                     <h3>1 FRIEND</h3>
                 {% else %}
+                    <p>Mutual - DEVELOPMENT</p>
+
                     <h3>FRIENDS {{friends|length}}</h3>
-                    <p>Mutual</p>
                 {% endif %}
 
             {% endif %}
+            <div class="friends-user">
+                {% for friend in friends %}
+                    <div class="user-friend-profile text-center">
 
-            {% for friend in friends %}
-                <div class="user-friend-profile text-center">
+                        <a href="{% url 'profile_user' user_name=friend.username %}">
+                            <img src="{{friend.profile.first.profile_img.url}}" alt="None" class="img-profile-comm">
+                        </a>
 
-                    <a href="{% url 'profile_user' user_name=friend.username %}">
-                        <img src="{{friend.profile.first.profile_img.url}}" alt="None" class="img-profile-comm">
-                    </a>
+                        <h4>{{friend.username}}</h4>
 
-                    <h4>{{friend.username}}</h4>
-
-                </div>
-            {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
         </div>
         
     </div>

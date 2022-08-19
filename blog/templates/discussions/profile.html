@@ -66,13 +66,17 @@
                 {% if friends|length == 1 %}
                     <h3>1 FRIEND</h3>
                 {% else %}
+                <p>Mutual - DEVELOPMENT</p>
                     <h3>FRIENDS {{friends|length}}</h3>
-                    <p>Mutual</p>
                 {% endif %}
 
             {% endif %}
-
+            <div class="friend-user">
             {% for friend in friends %}
+                {% for friend in friends %}
+                {% for friend in friends %}
+                {% for friend in friends %}
+
                 <div class="user-friend-profile text-center">
 
                     <a href="{% url 'profile_user' user_name=friend.username %}">
@@ -82,11 +86,15 @@
                     <h4>{{friend.username}}</h4>
 
                 </div>
+                {% endfor %}
+                {% endfor %}
+                {% endfor %}
             {% endfor %}
+        </div>
         </div>
     </div>
     
-    <div class="b-container activity col-4"> 
+    <div class="b-container activity text-center col-5"> 
 
         <a href="javascript:PopUpShow1st()">Here You Can See Your Activity</a>
     
@@ -119,7 +127,7 @@
 
     </div>
 
-    <div class="b-container likes col-6"> 
+    <div class="b-container likes text-center col-5"> 
 
         <a href="javascript:PopUpShow2nd()">Take a look at the posts you liked</a>
     
@@ -134,34 +142,32 @@
         <div class="b-popup-content">
 
             <!-- POSTS -->
-            <div class="b-container likes-nesting-1 col-1"> 
+            <div class="b-container likes col-3"> 
 
                 <a href="javascript:PopUpShow2ndPosts()">Posts</a>
             
             </div>
 
             <div class="b-popup b-popup-nesting" id="PopUpShow2ndPosts">
-        
-                <div class="b-popup-content">
-                    {% if like_post_user_list|length > 0 %}
-                        {% for post in like_post_user_list %}
-                            <!-- Post model -->
-                          
-                            {% include "discussions/post_model.html" with post=post.obj comments=False link=True favorites=True category="liked" %}
+                {% if like_post_user_list|length > 0 %}
+                    {% for post in like_post_user_list %}
+                        <!-- Post model -->
+                    
+                        {% include "discussions/post_model.html" with post=post.obj comments=False link=True favorites=True category="liked" %}
 
-                        {% endfor %}
-                    
-                    {% else %}
-                    
+                    {% endfor %}
+                
+                {% else %}
+                
                     <h3 class="title">You haven't got any like post...</h3>
-                    
-                    {% endif %}
-                </div>
+                
+                {% endif %}
+               
                 
             </div>
 
             <!-- COMMENTS -->
-            <div class="b-container likes-nesting-2 col-2"> 
+            <div class="b-container likes-nesting-2 likes col-3"> 
 
                 <a href="javascript:PopUpShow2ndComments()">Comments</a>
             
@@ -218,11 +224,7 @@
                 {% else %}
                     <h3 class="title">You haven't liked a single comment...</h3>
                 {% endif %}
-                
-                <div class="b-popup-content">
                     
-                </div>
-                
             </div>
             
         </div>
@@ -230,7 +232,7 @@
     </div>
 
 
-    <div class="b-container favourites col-3"> 
+    <div class="b-container favourites text-center col-4"> 
 
         <a href="javascript:PopUpShow3rd()">Favourites</a>
     
@@ -258,7 +260,7 @@
         </div>
 
     </div>
-    <div class="b-container settings"> 
+    <div class="b-container settings text-center col-3"> 
 
         <a href="javascript:PopUpShow4th()">Settings</a>
     
@@ -323,7 +325,7 @@
         </div>
     </div>
 
-    <div class="b-container account text-center"> 
+    <div class="b-container account text-center col-4"> 
 
         <a href="javascript:PopUpShow5th()">Account</a>
     
@@ -352,7 +354,35 @@
         </div>
 
     </div>
+    <div class="b-container account text-center"> 
 
+        <a href="javascript:PopUpShow6th()">QR-code</a>
+    
+    </div>
+
+    <div class="b-popup" id="popup6">
+
+        <div class="close-btn text-center">
+            <a href="javascript:PopUpHide()"><i class="fa-solid fa-xmark"></i> Close</a>
+        </div>
+
+        <div class="b-popup-content">
+
+            <div class="option">
+                <a href="{% url 'log_out' %}"><i class="fa-solid fa-arrow-right-from-bracket danger-icon"></i> Log out</a>
+            </div>
+
+            <div class="option">
+                <a href="{% url 'sign_up' %}"><i class="fa-solid fa-users just-icon"></i>&nbsp; Register</a>
+            </div>
+
+            <div class="option">
+                <a href="{% url 'sign_in' %}"><i class="fa-solid fa-arrow-right-to-bracket success-icon"></i>&nbsp; Log in</a>
+            </div>
+
+        </div>
+
+    </div>
 <hr>
 
 <script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
@@ -370,6 +400,7 @@
         $("#popup3").hide();
         $("#popup4").hide();
         $("#popup5").hide();
+        $("#popup6").hide();
         $("#PopUpShow2ndPosts").hide();
         $("#PopUpShow2ndComments").hide();
     }
@@ -381,6 +412,7 @@
         $("#popup3").hide();
         $("#popup4").hide();
         $("#popup5").hide();
+        $("#popup6").hide();
         $("#PopUpShow2ndPosts").hide();
         $("#PopUpShow2ndComments").hide();
     }
@@ -392,6 +424,8 @@
         $("#popup3").hide();
         $("#popup4").hide();
         $("#popup5").hide();
+        $("#popup6").hide();
+
         $("#PopUpShow2ndComments").hide(); 
     }
 
@@ -402,6 +436,8 @@
         $("#popup3").hide();
         $("#popup4").hide();
         $("#popup5").hide();
+        $("#popup6").hide();
+
         $("#PopUpShow2ndPosts").hide();
     }
 
@@ -412,6 +448,8 @@
         $("#popup2").hide();
         $("#popup4").hide();
         $("#popup5").hide();
+        $("#popup6").hide();
+
         $("#PopUpShow2ndPosts").hide();
         $("#PopUpShow2ndComments").hide();
     }
@@ -423,6 +461,8 @@
         $("#popup2").hide();
         $("#popup3").hide();
         $("#popup5").hide();
+        $("#popup6").hide();
+
         $("#PopUpShow2ndPosts").hide();
         $("#PopUpShow2ndComments").hide();
     }
@@ -434,6 +474,21 @@
         $("#popup2").hide();
         $("#popup3").hide();
         $("#popup4").hide();
+        $("#popup6").hide();
+
+        $("#PopUpShow2ndPosts").hide();
+        $("#PopUpShow2ndComments").hide();
+    }
+
+    function PopUpShow6th(){
+        $("#popup6").show();
+
+        $("#popup1").hide();
+        $("#popup2").hide();
+        $("#popup3").hide();
+        $("#popup4").hide();
+        $("#popup5").hide();
+
         $("#PopUpShow2ndPosts").hide();
         $("#PopUpShow2ndComments").hide();
     }
@@ -441,9 +496,11 @@
     function PopUpHide(){
         $("#popup1").hide();
         $("#popup2").hide();
-        $("#popup3").hide();
+        $("#popup3").hide();    
         $("#popup4").hide();
         $("#popup5").hide();
+        $("#popup6").hide();
+
         $("#PopUpShow2ndPosts").hide();
         $("#PopUpShow2ndComments").hide();
     }
