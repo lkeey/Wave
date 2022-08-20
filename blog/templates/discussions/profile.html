@@ -142,7 +142,7 @@
         <div class="b-popup-content">
 
             <!-- POSTS -->
-            <div class="b-container likes col-3"> 
+            <div class="b-container likes text-center col-3 "> 
 
                 <a href="javascript:PopUpShow2ndPosts()">Posts</a>
             
@@ -167,13 +167,13 @@
             </div>
 
             <!-- COMMENTS -->
-            <div class="b-container likes-nesting-2 likes col-3"> 
+            <div class="b-container likes likes-nesting-2 col-3 text-center"> 
 
                 <a href="javascript:PopUpShow2ndComments()">Comments</a>
             
             </div>
 
-            <div class="b-popup b-popup-nesting" id="PopUpShow2ndComments">
+            <div class="b-popup b-popup-nesting " id="PopUpShow2ndComments">
                 <br>
                 {% if like_comm_user_list|length >= 1 %}
                 {% for comm in like_comm_user_list %}
@@ -354,9 +354,9 @@
         </div>
 
     </div>
-    <div class="b-container account text-center"> 
+    <div class="b-container qr-code text-center col-10"> 
 
-        <a href="javascript:PopUpShow6th()">QR-code</a>
+        <a href="javascript:PopUpShow6th()">BIOs</a>
     
     </div>
 
@@ -368,17 +368,9 @@
 
         <div class="b-popup-content">
 
-            <div class="option">
-                <a href="{% url 'log_out' %}"><i class="fa-solid fa-arrow-right-from-bracket danger-icon"></i> Log out</a>
-            </div>
-
-            <div class="option">
-                <a href="{% url 'sign_up' %}"><i class="fa-solid fa-users just-icon"></i>&nbsp; Register</a>
-            </div>
-
-            <div class="option">
-                <a href="{% url 'sign_in' %}"><i class="fa-solid fa-arrow-right-to-bracket success-icon"></i>&nbsp; Log in</a>
-            </div>
+            <a href="{{ user_profile.qr_image.url }}">
+                <img src="{{ user_profile.qr_image.url }}" alt="None" class="qr-code-img">      
+            </a>
 
         </div>
 

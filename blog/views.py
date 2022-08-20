@@ -1,5 +1,6 @@
 from re import search
-from django.conf import settings
+
+from django.conf import settings as project_settings
 
 from django.contrib.sessions.models import Session
 from django.utils import timezone
@@ -10,6 +11,12 @@ from django_telegram_login.widgets.constants import (
     LARGE,
     DISABLE_USER_PHOTO,
 )
+
+from PIL import Image
+
+import numpy as np 
+
+import qrcode
 
 from django_telegram_login.widgets.generator import (
     create_callback_login_widget,
@@ -67,9 +74,10 @@ from friend.utils import get_friend_request_or_false
 
 from friend.friend_request_status import FriendRequestStatus
 
-bot_name = settings.TELEGRAM_BOT_NAME
-bot_token = settings.TELEGRAM_BOT_TOKEN
-redirect_url = settings.TELEGRAM_LOGIN_REDIRECT_URL
+bot_name = project_settings.TELEGRAM_BOT_NAME
+bot_token = project_settings.TELEGRAM_BOT_TOKEN
+redirect_url = project_settings.TELEGRAM_LOGIN_REDIRECT_URL
+name_site = 'http://127.0.0.1:8000/'
 
 # Create your views here.
 
@@ -392,6 +400,40 @@ def sign_up(request):
                     messages.info(request, "Username was taken")
 
                 else:
+                    # QR-code-img    
+                    try:
+                        filename = project_settings.MEDIA_ROOT + f"/qr-images/qr-{username}.png"
+
+                        print("QR", filename)
+
+                        # создать экземпляр объекта QRCode
+                        qr = qrcode.QRCode(version=1, box_size=7, border=4)
+
+                        # добавить данные в QR-код
+                        qr.add_data(f"{name_site}profile/{username}")
+
+                        # компилируем данные в массив QR-кода
+                        qr.make()
+
+                        # распечатать форму изображения
+                        print("The shape of the QR image:", np.array(qr.get_matrix()).shape)
+                        
+                        # переносим массив в реальное изображение
+                        img = qr.make_image(fill_color="#eca1a6", back_color="black")
+                        print("SAVE")
+                
+                        # сохраняем в файл
+                        img.save(filename) 
+                        print("SAVE")
+
+                        # print("1",  self.qr_image)
+                        # print("2",  self.qr_image.path)
+                        # self.qr_image.path = self.qr_image.path.replace("blank-profile-img", f"qr-{self.user.username}")
+                        # print("SELF_QR_IMAGE", self.qr_image)
+
+                    except Exception as _ex:
+                        print("Exception", _ex)
+
                     # create User
                     user = User.objects.create_user(
                         username=username,
@@ -411,7 +453,8 @@ def sign_up(request):
                     
                     new_profile = Profile.objects.create(
                         user=user_model, 
-                        id_user=user_model.id                            
+                        id_user=user_model.id,
+                        qr_image=f"qr-images/qr-{username}.png"                            
                     )
 
                     new_profile.save()

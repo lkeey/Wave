@@ -195,6 +195,13 @@ p {
   background-size: auto 300px;
 }
 
+.qr-code-img {
+  border-radius: 30px;
+  width: 70vh; 
+  height: 70vh;
+  background-size: auto 300px;
+}
+
 .img-posts-feed {
   border-radius: 50%;
   width: 10vh; 
@@ -618,6 +625,7 @@ p {
   color: #fff;
 
   border-radius: 30px;  
+
 }
 
 .b-container a {
@@ -651,7 +659,6 @@ p {
 
 .b-popup-nesting {
   /* background-color: red; */
-
   top: 10vh;
 
   left: -1vw;
@@ -666,6 +673,7 @@ p {
   margin: 5vw auto 10vw auto;
 
   padding: 10px;
+
 } 
 
 
@@ -702,23 +710,14 @@ p {
   padding: 1vw 5vw;
 
   background-color: rgba(0, 0, 0, 0);
-  /* background-image: linear-gradient(60deg, rgb(205, 20, 20) 10%, #f60ac3 100%); */
+  background-image: linear-gradient(60deg, rgb(205, 20, 20) 10%, #f60ac3 100%);
 
-  margin: auto;
 }
 
 .likes-nesting-1 {
   display: inline-block;
 
-  padding: 1vw 2vw;
-
-  top: 110%;
-  
-  left: 10%;
-
-  position: absolute;
-
-  background-image: linear-gradient(60deg, rgb(205, 20, 20) 10%, #f60ac3 100%);
+  color: red;
 
 }
 
@@ -726,9 +725,9 @@ p {
   position: absolute;
 
 
-  top: 5%;
+  top: 5.7%;
   right: 0%;
-  left: -5%;
+  left: 30%;
 
   background-image: linear-gradient(60deg, rgb(205, 20, 20) 10%, #f60ac3 100%);
 
@@ -831,6 +830,18 @@ p {
 .account {
   
   background-image: linear-gradient(60deg, rgb(0, 255, 229) 10%, #ffff00 100%);
+
+  display: inline-block;
+
+  padding: 1vw;
+
+}
+
+.qr-code {
+
+  margin: 1% 5% 0 5%;
+
+  background-image: linear-gradient(60deg, #7522bd 10%, #008cff 70%, #7522bd  100%);
 
   display: inline-block;
 

@@ -17,6 +17,8 @@ from datetime import datetime
 from django.contrib.auth import get_user_model
 
 from PIL import Image
+import numpy as np 
+import qrcode
 
 from django.contrib.postgres.fields import ArrayField
 
@@ -27,6 +29,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 # from django.utils.text import slugify
 
 User = get_user_model()
+
 
 
 class Profile(models.Model):
@@ -45,8 +48,13 @@ class Profile(models.Model):
 
     profile_img = models.ImageField(
         upload_to='profile_images', 
-        default='blank-profile-img.png'
+        default='profile_images/blank-profile-img.png'
         )
+
+    qr_image = models.ImageField(
+        upload_to='qr_images', 
+        default="qr_images/blank-profile-img.png"
+    )
     
     location = models.CharField(max_length=100, blank=True)
 
@@ -63,12 +71,15 @@ class Profile(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+
         img = Image.open(self.profile_img.path)
 
         if img.height > 300 or img.width > 300:
             output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.profile_img.path)
+
+        
 
 
 class Post(models.Model):
