@@ -87,21 +87,17 @@
                 
                 <div class="box box-chats">
 
-                        <div class="">
+                        <div class="col-4">
                             <img src="{{ user.profile.first.profile_img.url }}" alt="None" class="img-posts-feed img-chatting">           
                         </div>
 
-                        <div class="interlocutor profiles-all">
+                        <div class="interlocutor profiles-all col-1">
                             <h3>{{user.username}}</h3><br>      
                         </div>
 
-                    
-
-                    <a type="button" href="{% url 'create_conversation' user_id=user.id %}" class="send-message profile-btn">
-                        Send a message
+                    <a type="button" href="{% url 'create_conversation' user_id=user.id %}" class="send-message profile-btn text-center col-12 col-lg-5">
+                        <i class="fa-solid fa-message"></i> Send a message
                     </a>
-                    
-                    
 
                 </div>
             </a>
@@ -125,24 +121,24 @@
                                 <a href="{{ user.profile_img.url }}">
                                     <div class="box-image">
                                         <div class="content-image">
-                                            <img src="{{ user.profile.first.profile_img.url }}" alt="None" class="img-user">
+                                            <img src="{{ user.profile.first.profile_img.url }}" alt="None" class="img-user col-1">
                                         </div>
                                     </div>
                                 </a>
                                 
-                                <div class="box-info-user">
-                                    <h3 class="name-user">{{ user.username }}</h3>
-                                    <h2 class="bio">{{ user.profile.first.bio }}</h2>
+                                <div class="box-info-user col-12">
+                                    <h3 class="name-user col-3">{{ user.username }}</h3>
+                                    <h2 class="bio col-3">{{ user.profile.first.bio }}</h2>
                                 
-                                    <a type="button" href="{% url 'create_conversation' user_id=user.id %}" class="send-message profile-btn">
-                                        Send a message
+                                    <a type="button" href="{% url 'create_conversation' user_id=user.id %}" class="send-message profile-btn col-12 col-lg-5">
+                                        <i class="fa-solid fa-message"></i> Send a message
                                     </a>
                                 
                                     <!-- Type of button to add to friends -->
                                     {% if data.is_friend == False and data.is_self == False %}
                                     <!-- You sent them -->
                                     {% if data.request_sent == 1 %}
-                                        <a type="button" href="#" onclick='triggerCancelFriendRequest("{{data.pending_friend_request_id}}")' class="add-friends profile-btn">
+                                        <a type="button" href="#" onclick='triggerCancelFriendRequest("{{data.pending_friend_request_id}}")' class="add-friends profile-btn col-12 col-lg-5">
                                             <i class="fa-solid fa-user-large-slash"></i> Cancel Friend Request
                                         </a>
                                     

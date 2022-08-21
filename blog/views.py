@@ -242,7 +242,8 @@ def discussion_create(request):
             messages.info(request, 'The post was created successfully')
             messages.success(request, 'Now all SocialWave users will see it')
 
-            return render(request, 'discussions/discussion_detail.html', data)
+            return redirect('discussions_detail', pk=new_disccusion.pk)
+            # return render(request, 'discussions/discussion_detail.html', data)
 
     
     # если get-запрос, то вернуть пустую форму
@@ -281,7 +282,8 @@ class UserPostListView(ListView):
         user_profile = Profile.objects.get(user=user)
 
         queryset_posts = Post.objects.filter(author=user).order_by('-date_created')
-        
+        print("LEN", len(queryset_posts))
+
         query_posts_likes = PostLike.objects.filter(user=user).order_by('-obj')
 
         query_comm_likes = CommentLike.objects.filter(user=user).order_by('-obj')
@@ -366,6 +368,8 @@ def feed(request):
     friend_requests = FriendRequest.objects.filter(
             receiver=user.id, is_active=True
         )
+
+    print("FRIEN_R", friend_requests)
 
     data = {
         "user": user,
@@ -467,8 +471,8 @@ def sign_up(request):
                             "form": CommentForm,
                         }
 
-                    return render(request, 'discussions/posts_feed.html', data)
-                    
+                    # return render(request, 'discussions/posts_feed.html', data)
+                    return redirect('posts_feed')
             else:
                 messages.info(request, 'The username must be more than 2 characters and the password more than 7')
 
@@ -500,8 +504,8 @@ def sign_in(request):
                     "form": CommentForm,
                 }
 
-            return render(request, 'discussions/posts_feed.html', data)
-
+            # return render(request, 'discussions/posts_feed.html', data)
+            return redirect('posts_feed')
         else:
             messages.warning(request, 'Data is invalid')
 

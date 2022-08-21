@@ -84,7 +84,7 @@
                 <h2 class="bio">{{ user_profile.bio }}</h2>
             
                 <a type="button" href="{% url 'create_conversation' user_id=user_object.id %}" class="send-message profile-btn">
-                    Send a message
+                    <i class="fa-solid fa-message"></i> Send a message
                 </a>
                 <!-- Type of button to add to friends -->
                 {% if is_friend == False and is_self == False %}

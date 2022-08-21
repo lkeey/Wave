@@ -9,7 +9,7 @@
 
 {% include "discussions/like_favourite.html" %}
 
-<div class="col-5">   
+<div class="col-6">   
 
     {% for message in messages %}
         
@@ -24,14 +24,14 @@
     {% endfor %}
 
 </div>
-<div class="box d-flex justify-content-between">
-    <div class="notifications friend-requests col-6">
+<div class="box d-flex justify-content-between col-12">
+    <div class="notifications friend-requests text-center col-6">
         <input type="radio" id="radio-friends" name="tabs" onclick="location.href = '{% url 'friend_requests' user_id=user.id %}';" />
 
         <label class="tab" for="radio-friends"><i class="fa-solid fa-user-plus"></i> Friend-Requests<span class="notification">{{ friend_requests_count }}</span></label>
     </div>
 
-    <div class="notifications col-6">
+    <div class="notifications text-center col-6">
     
         <input type="radio" id="radio-notifications" name="tabs" onclick="location.href = '{% url 'notifications_user' %}';" />
 
