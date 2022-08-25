@@ -2,18 +2,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        // executes when HTML-Document is loaded and DOM is ready
-        //alert("document is ready");
-
-            //try {
-            //  alert(window.currentUser.user); 
-    //
-    //          $(`#${window.currentUser.user}`).show();
-    //
-    //      } catch (err) {
-        //        alert(err);
-                
-
+        
         window.currentUser = {
             user: false,
             id: false
@@ -42,10 +31,6 @@
         location.reload();
     }
 
-    function showPopUp(user){
-        PopUpShowProfileInfo(`${user}`);
-    }
-
     function triggerAcceptFriendRequest(friend_request_id){
         //alert(friend_request_id);
         acceptFriendRequest(friend_request_id, onFriendRequestAccepted)
@@ -57,19 +42,23 @@
 	}
 
     var SendFriendRequestBtn = document.getElementById("id_send_friend_request")
+
+
     if (SendFriendRequestBtn != null){
-        
+        alert(SendFriendRequestBtnJS)
         SendFriendRequestBtn.addEventListener("click", function(){
-            if (window.currentUser.user){                
+            if (window.currentUser.user){    
+                //alert(window.currentUser.user)            
                 SendFriendRequest(window.currentUser.id, onFriendRequestSent)
 
             } else {
-                alert("WITHOUUT")
+                //alert("WITHOUUT")
                 SendFriendRequest("{{user_object.id}}", onFriendRequestSent)
             }
             
         })
     }
+ 
 
     var removeFriendBtn = document.getElementById("id_unfriend_btn")
 	if (removeFriendBtn != null){

@@ -1,5 +1,7 @@
 from re import search
 
+from chat.templatetags import blog_tags
+
 from django.conf import settings as project_settings
 
 from django.contrib.sessions.models import Session
@@ -11,6 +13,15 @@ from django_telegram_login.widgets.constants import (
     LARGE,
     DISABLE_USER_PHOTO,
 )
+import simplejson
+
+from django.forms.models import model_to_dict
+
+from django.http import JsonResponse
+
+from django.template.loader import render_to_string
+
+from django.template import Template, RequestContext
 
 from PIL import Image
 
@@ -63,12 +74,14 @@ from .models import (
     PostLike, CommentLike,
     BookmarkComment, BookmarkPost,
 )
+from django.core import serializers
 
 from .forms import PostCreateForm, CommentForm
 
 from django.contrib.auth.decorators import login_required
 
 import json
+from json import dumps
 
 from friend.utils import get_friend_request_or_false
 
@@ -102,6 +115,9 @@ name_site = 'http://127.0.0.1:8000/'
         
 #         return context
 
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
 @login_required(login_url='sign_in')
 def show_all_users(request):
     user = auth.get_user(request)
@@ -113,19 +129,83 @@ def show_all_users(request):
     try:
         friend_list = FriendList.objects.get(user=user)
         print("friend_list", friend_list)
+
     except FriendList.DoesNotExist: 
         friend_list = FriendList(user=user)
         friend_list.save()
 
-    friends = friend_list.friends.all()     
+    friends = friend_list.friends.all()  
 
-    if request.method == "GET":
-        search_query = request.GET.get("search")
-        if search_query:
-            if len(search_query) > 0:
-                search_results = users.filter(
-                    username_icontains=search_query
-                     ).distinct()
+    is_ajax_request = request.headers.get("x-requested-with") == "XMLHttpRequest"
+    
+    if is_ajax_request:
+        data = "Not found"
+        url_parameter = request.GET.get("q")
+
+        if url_parameter:
+            print("URL-PARAMETER-AJAX", url_parameter)
+
+            users = User.objects.filter(username__icontains=url_parameter)
+
+        if len(users) > 0:
+            data = []
+            for pos in users:
+                print(pos)
+
+                profile = Profile.objects.filter(user=pos)[0]
+                print("PROFILE", profile.profile_img.url)
+
+                print(blog_tags.get_user_data(pos, user))
+
+                item = {
+                    # user parameters
+                    'username': pos.username,
+                    'id': pos.id,
+
+                    # profile parameters
+                    'profile_img': profile.profile_img.url,
+                    'bio': profile.bio,
+
+                    # friend-requests parameters
+                    'data': blog_tags.get_user_data(pos, user),
+                }
+
+                data.append(item)
+
+        print("DATA", data)
+        # html = render_to_string(
+        #     context={"users": users}
+        # )
+
+        # data_dict = {"html_from_view": html}
+
+        # data = {
+        #     "users_data": serializers.serialize('json', users)
+        # }
+
+        # print("Data", data)
+        
+        # users = dumps(list(users.values("username")))
+        
+        # data = {
+        #     "data": list(users.values())
+        # }
+        
+        # data = list(users.values())
+
+        # qs_json = serializers.serialize('json', users)
+        
+        # print("DAATA", data[0]['username'] )
+
+        # return JsonResponse(
+        #     data=data_dict,
+        #     safe=False
+        # )
+
+        # return HttpResponse(qs_json, content_type= "application/json")
+        return JsonResponse({"data": data})
+
+    print("USERS", users)
 
     data = {
         'user_global': user,
@@ -135,6 +215,7 @@ def show_all_users(request):
     }
 
     return render(request, 'discussions/catalog_users.html', data)
+
 
 
 def profiles_search_view(request, *args, **kwargs):

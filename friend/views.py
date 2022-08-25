@@ -54,9 +54,14 @@ def send_friend_request(request, *args, **kwargs):
                 try:
                     for req in friend_requests:
                         if req.is_active:
-
+                           
                             messages.error(request, f'Friend Request Already Sent!')
 
+                            req.is_active = False
+                            req.save()
+
+                            print(req.is_active)
+                            
                             raise Exception("You already sent them a friend request")
                 
                     # if none are active, then create a new friend request

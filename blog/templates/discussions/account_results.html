@@ -1,0 +1,121 @@
+{% load blog_tags  %}
+
+<!-- GET USER -->
+
+{% if user.profile.first %}
+    {% get_user_data user user_global as data %}
+    <!-- <h3>DATA {{data}} - {{user}} - {{user_global}}</h3> -->
+    
+    <a href="javascript:PopUpShowProfileInfo('{{user}}', '{{user.id}}')">
+        
+        <div class="box box-chats">
+
+                <div class="col-4">
+                    <img src="{{ user.profile.first.profile_img.url }}" alt="None" class="img-posts-feed img-chatting">           
+                </div>
+
+            <a type="button" href="{% url 'create_conversation' user_id=user.id %}" class="send-message profile-btn text-center col-12 col-lg-5">
+                <i class="fa-solid fa-message"></i> Send a message
+            </a>
+
+        </div>
+    </a>
+
+    <div class="b-popup content-user" id="{{user}}">
+
+        <div class="b-popup-content">
+                
+                <div class="container">
+                    <div class="text-center close-btn-users">
+                        <a href='javascript:PopUpHide("{{user}}")'><i class="fa-solid fa-xmark"></i></a>
+                    </div>
+
+                    <div class="box">
+                        <!-- <div class="img-profile">
+                            <a href="{{ user_profile.profile_img.url }}">
+                                <img src="{{ user_profile.profile_img.url }}" alt="None" class="img-user">
+                            </a>
+                        </div> -->
+            
+                        <a href="{{ user.profile_img.url }}">
+                            <div class="box-image">
+                                <div class="content-image">
+                                    <img src="{{ user.profile.first.profile_img.url }}" alt="None" class="img-user col-1">
+                                </div>
+                            </div>
+                        </a>
+                        
+                        <div class="box-info-user col-12">
+                            <h3 class="name-user col-3">{{ user.username }}</h3>
+                            <h2 class="bio col-3">{{ user.profile.first.bio }}</h2>
+                        
+                            <a type="button" href="{% url 'create_conversation' user_id=user.id %}" class="send-message profile-btn col-12">
+                                <i class="fa-solid fa-message"></i> Send a message
+                            </a>
+                            
+                            <!-- Type of button to add to friends -->
+                            {% if data.is_friend == False and data.is_self == False %}
+                            <!-- You sent them -->
+                            {% if data.request_sent == 1 %}
+                                <a type="button" 
+                                href="#" 
+                                onclick='triggerCancelFriendRequest("{{data.pending_friend_request_id}}")' 
+                                class="add-friends profile-btn col-12 col-lg-6">
+                                    <i class="fa-solid fa-user-large-slash"></i> Cancel Friend Request
+                                </a>
+                            
+                            <!-- Them sent you -->
+                            {% elif data.request_sent == 0 %}
+                                <span id="id_confirm_{{data.pending_friend_request_id.sender.id}}" 
+                                    class="confirm-friend-request material-icons p-1" 
+                                    onclick='triggerAcceptFriendRequest("{{data.pending_friend_request_id}}")'>
+                                    
+                                    <a type="button" href="#" class="add-friends profile-btn">
+                                        <i class="fa-solid fa-user-clock"></i> Access Friend Request
+                                    </a>
+                                </span>
+                                
+                            <!-- No request have been sent -->
+                            {% elif data.request_sent == -1 %}
+                                <a type="button" href="#" class="add-friends profile-btn" id="id_send_friend_request">
+                                    <i class="fa-solid fa-user-plus"></i> Add to friends
+                                </a>
+
+                            {% endif %}
+                        
+                        {% elif data.is_friend %}
+                        <div class="avatar"></div>
+                        <div class="dropdown dropdown-profile">
+                            <button class="dropbtn dropbtn-profile"><i class="fa-solid fa-sliders"></i></button>
+                            <div class="dropdown-content">
+                            <a href="{% url 'settings' %}"><i class="fa-solid fa-gears"></i> Settings</a>
+                            <a href="{% url 'log_out' %}"><i class="fa-solid fa-arrow-right-from-bracket danger-icon"></i> Log out</a>
+                            </div>
+                        </div>
+
+                            <a type="button" href="#" class="add-friends profile-btn" id="id_unfriend_btn">
+                                <i class="fa-solid fa-user-check"></i> Unfriend (Добавить дроупдаун) - FRIENDS
+                            </a>
+
+                        {% endif %}
+                            
+                            <!-- <a type="button" href="#" class="add-friends profile-btn">
+                                Add to friends
+                            </a>  -->
+
+                        </div> 
+                        
+                    </div>
+                    <a class="url_go_to text-center url_user" href="{% url 'profile_user' user_name=user.username %}">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        Go to {{user}}
+                    </a>
+                </div>
+        </div>
+
+    </div>
+
+
+{% endif %}
+    
+

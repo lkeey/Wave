@@ -1,8 +1,6 @@
 {% extends "discussions/base.html" %}
 
-{% block title %}Profile {{ user_profile.user.username }}{% endblock %}
-
-{% load blog_tags %}
+{% block title %}Catalog Users{% endblock %}
 
 {% block content_blog %}
 <script>
@@ -16,31 +14,25 @@
 
     //Функция отображения PopUp
     function PopUpShowProfileInfo( user, user_id ){
-        //alert(user_id)
-        //alert(window.currentUser.name)
-        //alert( user );
-        //document.getElementById( user ).show();
-        //$(f"#PopUpShowProfileInfo{user}").show();
-        
-    
-        window.currentUser.id = user_id;
-        window.currentUser.user = user ; 
 
- 
+        window.currentUser.id = user_id;
+        window.currentUser.user = user; 
+
         $(`#${user}`).show();
-        //alert(currentUser);  
+        //alert(currentUser.user);  
     }
 
     //Функция скрытия PopUp
     function PopUpHide( user ){
-        //alert( user );
+        
+        alert( user );
         //document.getElementById( user ).hide();
         $(`#${user}`).hide();
         //alert('HIDE');
     }  
-    
   
 </script>
+
 <div class="col-5">   
 
     {% for message in messages %}
@@ -65,153 +57,257 @@
     {% endfor %}
 
 </div>
-    <!-- {{user}}
-    {{users}} -->
-    <div class="search">
-
-        <form onsubmit="return executeQuery();">
-            <input type="text" id="search" name="search" class="search-click" name="" placeholder="Search here..."  />  
-        </form>   
-
-        <span>
-            <i class="fa fa-search"></i>
-        </span>
-    </div>
+       
     
-    {% for user in users %}
-        {% if user.profile.first %}
-            {% get_user_data user user_global as data%}
-            <h3>DATA {{data}} - {{user}} - {{user_global}}</h3>
-            
-            <a href="javascript:PopUpShowProfileInfo('{{user}}', '{{user.id}}')">
+    <div class="">
+
+        {# icon and search-box #}
+        <div class="search">
+
+          <i id="search-icon" class="fas fa-search"></i>
+          <input type="text" id="user-input" name="search" class="search-click" name="" placeholder="Search here..."  />  
+
+        </div>
+
+        <div id="replaceable-content" class="">
+
+            {% if users %}
                 
-                <div class="box box-chats">
-
-                        <div class="col-4">
-                            <img src="{{ user.profile.first.profile_img.url }}" alt="None" class="img-posts-feed img-chatting">           
-                        </div>
-
-                        <div class="interlocutor profiles-all col-1">
-                            <h3>{{user.username}}</h3><br>      
-                        </div>
-
-                    <a type="button" href="{% url 'create_conversation' user_id=user.id %}" class="send-message profile-btn text-center col-12 col-lg-5">
-                        <i class="fa-solid fa-message"></i> Send a message
-                    </a>
-
-                </div>
-            </a>
-        
-            <div class="b-popup content-user" id="{{user}}">
- 
-                <div class="b-popup-content">
-                        
-                        <div class="container">
-                            <div class="text-center close-btn-users">
-                                <a href='javascript:PopUpHide("{{user}}")'><i class="fa-solid fa-xmark"></i></a>
-                            </div>
-
-                            <div class="box">
-                                <!-- <div class="img-profile">
-                                    <a href="{{ user_profile.profile_img.url }}">
-                                        <img src="{{ user_profile.profile_img.url }}" alt="None" class="img-user">
-                                    </a>
-                                </div> -->
+                {% for user in users %}
                     
-                                <a href="{{ user.profile_img.url }}">
-                                    <div class="box-image">
-                                        <div class="content-image">
-                                            <img src="{{ user.profile.first.profile_img.url }}" alt="None" class="img-user col-1">
-                                        </div>
-                                    </div>
-                                </a>
-                                
-                                <div class="box-info-user col-12">
-                                    <h3 class="name-user col-3">{{ user.username }}</h3>
-                                    <h2 class="bio col-3">{{ user.profile.first.bio }}</h2>
-                                
-                                    <a type="button" href="{% url 'create_conversation' user_id=user.id %}" class="send-message profile-btn col-12 col-lg-5">
-                                        <i class="fa-solid fa-message"></i> Send a message
-                                    </a>
-                                
-                                    <!-- Type of button to add to friends -->
-                                    {% if data.is_friend == False and data.is_self == False %}
-                                    <!-- You sent them -->
-                                    {% if data.request_sent == 1 %}
-                                        <a type="button" href="#" onclick='triggerCancelFriendRequest("{{data.pending_friend_request_id}}")' class="add-friends profile-btn col-12 col-lg-5">
-                                            <i class="fa-solid fa-user-large-slash"></i> Cancel Friend Request
-                                        </a>
-                                    
-                                    <!-- Them sent you -->
-                                    {% elif data.request_sent == 0 %}
-                                            
-                                        <span id="id_confirm_{{data.pending_friend_request_id.sender.id}}" 
-                                            class="confirm-friend-request material-icons p-1" 
-                                            onclick='triggerAcceptFriendRequest("{{data.pending_friend_request_id}}")'>
-                                            
-                                            <a type="button" href="#" class="add-friends profile-btn">
-                                                <i class="fa-solid fa-user-clock"></i> Access Friend Request
-                                            </a>
-                                        </span>
-                                        
-                                    <!-- No request have been sent -->
-                                    {% elif data.request_sent == -1 %}
-                                        <a type="button" href="#" class="add-friends profile-btn" id="id_send_friend_request">
-                                            <i class="fa-solid fa-user-plus"></i> Add to friends
-                                        </a>
+                    {% if user.profile.first %}
+                        {# <h3>USER - {{user}}</h3> #}
+                        {% include "discussions/account_results.html" with user=user%}
+                        
+                        <!-- умышленный вызов onerror -->
+                        <img src="nooone" onerror='PopUpHide("{{user}}")'>
 
-                                    {% endif %}
-                                
-                                {% elif data.is_friend %}
-                                <div class="avatar"></div>
-                                <div class="dropdown dropdown-profile">
-                                    <button class="dropbtn dropbtn-profile"><i class="fa-solid fa-sliders"></i></button>
-                                    <div class="dropdown-content">
-                                    <a href="{% url 'settings' %}"><i class="fa-solid fa-gears"></i> Settings</a>
-                                    <a href="{% url 'log_out' %}"><i class="fa-solid fa-arrow-right-from-bracket danger-icon"></i> Log out</a>
-                                    </div>
-                                </div>
+                    {% endif %}
+                {% endfor %}
+              
+            {% else %}
 
-                                    <a type="button" href="#" class="add-friends profile-btn" id="id_unfriend_btn">
-                                        <i class="fa-solid fa-user-check"></i> Unfriend (Добавить дроупдаун) - FRIENDS
-                                    </a>
+                <h3>Not found</h3>
 
-                                {% endif %}
-                                    
-                                    <!-- <a type="button" href="#" class="add-friends profile-btn">
-                                        Add to friends
-                                    </a>  -->
+            {% endif %}
 
-                                </div> 
-                                
-                            </div>
-                            <a class="url_go_to text-center url_user" href="{% url 'profile_user' user_name=user.username %}">
-                                <i class="fa-solid fa-cloud-arrow-up"></i>
-                                Go to {{user}}
-                            </a>
-
-                        </div>
-
-                 
-                </div>
-
-            </div>
-    
-        <script>PopUpHide('{{user}}');</script>
-        {% endif %}
-    {% endfor %}
+        </div>
+      
+      </div>
 
 <script type="text/javascript">
     
-    function execute(){
-        var query = document.getElementById("search").value()
+    const user_input = $("#user-input")
+    const search_icon = $('#search-icon')
+    const artists_div = $('#replaceable-content')
+    const endpoint = '{% url "all_users" %}'
+    const delay_by_in_ms = 700
+    let scheduled_function = false
 
-        window.location.replace("{% url 'all_users' %}?search="+query)
+    let ajax_call = function (endpoint, request_parameters) {
+        $.getJSON(endpoint, request_parameters)
+            .done(response => {
+                
+                // fade out the artists_div, then:
+                artists_div.fadeTo('slow', 0).promise().then(() => {
+                // replace the HTML contents
+
+                var html = "";
+ 
+                response = response.data
+                if (Array.isArray(response)){
+                    for (let i = 0; i < response.length; i++) {
+                        var user_js = response[i];
+                        var friend_btn = "";
+                        var user_profile_url = "/profile/" + user_js.username;
+                        
+                        if ( !( user_js.data.is_friend) && !(user_js.data.is_self) ) {
+                            if (user_js.data.request_sent == 1){
+                                // You send to them
+                                //alert("You send to them")
+                                friend_btn = `
+                                <a type="button" 
+                                href="#" 
+                                onclick='triggerCancelFriendRequest("${user_js.data.pending_friend_request_id}")' 
+                                class="add-friends profile-btn col-12 col-lg-6">
+                                    <i class="fa-solid fa-user-large-slash"></i> Cancel Friend Request
+                                </a>
+                            `
+                            } else if ( user_js.data.request_sent == 0 ) {
+                                // Them sent to you
+                                //alert("Them sent to you")
+                                friend_btn = `
+                                <span id="id_confirm_${user_js.data.pending_friend_request_id}" 
+                                class="confirm-friend-request material-icons p-1" 
+                                onclick='triggerAcceptFriendRequest("${user_js.data.pending_friend_request_id}")'>
+                                
+                                <a type="button" href="#" class="add-friends profile-btn">
+                                    <i class="fa-solid fa-user-clock"></i> Access Friend Request
+                                </a>
+                                </span>
+                            `
+                            } else if ( user_js.data.request_sent == -1 ) {
+                                // No request have been sent
+                                //alert("No request have been sent")
+                                friend_btn = `
+                                <a type="button" href="#" class="add-friends profile-btn" id="id_send_friend_request">
+                                    <i class="fa-solid fa-user-plus"></i> Add to friends 
+                                </a>
+                                `
+                                
+                            }
+                        } else if ( user_js.data.is_friend ) {
+                            //alert("unfriend")
+                            friend_btn = `
+                            <a type="button" href="#" class="add-friends profile-btn" id="id_unfriend_btn_js">
+                                <i class="fa-solid fa-user-check"></i> Unfriend
+                            </a>
+                            `
+                            
+                        } else {
+                            //alert("ITS YOU")
+                        }
+                        html += `
+                        <h3>Js${user_js.username}, ${user_js.data.is_friend}</h3>
+                            
+                            <a href="javascript:PopUpShowProfileInfo('${user_js.username}', '${user_js.id}')">
+                                
+                                <div class="box box-chats">
+
+                                        <div class="col-4">
+                                            <img src="${ user_js.profile_img }" alt="None" class="img-posts-feed img-chatting">           
+                                        </div>
+
+                                        <div class="interlocutor profiles-all col-1">
+                                            <h3>${ user_js.username }</h3><br>      
+                                        </div>
+
+                                    <a type="button" href="{% url 'create_conversation' user_id=user.id %}" class="send-message profile-btn text-center col-12 col-lg-5">
+                                        <i class="fa-solid fa-message"></i> Send a message
+                                    </a>
+
+                                </div>
+                            </a>
+
+                            <div class="b-popup content-user" id="${user_js.username}">
+
+                                <div class="b-popup-content">
+                                        
+                                        <div class="container">
+                                            <div class="text-center close-btn-users">
+                                                <a href='javascript:PopUpHide("${user_js.username}")'><i class="fa-solid fa-xmark"></i></a>
+                                            </div>
+
+                                            <div class="box">
+                                                
+                                                <a href="${user_js.profile_img}">
+                                                    <div class="box-image">
+                                                        <div class="content-image">
+                                                            <img src="${user_js.profile_img}" alt="None" class="img-user col-1">
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                
+                                                <div class="box-info-user col-12">
+                                                    <h3 class="name-user col-3">${user_js.username}</h3>
+                                                    <h2 class="bio col-3">${user_js.bio}</h2>
+                                                
+                                                    <a type="button" href="{% url 'create_conversation' user_id=user.id %}" class="send-message profile-btn col-12">
+                                                        <i class="fa-solid fa-message"></i> Send a message
+                                                    </a>
+                                                
+                                                    <!-- Type of button to add to friends -->
+                                                    
+                                                    ${friend_btn}
+                                                    
+                                                </div> 
+                                                
+                                            </div>
+                                            <a class="url_go_to text-center url_user" href="${user_profile_url}">
+                                                <i class="fa-solid fa-cloud-arrow-up"></i>
+                                                Go to ${user_js.username}
+                                            </a>
+                                        </div>
+                                </div>
+
+                            </div>
+                        
+                        `;         
+
+                    }
+                } else {
+                    html = "NOT FOUND"
+                }
+                
+
+                artists_div.html(html);
+                // fade-in the div with new contents
+                artists_div.fadeTo('slow', 1)
+                // stop animating search icon
+                search_icon.removeClass('blink')
+                
+
+                var SendFriendRequestBtnJS = document.getElementById("id_send_friend_request")
+                
+                if (SendFriendRequestBtnJS != null){
+                    //alert("fr-req"+SendFriendRequestBtnJS)
+                    SendFriendRequestBtnJS.addEventListener("click", function(){
+                        if (window.currentUser.user){    
+                            //alert(window.currentUser.user)            
+                            SendFriendRequest(window.currentUser.id, onFriendRequestSent)
+            
+                        } else {
+                            //alert("WITHOUUT")
+                            SendFriendRequest(`${user_js.id}`, onFriendRequestSent)
+                        }
+                        
+                    })
+                }
+
+                var removeFriendBtnJS = document.getElementById("id_unfriend_btn_js")
+
+                if (removeFriendBtnJS != null){
+                    //alert("fr-remove "+removeFriendBtnJS)
+
+                    removeFriendBtnJS.addEventListener("click", function(){
+                        if (window.currentUser.user){    
+                            //alert(window.currentUser.user)            
+                            removeFriend(window.currentUser.id, onFriendRemoved)
+            
+                        } else {
+                            //alert("WITHOUUT")
+                            removeFriend(`${user_js.id}`, onFriendRemoved)
+                        }
+                        
+                    })
+                }
+
+                })
+                
+
+            })
         
-        return false
     }
 
-    
+
+    user_input.on('keyup', function () {
+
+        const request_parameters = {
+            q: $(this).val() // value of user_input: the HTML element with ID user-input
+        }
+
+        // start animating the search icon with the CSS class
+        search_icon.addClass('blink')
+
+        // if scheduled_function is NOT false, cancel the execution of the function
+        if (scheduled_function) {
+            clearTimeout(scheduled_function)
+        }
+
+        // setTimeout returns the ID of the function to be executed
+        scheduled_function = setTimeout(ajax_call, delay_by_in_ms, endpoint, request_parameters)
+    })
+
 
 </script>
 
@@ -221,5 +317,4 @@
 {% include "friend/snippets/remove_friend.html" %}
 {% include 'friend/snippets/cancel_friend_request.html' %}
 
-
-{% endblock %}
+{% endblock %}  
