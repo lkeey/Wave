@@ -5,6 +5,19 @@
 {% load blog_tags %}  
 
 {% block content_chat %}
+
+<script>
+    function ScrollToBottom(){
+        const scroll_el = document.getElementById('message_last');
+        scroll_el.scrollIntoView({behavior: "smooth"}, true);
+    }  
+
+    window.onload = function(){
+        ScrollToBottom();
+    }
+
+</script>
+
 <div class="container container-chat">
     {% if not chat %}
         <div class="panel panel-body">
@@ -34,19 +47,22 @@
                         <p>{{companion.profile.first.bio}}</p>
                     </div>
                 </div>
-
-                
+  
             </div>
 
             <div id="messages" class="panel">
-                <div class="text-center">     
+                <div class="text-center"> 
+                    <!-- <h3>unread_1st - {{unread_1st}} </h3>    -->
                     {% if chat.message_set.all|length > 0 %}
                         {% for message in chat.message_set.all %}
-                        
-                            <p class="date-created-mess">
+                            
+                            <p class="date-created-mess"
+                            {% if unread_1st == message %} 
+                                id="message_last" 
+                            {% endif %}>
                                 {{ message.date_created }}
                             </p>
-
+                            
                             {% if message.author == user %}
                             <div class="">
                                 <div class="mess-own-readable">
@@ -92,7 +108,7 @@
                 </div>
             </div>
         {% endif %}
-        <div class="message_form box text-center">
+        <div class="message_form box text-center" id="form-sending">
             <form method="post">
 
                 <div class="col-9">
@@ -110,4 +126,5 @@
         </div>
     {% endif %}
 </div>
+
 {% endblock %}

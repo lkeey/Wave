@@ -1,9 +1,7 @@
 body {
-    margin: 0px;
-    background-image: linear-gradient(60deg, rgb(123, 69, 223) 10%, #7522bd 100%);
-    overflow-x: hidden;
-
-    margin-bottom: 100%;
+  background-image: linear-gradient(60deg, rgb(123, 69, 223) 10%, #7522bd 100%);
+  overflow-x: hidden;
+  
 }
 
 a {
@@ -160,6 +158,7 @@ p {
 
 .avatar {
   margin: 0 4%;
+  /* margin-bottom: 100%; */
 }
 
 .container{
@@ -199,8 +198,8 @@ p {
 
 .qr-code-img {
   border-radius: 30px;
-  width: 70vh; 
-  height: 70vh;
+  width: 50vh; 
+  height: 50vh;
   background-size: auto 300px;
 }
 
@@ -640,9 +639,9 @@ p {
 
 .b-popup{
   /* Регулировка положения вслывающего окна */
-  top: 100vh;
+  top: 140vh;
 
-  width: 80%;
+  width: 95%;
   min-height: fit-content;
   /* background-color: rgba(250, 253, 251, 0.2);   */
 
@@ -655,9 +654,9 @@ p {
 
   border-radius: 20px;
 
-  /* background-color: red; */
+  background-color: red;
 
-  margin: 1vw auto 3vw auto;
+  margin: 0vw auto 3vw auto;
 
   padding: 10px;
 }
@@ -1154,7 +1153,7 @@ p {
 
 .b-content-red {
   top: 5vh;
-  
+
   background-image: linear-gradient(45deg, rgb(9, 82, 254) 10%, #00ff00 100%);
 
 }

@@ -48,7 +48,13 @@ class MessagesView(View):
             if request.user in chat.members.all():
                 # все сообщения станут прочитанными, 
                 # если сообщения отправлено другим пользователем
-
+                first_message_unread = Message.unreaded_objects.get_amount_unreaded().exclude(author=request.user).filter(chat=chat).first()
+                
+                if not first_message_unread:
+                    first_message_unread = Message.unreaded_objects.get_earliest_message()
+                
+                print("first_message_unread",first_message_unread)
+                
                 chat.message_set.filter(readable=False).exclude(author=request.user).update(readable=True)
             
             else:
@@ -62,7 +68,7 @@ class MessagesView(View):
                 'user': request.user,
                 'chat': chat,
                 'form': MessageForm(),
-                
+                'unread_1st': first_message_unread
             }
 
         return render(request,'chat/messages.html', context)
@@ -71,12 +77,20 @@ class MessagesView(View):
         form = MessageForm(data=request.POST)
         if form.is_valid():
             message = form.save(commit=False)
-            print("CREATE MESSAGE", message)
-            
-            # if len(message.text) >= 1:
-            message.chat_id = chat_id
-            message.author = request.user
-            message.save()
+
+            if str(message).isspace() or len(str(message)) == 0:
+                print("NOOO!!!")
+
+            else:
+                
+                print("CREATE MESSAGE", message)
+                print(len(str(message)))
+
+                # if len(message.text) >= 1:
+                message.chat_id = chat_id
+                message.author = request.user
+                message.save()
+
         # return redirect(reverse('users:messages', kwargs={'chat_id': chat_id}))
         return redirect("messages", chat_id=chat_id)
         

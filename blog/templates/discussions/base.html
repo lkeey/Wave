@@ -6,11 +6,12 @@
 {% block content %}
 
 {# находится блок контента #}
-{% block content_blog %}
+<div class="body-blog">
+    {% block content_blog %}
 
 
-{% endblock %}
-
+    {% endblock %}
+</div>
 {% include "templates_projects/navbar.html"%}
 
 {% endblock %}

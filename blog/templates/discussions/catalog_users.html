@@ -25,7 +25,7 @@
     //Функция скрытия PopUp
     function PopUpHide( user ){
         
-        alert( user );
+        //alert( user );
         //document.getElementById( user ).hide();
         $(`#${user}`).hide();
         //alert('HIDE');
@@ -34,7 +34,6 @@
 </script>
 
 <div class="col-5">   
-
     {% for message in messages %}
         
         {% if message.tags == 'alert-success' %}
@@ -168,7 +167,6 @@
                             //alert("ITS YOU")
                         }
                         html += `
-                        <h3>Js${user_js.username}, ${user_js.data.is_friend}</h3>
                             
                             <a href="javascript:PopUpShowProfileInfo('${user_js.username}', '${user_js.id}')">
                                 
@@ -231,7 +229,9 @@
                                 </div>
 
                             </div>
-                        
+                            <!-- умышленный вызов onerror -->
+                            <img src="nooone" onerror='PopUpHide("${user_js.username}")'>
+            
                         `;         
 
                     }
@@ -289,12 +289,20 @@
         
     }
 
-
     user_input.on('keyup', function () {
+        if ($(this).val()) {
+            //alert("SUCCESS"+$(this).val())
 
-        const request_parameters = {
-            q: $(this).val() // value of user_input: the HTML element with ID user-input
+            var request_parameters = {
+                q: $(this).val() // value of user_input: the HTML element with ID user-input
+            }
+        } else {
+            //alert("NONE")
+            var request_parameters = {
+                q: null
+            }
         }
+
 
         // start animating the search icon with the CSS class
         search_icon.addClass('blink')

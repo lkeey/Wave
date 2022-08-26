@@ -20,6 +20,10 @@ class ChatManager(models.Manager):
     def get_amount_unreaded_all(self):
         return super().get_queryset().filter(members__in=False)
 
+    def get_earliest_message(self):
+        return super().get_queryset().last()
+
+
 class Chat(models.Model):
     
     DIALOG = 'D'

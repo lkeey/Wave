@@ -146,31 +146,40 @@ def show_all_users(request):
             print("URL-PARAMETER-AJAX", url_parameter)
 
             users = User.objects.filter(username__icontains=url_parameter)
+        
+        else:
+            users = User.objects.all()
 
+        print("USERS", users)
+        
         if len(users) > 0:
             data = []
             for pos in users:
-                print(pos)
+                try:
+                    
+                    print(pos)
 
-                profile = Profile.objects.filter(user=pos)[0]
-                print("PROFILE", profile.profile_img.url)
+                    profile = Profile.objects.filter(user=pos)[0]
+                    print("PROFILE", profile.profile_img.url)
 
-                print(blog_tags.get_user_data(pos, user))
+                    print(blog_tags.get_user_data(pos, user))
 
-                item = {
-                    # user parameters
-                    'username': pos.username,
-                    'id': pos.id,
+                    item = {
+                        # user parameters
+                        'username': pos.username,
+                        'id': pos.id,
 
-                    # profile parameters
-                    'profile_img': profile.profile_img.url,
-                    'bio': profile.bio,
+                        # profile parameters
+                        'profile_img': profile.profile_img.url,
+                        'bio': profile.bio,
 
-                    # friend-requests parameters
-                    'data': blog_tags.get_user_data(pos, user),
-                }
+                        # friend-requests parameters
+                        'data': blog_tags.get_user_data(pos, user),
+                    }
 
-                data.append(item)
+                    data.append(item)
+                except Exception as _Ex:
+                    print("WARING "+str(_Ex))
 
         print("DATA", data)
         # html = render_to_string(
