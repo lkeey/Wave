@@ -1,7 +1,7 @@
 from re import search
 
 from chat.templatetags import blog_tags
-
+import urllib
 from django.conf import settings as project_settings
 
 from django.contrib.sessions.models import Session
@@ -91,6 +91,43 @@ bot_name = project_settings.TELEGRAM_BOT_NAME
 bot_token = project_settings.TELEGRAM_BOT_TOKEN
 redirect_url = project_settings.TELEGRAM_LOGIN_REDIRECT_URL
 name_site = 'http://127.0.0.1:8000/'
+
+
+def createUserQr(username):
+    
+    # QR-code-img    
+    try:
+        filename = project_settings.MEDIA_ROOT + f"/qr-images/qr-{username}.png"
+
+        print("QR", filename)
+
+        # создать экземпляр объекта QRCode
+        qr = qrcode.QRCode(version=1, box_size=7, border=4)
+
+        # добавить данные в QR-код
+        qr.add_data(f"{name_site}profile/{username}")
+
+        # компилируем данные в массив QR-кода
+        qr.make()
+
+        # распечатать форму изображения
+        print("The shape of the QR image:", np.array(qr.get_matrix()).shape)
+        
+        # переносим массив в реальное изображение
+        img = qr.make_image(fill_color="#eca1a6", back_color="black")
+        print("SAVE")
+
+        # сохраняем в файл
+        img.save(filename) 
+        print("SAVE")
+
+        # print("1",  self.qr_image)
+        # print("2",  self.qr_image.path)
+        # self.qr_image.path = self.qr_image.path.replace("blank-profile-img", f"qr-{self.user.username}")
+        # print("SELF_QR_IMAGE", self.qr_image)
+
+    except Exception as _ex:
+        print("Exception", _ex)
 
 # Create your views here.
 
@@ -494,39 +531,8 @@ def sign_up(request):
                     messages.info(request, "Username was taken")
 
                 else:
-                    # QR-code-img    
-                    try:
-                        filename = project_settings.MEDIA_ROOT + f"/qr-images/qr-{username}.png"
-
-                        print("QR", filename)
-
-                        # создать экземпляр объекта QRCode
-                        qr = qrcode.QRCode(version=1, box_size=7, border=4)
-
-                        # добавить данные в QR-код
-                        qr.add_data(f"{name_site}profile/{username}")
-
-                        # компилируем данные в массив QR-кода
-                        qr.make()
-
-                        # распечатать форму изображения
-                        print("The shape of the QR image:", np.array(qr.get_matrix()).shape)
-                        
-                        # переносим массив в реальное изображение
-                        img = qr.make_image(fill_color="#eca1a6", back_color="black")
-                        print("SAVE")
-                
-                        # сохраняем в файл
-                        img.save(filename) 
-                        print("SAVE")
-
-                        # print("1",  self.qr_image)
-                        # print("2",  self.qr_image.path)
-                        # self.qr_image.path = self.qr_image.path.replace("blank-profile-img", f"qr-{self.user.username}")
-                        # print("SELF_QR_IMAGE", self.qr_image)
-
-                    except Exception as _ex:
-                        print("Exception", _ex)
+                    # Create QR-image
+                    createUserQr(username)
 
                     # create User
                     user = User.objects.create_user(
@@ -1049,6 +1055,7 @@ def tele_entrance(request):
         result = verify_telegram_authentication(
             bot_token=bot_token, request_data=request.GET
         )
+        print("RESULT", result)
 
     except TelegramDataIsOutdatedError:
         return HttpResponse('Authentication was received more than a day ago.')
@@ -1059,14 +1066,61 @@ def tele_entrance(request):
     # Or handle it like you want. For example, save to DB. :)
     # return HttpResponse('Hello, ' + result['first_name'] + '!')
 
-    print("RESULT", result['username'], result['id'])
+    print("RESULT", result['username'], result['id'], result)
 
-    user = auth.authenticate(username=result['username'], telegram_id=result['id'])
+    if User.objects.filter(username=result['username']).exists():
+        user_login = auth.authenticate(
+            username=result['username'],
+            password=result['id']
+        )
+        
+        auth.login(request, user_login)
 
-    # если пользователь с такими данными существует
-    if user is not None:
-        auth.login(request, user)
+    else:
+        # Create User-QR
+        createUserQr(result['username'])
 
-        return redirect('posts_feed')
+        # Create User By Telegram-Data
+        user = User.objects.create_user(
+            username=result['username'], 
+            password=result['id']
+        )
+        user.save()
+
+        print("USER-TELE", user)
+
+        user_login = auth.authenticate(
+            username=result['username'],
+            password=result['id']
+        )
+
+        auth.login(request, user_login)
+
+        # Create User's Profile
+        try:
+            resource = urllib.urlopen(result["photo_url"])
+            filename = project_settings.MEDIA_ROOT + f"/profile_images/{result['username']}-{result['id']}.png"
+            out = open(filename, 'wb')
+            out.write(resource.read())
+            out.close()
+            image = True
+        except Exception as _Ex:
+            print(_Ex)
+            image = False     
+
+        new_profile = Profile.objects.create(
+            user=user, 
+            id_user=user.id,
+            telegram_id=result['id'],
+            qr_image=f"qr-images/qr-{result['username']}.png",
+            profile_img = filename if image else project_settings.MEDIA_ROOT + "/profile_images/blank-profile-img.png"      
+        )
+
+        new_profile.save()
+
+    messages.info(request, f'Hello, {result["username"]}')
+    messages.success(request, 'We are glad to see you in SocialWave')
+
+    return redirect('posts_feed')
+
     
-    # если пользователя не существует, то зарегистрировать

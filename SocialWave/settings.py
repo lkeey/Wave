@@ -303,4 +303,6 @@ TELEGRAM_BOT_NAME = 'SocialWaveBot'
 TELEGRAM_BOT_TOKEN = '5482182333:AAH-seq0VT3kgXNLpdu9cui1reDy_5KDjkc'
 TELEGRAM_LOGIN_REDIRECT_URL = 'http://lkeey.pythonanywhere.com/'
 
-
+# Часовой пояс
+TIME_ZONE = 'Europe/Istanbul' #UTC +2 
+USE_TZ = True
