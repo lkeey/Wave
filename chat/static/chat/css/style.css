@@ -377,9 +377,9 @@ input {
     margin-right: 4%;
     position: relative;
     display: inline;
-    width: 30vw;
-    height: 30vw;
-    background: rgba(0, 0, 0, 0.5) ;
+    width: 30vh;
+    height: 30vh;
+    background: rgba(0, 0, 0, 0.1) ;
     border-radius: 50%;
 
     overflow: hidden;
@@ -389,7 +389,7 @@ input {
     content: '';
     position: absolute;
     
-    inset: -10px 0px;
+    inset: 0px 0px;
     background: linear-gradient(315deg, #00ccff, #d400d4);
     transition: 0.5s;
 
@@ -397,7 +397,7 @@ input {
 }
 
 .box-image:hover::before {
-    inset: -20px 50px;
+    inset: 0px 50px;
 }
 
 @keyframes animate {
@@ -415,8 +415,8 @@ input {
 
     position: absolute;
 
-    inset: 6px;
-    background: black;
+    inset: 10px;
+    background: white;
 
     border-radius: 50%;
     z-index: 1;

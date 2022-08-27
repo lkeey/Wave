@@ -158,7 +158,7 @@ p {
 
 .avatar {
   margin: 0 4%;
-  /* margin-bottom: 100%; */
+  margin-bottom: 100vh;
 }
 
 .container{
@@ -198,9 +198,8 @@ p {
 
 .qr-code-img {
   border-radius: 30px;
-  width: 50vh; 
-  height: 50vh;
-  background-size: auto 300px;
+  
+  background-size: auto 30vw;
 }
 
 .img-posts-feed {
@@ -639,7 +638,7 @@ p {
 
 .b-popup{
   /* Регулировка положения вслывающего окна */
-  top: 140vh;
+  top: 80vh;
 
   width: 95%;
   min-height: fit-content;
@@ -653,8 +652,6 @@ p {
   position: absolute;
 
   border-radius: 20px;
-
-  background-color: red;
 
   margin: 0vw auto 3vw auto;
 
@@ -688,15 +685,16 @@ p {
 
   position: fixed;
 
-  left: 70vw;
+  left: 85vw;
 
-  top: 90vh;
+  top: 60vh;
 
   padding: .5vw 1vw;
   border-radius: 50px;
   min-width: fit-content;
   background-image: linear-gradient(60deg, rgb(18, 19, 19) 10%, #eef60a 100%);
 
+  box-shadow: 10px 10px 100px black;
 }
 
 .close-btn a {

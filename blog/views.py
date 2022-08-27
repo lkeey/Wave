@@ -1,7 +1,7 @@
 from re import search
 
 from chat.templatetags import blog_tags
-import urllib
+import urllib.request
 from django.conf import settings as project_settings
 
 from django.contrib.sessions.models import Session
@@ -1098,12 +1098,16 @@ def tele_entrance(request):
 
         # Create User's Profile
         try:
-            resource = urllib.urlopen(result["photo_url"])
+
             filename = project_settings.MEDIA_ROOT + f"/profile_images/{result['username']}-{result['id']}.png"
-            out = open(filename, 'wb')
-            out.write(resource.read())
-            out.close()
+            
+            urllib.request.urlretrieve(
+                result["photo_url"], 
+                filename,
+            )
+
             image = True
+
         except Exception as _Ex:
             print(_Ex)
             image = False     

@@ -61,8 +61,8 @@
 
     var removeFriendBtn = document.getElementById("id_unfriend_btn")
 	if (removeFriendBtn != null){
+
 		removeFriendBtn.addEventListener("click", function(){
-			
             if (window.currentUser.user){
                 //alert(window.currentUser.name);
                 removeFriend(window.currentUser.id, onFriendRemoved)
