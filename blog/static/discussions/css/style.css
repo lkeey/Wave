@@ -202,10 +202,14 @@ p {
   background-size: auto 30vw;
 }
 
+.posts-feed {
+  margin-bottom: 10vh;
+}
+
 .img-posts-feed {
   border-radius: 50%;
-  width: 10vw; 
-  height: 10vw;
+  width: 9vh; 
+  height: 9vh;
   background-size: auto 300px;
 
 }
@@ -537,8 +541,8 @@ p {
 
 .img-profile-comm {
   border-radius: 50%;
-  width: 5vh; 
-  height: 5vh;
+  width: 10vh; 
+  height: 10vh;
   /* background-size: auto ; */
 
   /* margin: 10px 10px; */
@@ -638,7 +642,7 @@ p {
 
 .b-popup{
   /* Регулировка положения вслывающего окна */
-  top: 80vh;
+  top: 105vh;
 
   width: 95%;
   min-height: fit-content;
@@ -1214,8 +1218,8 @@ p {
 }
 
 .user-friend-profile img {
-  width: 10vw;
-  height: 10vw;
+  width: 20vh;
+  height: 20vh;
 }
 
 .user-friend-profile {

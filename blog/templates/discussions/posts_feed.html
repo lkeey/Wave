@@ -38,7 +38,7 @@
         <label class="tab" for="radio-notifications"><i class="fa-solid fa-bell"></i> Notifications<span class="notification">{{ user.profile.all.0.get_amount_notifications }}</span></label>
     </div>
 </div>
-
+<div class="posts-feed">
 {% if all_posts|length > 0 %}
 
     {% for post in all_posts %}
@@ -51,6 +51,6 @@
     <h3 class="title">We haven't got any post...</h3>
     
 {% endif %}
-
+</div>
 
 {% endblock %}

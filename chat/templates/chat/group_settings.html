@@ -1,0 +1,22 @@
+{% extends "discussions/base.html" %}
+
+{% block title %}Settings Group{% endblock %}
+
+{% block content_blog %}
+    
+    <form method="post" action="{% url 'create_group' %}">
+        {% csrf_token %}
+
+        <div class="col-10">
+            {% csrf_token %}
+            {{ form }}
+        </div>
+
+        <input type="file" name="image" class="group-settings">
+        <input type="hidden" name="group_id" id="group_id" value="{{group.id}}">
+
+        <br><input type="submit" value="SAVE" class="btn btn-save"><br>
+
+    </form>
+
+{% endblock %}

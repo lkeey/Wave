@@ -4,8 +4,8 @@ from django.urls import reverse
 
 from django.contrib import messages
 
-from .models import Chat, Message, User
-from .forms import MessageForm
+from .models import Chat, Group, Message, User
+from .forms import MessageForm, GroupEditForm
 from django.db.models import Count
 
 # from django.contrib.auth.models import User, auth
@@ -82,7 +82,6 @@ class MessagesView(View):
                 print("NOOO!!!")
 
             else:
-                
                 print("CREATE MESSAGE", message)
                 print(len(str(message)))
 
@@ -129,3 +128,45 @@ class CreateDialogView(View):
 
         # return redirect(reverse('chat:messages', kwargs={'chat_id': chat.id}))
         return redirect("messages", chat_id=chat.id)
+
+# создание группы
+class CreateGroupView(View):
+    form_class = GroupEditForm
+
+    def get(self, request):
+        group = Chat.objects.create()
+        group.members.add(request.user.id)
+
+        context = {
+            'user': request.user,
+            'group': group,
+            'form': GroupEditForm(),
+        }
+
+        return render(request,'chat/group_settings.html', context)
+
+    def post(self, request, **kwargs):
+        form = self.get_form()
+
+        if form.is_valid():
+            return self.form_valid(form, request)
+
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form, request):
+        form = GroupEditForm(data=request.POST)
+        # group_id = request.FILES.get('image')
+        # print("img", group_id)
+
+        group_id = request.POST['group_id']
+        print("id", group_id)
+
+        if form.is_valid() and group_id:
+            group = Group.get_object_or_404(id=group_id)
+
+            data = form.save(commit=False)
+
+            print("data", data)
+        
+        return redirect("home")

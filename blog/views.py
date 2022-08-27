@@ -572,13 +572,15 @@ def sign_up(request):
             else:
                 messages.info(request, 'The username must be more than 2 characters and the password more than 7')
 
-
         else:
             messages.info(request, 'Password is not matching')
             return redirect('sign_up')
 
+    telegram_login_widget = create_callback_login_widget(bot_name, size=SMALL)
 
-    return render(request, 'discussions/sign_up.html')
+    context = {'telegram_login_widget': telegram_login_widget}
+
+    return render(request, 'discussions/sign_up.html', context )
 
 # logging
 def sign_in(request):

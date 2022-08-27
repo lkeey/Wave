@@ -51,6 +51,31 @@ class Chat(models.Model):
         # return 'users:messages', (), {'chat_id': self.pk }
         return reverse('messages', kwargs={"chat_id": self.pk})
 
+class Group(models.Model):
+    class Meta:
+        verbose_name = 'Group'
+        verbose_name_plural = 'Groups'
+
+    group = models.ForeignKey(
+        Chat,
+        on_delete=models.CASCADE,
+    )
+
+    name = models.TextField(
+        '', blank=True,
+        null=False, max_length=100,
+    )
+
+    bio = models.TextField(
+        '', blank=True,
+        null=False, max_length=200,
+    )
+
+    image = models.ImageField(
+        upload_to='group_images', 
+        default='profile_images/blank-profile-img.png'
+    )
+
 
 class Message(models.Model):
     class Meta:

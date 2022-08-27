@@ -30,6 +30,7 @@ class PostCreateForm(ModelForm):
         )
         
         self.fields['title'].widget.attrs['class'] = 'form-control, input-post-title'
+        
         self.fields['content'].widget.attrs['class'] = 'form-control, input-post-content'
 
 
