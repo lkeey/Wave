@@ -4,7 +4,7 @@
 
 {% block content_blog %}
     
-    <form method="post" action="{% url 'create_group' %}">
+    <form method="post">
         {% csrf_token %}
 
         <div class="col-10">
@@ -12,8 +12,7 @@
             {{ form }}
         </div>
 
-        <input type="file" name="image" class="group-settings">
-        <input type="hidden" name="group_id" id="group_id" value="{{group.id}}">
+        <input type="file" name="image" id="image" class="group-settings">
 
         <br><input type="submit" value="SAVE" class="btn btn-save"><br>
 

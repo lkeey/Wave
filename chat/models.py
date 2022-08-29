@@ -59,6 +59,7 @@ class Group(models.Model):
     group = models.ForeignKey(
         Chat,
         on_delete=models.CASCADE,
+        related_name="group",
     )
 
     name = models.TextField(
@@ -75,6 +76,9 @@ class Group(models.Model):
         upload_to='group_images', 
         default='profile_images/blank-profile-img.png'
     )
+
+    def get_object(self, group):
+        return Group.objects.filter(id=group).first()
 
 
 class Message(models.Model):

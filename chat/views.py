@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
 from django.contrib import messages
-
+from django.views.generic.edit import FormMixin
 from .models import Chat, Group, Message, User
 from .forms import MessageForm, GroupEditForm
 from django.db.models import Count
@@ -11,7 +11,7 @@ from django.db.models import Count
 # from django.contrib.auth.models import User, auth
 from django.http import HttpResponse, JsonResponse
 
-from django.views.generic import View
+from django.views.generic import View, DetailView
 
 from django.db.models import Q
 
@@ -131,42 +131,70 @@ class CreateDialogView(View):
 
 # создание группы
 class CreateGroupView(View):
-    form_class = GroupEditForm
-
+    
     def get(self, request):
-        group = Chat.objects.create()
+        group = Chat.objects.create(
+            type=Chat.CHAT
+        )
         group.members.add(request.user.id)
+
+        related_group = Group.objects.create(
+            group=group,
+            name="While without name!!",
+            bio="None too..."
+        )
+
+        return redirect("messages", chat_id=group.id)
+
+
+class GroupSettings(FormMixin, DetailView):
+    form_class = GroupEditForm
+    model = Group
+
+    def get(self, request, pk):
+
+        chat = Chat.objects.filter(id=pk).first()
+
+        print("CHAT", chat.id)
 
         context = {
             'user': request.user,
-            'group': group,
             'form': GroupEditForm(),
         }
 
         return render(request,'chat/group_settings.html', context)
 
-    def post(self, request, **kwargs):
+    def post(self, request, pk, **kwargs):
+
         form = self.get_form()
 
         if form.is_valid():
-            return self.form_valid(form, request)
+
+            return self.form_valid(form, request, pk)
 
         else:
             return self.form_invalid(form)
 
-    def form_valid(self, form, request):
+    def form_valid(self, form, request, pk):
         form = GroupEditForm(data=request.POST)
-        # group_id = request.FILES.get('image')
-        # print("img", group_id)
 
-        group_id = request.POST['group_id']
-        print("id", group_id)
+        # находим обьект Group
+        self.object = get_object_or_404(
+            Group,
+            group__id=pk
+        )
 
-        if form.is_valid() and group_id:
-            group = Group.get_object_or_404(id=group_id)
-
-            data = form.save(commit=False)
-
-            print("data", data)
+        form = form.save(commit=False)
         
+        self.object.name = form.name
+        self.object.bio = form.bio
+
+        if request.FILES.get('image') != None:
+            print("img")
+            self.object.image = request.FILES.get('image')
+
+        self.object.save()
+
+        print(self.object)
+
         return redirect("home")

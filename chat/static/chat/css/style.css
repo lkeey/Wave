@@ -7,6 +7,10 @@
     width: 25rem;
 }
 
+.panel {
+    margin-bottom: 20vh;
+}
+
 .name-room {
     font-weight: 900;
 }

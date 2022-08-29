@@ -16,4 +16,7 @@ urlpatterns = [
     path('create_group', views.CreateGroupView.as_view(), name='create_group'),
     
     path('conversation/<int:chat_id>', views.MessagesView.as_view(), name='messages'),
+
+    path('settings_group/<int:pk>', views.GroupSettings.as_view(), name='group_settings'),
+
 ]

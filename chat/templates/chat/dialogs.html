@@ -53,26 +53,26 @@
     {% endif %}
     {% for chat in chats %}
         {% if chat.message_set.count != 0 %}
-            {% with last_message=chat.message_set.last %}
-            {% get_companion user chat as companion %}
+
+            {% if chat.type == 'C' %}
                 <a class="chat-home" href="{{ chat.get_absolute_url }}">
                     <div class="box box-chats">
 
                         <div class="">
-                            <img src="{{ companion.profile.first.profile_img.url }}" alt="None" class="img-posts-feed img-chatting">           
+                            <img src="{{ chat.group.first.image.url }}" alt="None" class="img-posts-feed img-chatting">           
                         </div>
 
                         <div class="interlocutor">
-                            <h3>{{companion}}</h3><br>
+                            <h3>{{ chat.group.first.name }}</h3><br>
                             <div class="message_last_info">
                                 {% if last_message.author == user %}
-                                  <p class="last_mess_author">You:</p>  
+                                <p class="last_mess_author">You:</p>  
                                 {% else %}
                                     <p class="last_mess_author">{{last_message.author}}:</p>
                                 {% endif %}
                                 <label class="last_message">{{last_message}} {% get_companion user chat as companion %} </label>
                                 
-                               <div class="mess-other-readable">
+                            <div class="mess-other-readable">
                                     {% if last_message.readable %} 
                                         <!-- Прочитано -->
                                         <i class="read-icon fa-solid fa-circle"></i>
@@ -92,7 +92,48 @@
 
                     </div>
                 </a>
-            {% endwith %}
+            {% else %}
+                {% with last_message=chat.message_set.last %}
+                {% get_companion user chat as companion %}
+                    <a class="chat-home" href="{{ chat.get_absolute_url }}">
+                        <div class="box box-chats">
+
+                            <div class="">
+                                <img src="{{ companion.profile.first.profile_img.url }}" alt="None" class="img-posts-feed img-chatting">           
+                            </div>
+
+                            <div class="interlocutor">
+                                <h3>{{companion}}</h3><br>
+                                <div class="message_last_info">
+                                    {% if last_message.author == user %}
+                                    <p class="last_mess_author">You:</p>  
+                                    {% else %}
+                                        <p class="last_mess_author">{{last_message.author}}:</p>
+                                    {% endif %}
+                                    <label class="last_message">{{last_message}} {% get_companion user chat as companion %} </label>
+                                    
+                                <div class="mess-other-readable">
+                                        {% if last_message.readable %} 
+                                            <!-- Прочитано -->
+                                            <i class="read-icon fa-solid fa-circle"></i>
+                                        {% else %}
+                                            <i class="unread-icon fa-solid fa-circle"></i>
+                                            <!-- Непрочитано -->
+                                        {% endif %}
+                                    </div>
+                                    
+                                    {% get_count_unreaded chat companion as amount %}
+                                    {% if amount > 0 %}
+                                        <!-- есть непрочитанные сообщения -->
+                                        <label class="tab"><span class="notification amount-unreaded">{{ amount }}</span></label>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                        </div>
+                    </a>
+                {% endwith %}
+            {% endif %}
         {% endif %}
     {% endfor %}
     

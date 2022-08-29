@@ -26,30 +26,51 @@
     {% else %}
         {% load tz %}
         {% if chat %}
-        
-            <div class="name-with-conversation">
-                <div class="box">
-                    {% get_companion user chat as companion %}
-                    
-                    <div class="">
-                        <a href="{% url 'home' %}">
-                            <i class="fa-solid fa-arrow-left"></i>
-                        </a>
-                    </div>
+            {% if chat.type == "D" %}
+                <div class="name-with-conversation">
+                    <div class="box">
+                        {% get_companion user chat as companion %}
+                        
+                        <div class="">
+                            <a href="{% url 'home' %}">
+                                <i class="fa-solid fa-arrow-left"></i>
+                            </a>
+                        </div>
 
-                    <div class="">
-                        <a href="{% url 'profile_user' user_name=companion %}">
-                            <img src="{{ companion.profile.first.profile_img.url }}" alt="None" class="img-posts-feed img-chatting">  
-                        </a>             
+                        <div class="">
+                            <a href="{% url 'profile_user' user_name=companion %}">
+                                <img src="{{ companion.profile.first.profile_img.url }}" alt="None" class="img-posts-feed img-chatting">  
+                            </a>             
+                        </div>
+                        <div class="interlocutor">
+                            <h3>{{companion}}</h3><br>
+                            <p>{{companion.profile.first.bio}}</p>
+                        </div>
                     </div>
-                    <div class="interlocutor">
-                        <h3>{{companion}}</h3><br>
-                        <p>{{companion.profile.first.bio}}</p>
-                    </div>
+    
                 </div>
-  
-            </div>
+            {% else %}
+            <a href="{% url 'group_settings' pk=chat.id %}">
 
+                <div class="name-with-conversation">
+
+                    <div class="box">
+                        <div class="">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </div>
+
+                        <div class=""> 
+                            <img src="{{ chat.group.first.image.url }}" alt="None" class="img-posts-feed img-chatting">         
+                        </div>
+                        <div class="interlocutor">
+                            <h3>{{chat.group.first.name}}</h3><br>
+                            <p>{{chat.group.first.bio}}</p>
+                        </div>
+                    </div>
+                
+                </div>
+            </a>
+            {% endif %}
             <div id="messages" class="panel">
                 <div class="text-center"> 
                     <!-- <h3>unread_1st - {{unread_1st}} </h3>    -->
@@ -102,7 +123,11 @@
                         
                     {% else %}
                         <div class="first-message">
-                           <p>Send First Message In This Chat</p> 
+                            {% if chat.type == 'D' %}
+                                <p>Send First Message In This Chat</p> 
+                            {% else %}
+                                <p>Send First Message In This Group</p> 
+                            {% endif %}
                         </div>
                     {% endif %}
                 </div>
