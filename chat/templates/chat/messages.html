@@ -83,7 +83,9 @@
                             {% endif %}>
                                 {{ message.date_created }}
                             </p>
-                            
+
+                            {{user}} - {{message.author.profile.first}}
+
                             {% if message.author == user %}
                             <div class="">
                                 <div class="mess-own-readable">
@@ -99,11 +101,20 @@
                                     <h4 class="content-message">{{ message }}</h4>
                                     <p class="date-message">{% myDate message.date_created %}</p>
                                 </div>
-                                
+                                {% if chat.type == 'C' %}
+                                    <a href="{% url 'profile_user' user_name=message.author.username %}">
+                                        <img class="img-profile-comm" src="{{message.author.profile.first.profile_img.url}}" alt="Not Found">
+                                    </a>
+                                {% endif %}
                             </div>
 
                             {% else %}
                             <div class="">   
+                                {% if chat.type == 'C' %}
+                                    <a href="{% url 'profile_user' user_name=message.author.username %}">
+                                        <img class="img-profile-comm" src="{{message.author.profile.first.profile_img.url}}" alt="Not Found">
+                                    </a>
+                                {% endif %}
                                 <div class="container-messages other_message">
                                     <h4 class="content-message">{{ message }}</h4>
                                     <p class="date-message">{% myDate message.date_created %}</p>

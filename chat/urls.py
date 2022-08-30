@@ -19,4 +19,5 @@ urlpatterns = [
 
     path('settings_group/<int:pk>', views.GroupSettings.as_view(), name='group_settings'),
 
+    path('add_participant/<int:pk>/', views.add_participant, name='add_to_group')
 ]

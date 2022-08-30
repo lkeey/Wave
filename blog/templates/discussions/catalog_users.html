@@ -119,6 +119,7 @@
                         var user_js = response[i];
                         var friend_btn = "";
                         var user_profile_url = "/profile/" + user_js.username;
+                        var user_conversation_url = "/chat/create/" + user_js.id
                         
                         if ( !( user_js.data.is_friend) && !(user_js.data.is_self) ) {
                             if (user_js.data.request_sent == 1){
@@ -180,7 +181,7 @@
                                             <h3>${ user_js.username }</h3><br>      
                                         </div>
 
-                                    <a type="button" href="{% url 'create_conversation' user_id=user.id %}" class="send-message profile-btn text-center col-12 col-lg-5">
+                                    <a type="button" href="${user_conversation_url}" class="send-message profile-btn text-center col-12 col-lg-5">
                                         <i class="fa-solid fa-message"></i> Send a message
                                     </a>
 
@@ -209,8 +210,8 @@
                                                 <div class="box-info-user col-12">
                                                     <h3 class="name-user col-3">${user_js.username}</h3>
                                                     <h2 class="bio col-3">${user_js.bio}</h2>
-                                                
-                                                    <a type="button" href="{% url 'create_conversation' user_id=user.id %}" class="send-message profile-btn col-12">
+                                                    
+                                                    <a type="button" href="${user_conversation_url}" class="send-message profile-btn col-12">
                                                         <i class="fa-solid fa-message"></i> Send a message
                                                     </a>
                                                 

@@ -45,11 +45,11 @@ class Chat(models.Model):
         User, verbose_name = "Participant"
     )
 
-
     # @models.permalink
     def get_absolute_url(self):
         # return 'users:messages', (), {'chat_id': self.pk }
         return reverse('messages', kwargs={"chat_id": self.pk})
+
 
 class Group(models.Model):
     class Meta:

@@ -158,7 +158,7 @@ def is_ajax(request):
 @login_required(login_url='sign_in')
 def show_all_users(request):
     user = auth.get_user(request)
-
+    
     users = User.objects.all()
 
     data = {}
@@ -261,8 +261,6 @@ def show_all_users(request):
     }
 
     return render(request, 'discussions/catalog_users.html', data)
-
-
 
 def profiles_search_view(request, *args, **kwargs):
     context = {} 

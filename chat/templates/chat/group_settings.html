@@ -3,7 +3,16 @@
 {% block title %}Settings Group{% endblock %}
 
 {% block content_blog %}
-    
+<script>
+
+    function ShowLink () {
+        alert(location.host+"{% url 'add_to_group' pk=chat.id %}")
+    }
+
+</script>
+
+    <h3 class="title">Group Settings</h3>
+    <h5 class="title">Name: {{chat.group.first.name}} - BIO: {{chat.group.first.bio}}</h5>
     <form method="post">
         {% csrf_token %}
 
@@ -11,11 +20,14 @@
             {% csrf_token %}
             {{ form }}
         </div>
-
+      
         <input type="file" name="image" id="image" class="group-settings">
 
         <br><input type="submit" value="SAVE" class="btn btn-save"><br>
 
     </form>
+
+    <h3>Поделись этой ссылкой с друзьями!</h3>
+    <p onclick="ShowLink()">Click Here</p>
 
 {% endblock %}

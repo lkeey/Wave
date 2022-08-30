@@ -159,6 +159,7 @@ class GroupSettings(FormMixin, DetailView):
 
         context = {
             'user': request.user,
+            'chat': chat,
             'form': GroupEditForm(),
         }
 
@@ -198,3 +199,14 @@ class GroupSettings(FormMixin, DetailView):
         print(self.object)
 
         return redirect("home")
+
+def add_participant(request, pk):
+    user = request.user
+
+    chat = Chat.objects.filter(id=pk).first()
+    print(chat.members)
+    if user not in chat.members.all():
+        chat.members.add(user)
+        print("addeed")
+    
+    return redirect("messages", chat_id=pk)
